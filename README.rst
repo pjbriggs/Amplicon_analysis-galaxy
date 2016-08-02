@@ -59,7 +59,7 @@ Equivalent Galaxy tools:
    https://toolshed.g2.bx.psu.edu/view/iyad/package_blast_2_2_26/
 
  - ``fasta_number`` (02jun2015)
-   Part of uparse? No toolshed version available, possible licensing issues?
+   Part of ``uparse``? No toolshed version available, possible licensing issues?
    http://drive5.com/python/summary.html
    http://drive5.com/python/
    http://drive5.com/python/python_scripts.tar.gz
@@ -68,9 +68,9 @@ Equivalent Galaxy tools:
    No toolshed version found
    http://kirill-kryukov.com/study/tools/fasta-splitter/
 
-- RDP classifier (2.2)
-  Is this part of Qiime?
+ - ``RDP classifier`` (2.2)
+   Is this part of ``Qiime``?
 
-- R (3.2.0)
-  Toolshed has R 3.2.1:
-  https://toolshed.g2.bx.psu.edu/view/iuc/package_r_3_2_1/d0bf97420fb5
+ - ``R`` (3.2.0)
+   Toolshed has ``R`` 3.2.1:
+   https://toolshed.g2.bx.psu.edu/view/iuc/package_r_3_2_1/d0bf97420fb5
