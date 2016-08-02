@@ -65,8 +65,8 @@ Equivalent Galaxy tools:
    http://drive5.com/python/python_scripts.tar.gz
 
  - ``fasta_splitter`` (0.2.4)
-   No toolshed version found
-   http://kirill-kryukov.com/study/tools/fasta-splitter/
+   No toolshed version found - have 0.2.4 version under development at
+   https://github.com/fls-bioinformatics-core/galaxy-tools/tree/package_fasta_splitter_0_2_4/packages/package_fasta_splitter_0_2_4
 
  - ``RDP classifier`` (2.2)
    Is this part of ``Qiime``?
