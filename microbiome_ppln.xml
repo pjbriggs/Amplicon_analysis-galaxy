@@ -1,0 +1,87 @@
+<tool id="microbiome_ppln" name="Microbiome Pipeline" version="0.0.1">
+  <description>analyse 16S rRNA data from Illumina Miseq paired-end reads</description>
+  <requirements>
+    <requirement type="package" version="0.0.0">microbiome_pipeline</requirement>
+    <requirement type="package" version="1.8">cutadapt</requirement>
+    <requirement type="package" version="1.33">sickle</requirement>
+    <requirement type="package" version="27-08-2013">bioawk</requirement>
+    <requirement type="package" version="2.8.1">pandaseq</requirement>
+    <requirement type="package" version="3.5.0">spades</requirement>
+    <requirement type="package" version="0.11.4">fastqc</requirement>
+    <requirement type="package" version="1.9.1">qiime</requirement>
+    <requirement type="package" version="2.2.26">blast</requirement>
+    <requirement type="package" version="0.2.4">fasta_splitter</requirement>
+    <requirement type="package" version="2.2">rdp_classifier</requirement>
+    <requirement type="package" version="3.2.1">R</requirement>
+  </requirements>
+  <stdio>
+    <exit_code range="1:" />
+  </stdio>
+  <command><![CDATA[
+  ## Create links to input FASTQs and Final_names.txt and Barcode.txt files
+  #for $fq_pair in $fastq_pairs
+    ln -s "${fq_pair.fastq_r1}" &&
+    ln -s "${fq_pair.fastq_r2}" &&
+    echo $$(basename ${fq_pair.fastq_r1}) "${fq_pair.name}" >> Final_names.txt &&
+    echo $$(basename ${fq_pair.fastq_r2}) "${fq_pair.name}" >> Final_names.txt &&
+    echo "${fq_pair.name}" "${fq_pair.barcode}" >> Barcode.txt
+  #end for
+
+  ## Collect outputs
+  mv Final_names.txt "${final_names_file}" &&
+  mv Barcode.txt "${barcode_file}"
+  
+  ]]></command>
+  <inputs>
+    <repeat name="fastq_pairs" title="Input fastq pairs" min="1">
+      <param type="text" name="name" value=""
+	     label="Final name for FASTQ pair" />
+      <param type="data" name="fastq_r1" format="fastqsanger"
+	     label="FASTQ with forward reads (R1)" />
+      <param type="data" name="fastq_r2" format="fastqsanger"
+	     label="FASTQ with reverse reads (R2)" />
+      <param type="text" name="barcode" value=""
+	     label="Barcode associated with FASTQ pair" />
+    </repeat>
+  </inputs>
+  <outputs>
+    <data format="tabular" name="final_names_file"
+	  label="Final_names.txt" />
+    <data format="tabular" name="barcode_file"
+	  label="Barcode.txt" />
+  </outputs>
+  <tests>
+  </tests>
+  <help><![CDATA[
+.. class:: infomark
+
+**What it does**
+
+This pipeline has been designed for the analysis of 16S rRNA data from
+Illumina Miseq (Casava >= 1.8) paired-end reads.
+  
+.. class:: infomark
+
+**Usage**
+
+The pipeline isdivided in 3 steps:
+
+ * 1. Quality control with Cutadapt to check for and trim PCR primers,
+   Sickle for quality trimming, SPADes for illumina Miseq error
+   correction and Pandaseq to merge paired-end reads
+ * 2.1 QIIME pipeline to remove singletons and chimeras and build otu
+   table and phylogenetic tree
+ * 2.2 UPARSE pipeline to remove singletons and chimeras and build otu
+   table and phylogenetic tree
+ * 2.3 Vsearch pipeline. A freely available programme almost identical
+   to Uparse but not limited to 4GB RAM
+ * 3. QIIME to perform beta and alpha diversity analysis
+
+**Authors**
+
+Mauro Tutino
+
+	]]></help>
+  <citations>
+  </citations>
+</tool>
