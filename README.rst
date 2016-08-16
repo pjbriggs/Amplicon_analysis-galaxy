@@ -74,3 +74,12 @@ Equivalent Galaxy tools:
  - ``R`` (3.2.0)
    Toolshed has ``R`` 3.2.1:
    https://toolshed.g2.bx.psu.edu/view/iuc/package_r_3_2_1/d0bf97420fb5
+
+Other notes
+-----------
+
+The pipeline takes as input multiple pairs of Fastq files, which is
+potentially a challenge for implementing a Galaxy wrapper. One possible
+approach could be to use Galaxy collections, along the lines of:
+
+ - _Processing many samples at once (Galaxy wiki):https://github.com/nekrut/galaxy/wiki/Processing-many-samples-at-once
