@@ -4,6 +4,42 @@ microbiome-ppln-galaxy
 Development of Galaxy tools to wrap Mauro Tutino's microbiome pipeline
 scripts (not currently available publicly).
 
+Pipeline options to interface
+-----------------------------
+
+ - Input files:
+   * List of Fastq R1/R2 pairs
+   * ``Categories.txt`` file
+   * ``Final_name.txt`` file
+   * ``Metatable.txt`` file
+ - Step one (quality control):
+   * Cutadapt: forward and reverse PCR primers, without any
+     barcode/adapter (-g and -G options). Must be supplied.
+   * Sickle: threshold below which read will be trimmed (-q) (default 20)
+   * Pandaseq: minimum overlap (in bp) between forward and reverse reads
+     (-O) (default 10)
+   * Pandaseq: minimum length (in bp) for a sequence to be kept after
+     overlapping (-L) (default 380)
+ - Step two (pipeline):
+   * Pipeline: one of 'uparse', 'vsearch' or 'qiime' (e.g. -P vsearch)
+   * Reference database: by default the reference database is GreenGenes,
+     use -S to use Silva instead
+ - Step three (reporting):
+   * no options required at present
+
+Outputs to collect
+------------------
+
+ - <PIPELINE>_OTU_tables/*_tax_OTU_table.biom
+ - <PIPELINE>_OTU_tables/otus.tre
+ - Metatable_log/Metatable_corrected.txt (final metatable file)
+ - RESULTS/<PIPELINE>_<reference>/phylum_genus_dist/barcharts.html
+ - RESULTS/<PIPELINE>_<reference>/OTUS_count.txt
+ - RESULTS/<PIPELINE>_<reference>/table_summary.txt
+ - RESULTS/<PIPELINE>_<reference>/Heatmap/otu_table.html
+ - RESULTS/<PIPELINE>_<reference>/beta_div_even/weighted_2d_plot/...html
+ - RESULTS/<PIPELINE>_<reference>/beta_div_even/unweighted_2d_plot/...html
+
 Pipeline dependencies
 ---------------------
 
@@ -78,8 +114,9 @@ Equivalent Galaxy tools:
 Other notes
 -----------
 
-The pipeline takes as input multiple pairs of Fastq files, which is
-potentially a challenge for implementing a Galaxy wrapper. One possible
-approach could be to use Galaxy collections, along the lines of:
+ * The pipeline takes as input multiple pairs of Fastq files, which is
+   potentially a challenge for implementing a Galaxy wrapper. One possible
+   approach could be to use Galaxy collections, along the lines of:
+   - _Processing many samples at once (Galaxy wiki):https://github.com/nekrut/galaxy/wiki/Processing-many-samples-at-once
 
- - _Processing many samples at once (Galaxy wiki):https://github.com/nekrut/galaxy/wiki/Processing-many-samples-at-once
+ * Silva database requires minimum 18Gb RAM
