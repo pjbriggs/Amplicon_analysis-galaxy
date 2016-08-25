@@ -56,7 +56,16 @@
   &&
 
   ## Collect outputs
-  Final_name.txt "${final_name_file}"
+  cp Final_name.txt "${final_name_file}" &&
+  cp Metatable_log/Metatable_corrected.txt "${metatable_corrected}" &&
+  cp ${pipeline.name}_OTU_tables/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_tax_OTU_table.biom "${tax_otu_table_biom_file}" &&
+  cp ${pipeline.name}_OTU_tables/otus.tre "${otus_tre_file}" &&
+  cp RESULTS/${pipeline.name}_${reference.name}/phylum_genus_dist/bar_charts.html "${phylum_genus_dist_barcharts_html}" &&
+  cp RESULTS/${pipeline.name}_${reference.name}/OTUs_count.txt "${otus_count_file}" &&
+  cp RESULTS/${pipeline.name}_${reference.name}/table_summary.txt "${table_summary_file}" &&
+  cp RESULTS/${pipeline.name}_${reference.name}/Heatmap/otu_table.html "${heatmap_otu_table_html}" &&
+  cp RESULTS/${pipeline.name}_${reference.name}/beta_div_even/weighted_2d_plot/weighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_weighted_2d_plots}" &&
+  cp RESULTS/${pipeline.name}_${reference.name}/beta_div_even/unweighted_2d_plot/unweighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_unweighted_2d_plots}"
   ]]></command>
   <inputs>
     <param type="data" name="metatable_file_in" format="tabular"
@@ -88,9 +97,9 @@
 	   help="Default is 380 (-L)" />
     <param type="select" name="pipeline"
 	    label="Pipeline to use for analysis">
-      <option value="vsearch" selected="true" >VSEARCH</option>
-      <option value="qiime">QIIME</option>
-      <option value="uparse">UPARSE</option>
+      <option value="vsearch" selected="true" >Vsearch</option>
+      <option value="QIIME">QIIME</option>
+      <option value="uparse">Uparse</option>
     </param>
     <param type="select" name="reference_database"
 	   label="Reference database">
@@ -101,6 +110,24 @@
   <outputs>
     <data format="tabular" name="final_name_file"
 	  label="${tool.name}: Final_name.txt" />
+    <data format="tabular" name="metatable_corrected"
+	  label="${tool.name}: Metatable_corrected.txt" />
+    <data format="biom" name="tax_otu_table_biom_file"
+	  label="${tool.name}: ${pipeline} tax OTU table (biom format)" />
+    <data format="tabular" name="otus_tre_file"
+	  label="${tool.name}: ${pipeline} otus.tre" />
+    <data format="html" name="phylum_genus_dist_barcharts_html"
+	  label="${tool.name}: ${pipeline} phylum_genus_dist barcharts HTML" />
+    <data format="tabular" name="otus_count_file"
+	  label="${tool.name}: ${pipeline} OTUs count file" />
+    <data format="tabular" name="table_summary_file"
+	  label="${tool.name}: ${pipeline} table summary file" />
+    <data format="html" name="heatmap_otu_table_html"
+	  label="${tool.name}: ${pipeline} heatmap OTU table HTML" />
+    <data format="html" name="beta_div_even_weighted_2d_plots"
+	  label="${tool.name}: ${pipeline} beta diversity weighted 2D plots HTML" />
+    <data format="html" name="beta_div_even_unweighted_2d_plots"
+	  label="${tool.name}: ${pipeline} beta diversity unweighted 2D plots HTML" />
   </outputs>
   <tests>
   </tests>
