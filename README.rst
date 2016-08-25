@@ -21,7 +21,7 @@ Pipeline options to interface
    * Pandaseq: minimum length (in bp) for a sequence to be kept after
      overlapping (-L) (default 380)
  - Step two (pipeline):
-   * Pipeline: one of 'uparse', 'vsearch' or 'qiime' (e.g. -P vsearch)
+   * Pipeline: one of 'uparse', 'vsearch' or 'QIIME' (e.g. -P vsearch)
    * Reference database: by default the reference database is GreenGenes,
      use -S to use Silva instead
  - Step three (reporting):
@@ -33,7 +33,7 @@ Outputs to collect
  - <PIPELINE>_OTU_tables/*_tax_OTU_table.biom
  - <PIPELINE>_OTU_tables/otus.tre
  - Metatable_log/Metatable_corrected.txt (final metatable file)
- - RESULTS/<PIPELINE>_<reference>/phylum_genus_dist/barcharts.html
+ - RESULTS/<PIPELINE>_<reference>/phylum_genus_dist/bar_charts.html
  - RESULTS/<PIPELINE>_<reference>/OTUS_count.txt
  - RESULTS/<PIPELINE>_<reference>/table_summary.txt
  - RESULTS/<PIPELINE>_<reference>/Heatmap/otu_table.html
