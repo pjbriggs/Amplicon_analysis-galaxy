@@ -53,7 +53,7 @@ The pipeline uses the following packages - for step 1::
     spades/3.5.0
     fastqc/0.11.3
 
-For steps 2 and 2::
+For steps 2 and 3::
 
     qiime/1.8.0
     blast/legacy/2.2.26
@@ -61,6 +61,9 @@ For steps 2 and 2::
     fasta-splitter/0.2.4
     rdp_classifier/2.2
     R/3.2.0
+
+There is an installer script which attempts to install the dependencies
+locally (``install_tool_deps.sh``).
 
 Equivalent Galaxy tools:
 
