@@ -248,6 +248,8 @@ function install_qiime_1_8_0() {
     wget -q http://www.microbesonline.org/fasttree/FastTree
     chmod 0755 FastTree
     mv FastTree $INSTALL_DIR/bin
+    # Config file
+    sed -i 's,qiime_scripts_dir,qiime_scripts_dir\t'"$INSTALL_DIR\/bin"',g' $INSTALL_DIR/lib/python2.7/site-packages/qiime/support_files/qiime_config
     popd
     rm -rf $wd/*
     rmdir $wd
@@ -259,6 +261,7 @@ echo Setting up qiime 1.8.0
 #if [ -f $1/python/2.7.10/env.sh ] ; then
 #   . $1/python/2.7.10/env.sh
 #fi
+export QIIME_CONFIG_FP=$INSTALL_DIR/lib/python2.7/site-packages/qiime/support_files/qiime_config
 export PATH=$INSTALL_DIR/bin:\$PATH
 export PYTHONPATH=$INSTALL_DIR:\$PYTHONPATH
 export PYTHONPATH=$INSTALL_DIR/lib:\$PYTHONPATH
