@@ -431,7 +431,7 @@ function install_rdp_classifier_2_2() {
 cat > $install_dir/env.sh <<EOF
 #!/bin/sh
 # Source this to setup rdp-classifier/2.2
-echo Setting up DP classifier 2.2
+echo Setting up RDP classifier 2.2
 export RDP_JAR_PATH=$install_dir/rdp_classifier-2.2.jar
 #
 EOF
