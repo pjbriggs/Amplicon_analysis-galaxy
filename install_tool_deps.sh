@@ -374,7 +374,7 @@ function install_fasta_number() {
 cat > $install_dir/env.sh <<EOF
 #!/bin/sh
 # Source this to setup fasta_number/default
-echo Setting up fasta_number (default)
+echo Setting up fasta_number \(default\)
 export PATH=$install_dir/bin:\$PATH
 #
 EOF
