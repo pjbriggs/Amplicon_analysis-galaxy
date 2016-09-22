@@ -42,7 +42,7 @@ function install_cutadapt_1_11() {
 	return
     fi
     mkdir -p $INSTALL_DIR
-    install_python_package $INSTALL_DIR numpy 1.9 \
+    install_python_package $INSTALL_DIR cutadapt 1.11 \
 	https://pypi.python.org/packages/47/bf/9045e90dac084a90aa2bb72c7d5aadefaea96a5776f445f5b5d9a7a2c78b/cutadapt-1.11.tar.gz \
 	cutadapt-1.11
     # Make setup file
@@ -132,9 +132,9 @@ function install_pandaseq_2_8_1() {
     wget -q https://github.com/neufeld/pandaseq/archive/v2.8.1.tar.gz
     tar xzf v2.8.1.tar.gz
     cd pandaseq-2.8.1
-    ./autogen.sh >/dev/null 2>&1
-    ./configure --prefix=$install_dir >/dev/null 2>&1
-    make; make install >/dev/null 2>&1
+    ./autogen.sh >$install_dir/INSTALLATION.log 2>&1
+    ./configure --prefix=$install_dir >>$install_dir/INSTALLATION.log 2>&1
+    make; make install >>$install_dir/INSTALLATION.log 2>&1
     popd
     rm -rf $wd/*
     rmdir $wd
