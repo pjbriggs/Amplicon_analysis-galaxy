@@ -1,23 +1,25 @@
-<tool id="microbiome_ppln" name="Microbiome Pipeline" version="0.0.1">
+<tool id="microbiome_ppln" name="Amplicon Analysis Pipeline" version="0.0.0.1">
   <description>analyse 16S rRNA data from Illumina Miseq paired-end reads</description>
   <requirements>
-    <requirement type="package" version="0.0.0">microbiome_pipeline</requirement>
+    <requirement type="package">amplicon_analysis_pipeline</requirement>
     <requirement type="package" version="1.8">cutadapt</requirement>
     <requirement type="package" version="1.33">sickle</requirement>
     <requirement type="package" version="27-08-2013">bioawk</requirement>
     <requirement type="package" version="2.8.1">pandaseq</requirement>
     <requirement type="package" version="3.5.0">spades</requirement>
-    <requirement type="package" version="0.11.4">fastqc</requirement>
-    <requirement type="package" version="1.9.1">qiime</requirement>
+    <requirement type="package" version="0.11.3">fastqc</requirement>
+    <requirement type="package" version="1.8.0">qiime</requirement>
     <requirement type="package" version="2.2.26">blast</requirement>
-    <requirement type="package" version="0.2.4">fasta_splitter</requirement>
-    <requirement type="package" version="2.2">rdp_classifier</requirement>
-    <requirement type="package" version="3.2.1">R</requirement>
+    <requirement type="package" version="0.2.4">fasta-splitter</requirement>
+    <requirement type="package" version="2.2">rdp-classifier</requirement>
+    <requirement type="package" version="3.2.0">R</requirement>
+    <requirement type="package" version="1.1.3">vsearch</requirement>
+    <requirement type="package">fasta_number</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" />
   </stdio>
-  <command><![CDATA[
+  <command interpreter="bash"><![CDATA[
   ## Create links to input FASTQs and Final_names.txt file
   #for $fq_pair in $fastq_pairs
     ln -s "${fq_pair.fastq_r1}" &&
@@ -29,14 +31,6 @@
   ## Make links to Categories.txt and Metatable.txt
   ln -s "${categories_file_in}" Categories.txt
   ln -s "${metatable_file_in}" Metatable.txt
-
-  ## Make links to reference data dirs
-  ## FIXME needs to be properly implemented
-  ##if str( $minimum_length ) != ""
-  ##  ln -s \$GREENGENES_DIR
-  ###else
-  ##  ln -s \$SILVA_DIR
-  ###end if
 
   ## Run the amplicon analysis pipeline script
   Amplicon_analysis_pipeline.sh
