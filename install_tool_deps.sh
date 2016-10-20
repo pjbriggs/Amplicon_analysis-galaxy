@@ -483,7 +483,10 @@ function install_uc2otutab() {
     pushd $wd
     wget -q http://drive5.com/python/python_scripts.tar.gz
     tar zxf python_scripts.tar.gz
-    mv uc2otutab.py die.py fasta.py progress.py uc.py $install_dir/bin
+    mv die.py fasta.py progress.py uc.py $install_dir/bin
+    echo "#!/usr/bin/env python" >$install_dir/bin/uc2otutab.py
+    cat uc2otutab.py >>$install_dir/bin/uc2otutab.py
+    chmod +x $install_dir/bin/uc2otutab.py
     popd
     # Clean up
     rm -rf $wd/*
