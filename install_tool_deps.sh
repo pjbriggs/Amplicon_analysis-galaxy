@@ -468,6 +468,35 @@ export TK_LIBRARY=$install_dir/lib/libtk8.4.so
 #
 EOF
 }
+function install_uc2otutab() {
+    # See http://drive5.com/python/uc2otutab_py.html
+    echo Installing uc2otutab
+    # Install to "default" version i.e. essentially a versionless
+    # installation (see Galaxy dependency resolver docs)
+    local install_dir=$1/uc2otutab/default
+    if [ -f $install_dir/env.sh ] ; then
+	return
+    fi
+    mkdir -p $install_dir/bin
+    local wd=$(mktemp -d)
+    echo Moving to $wd
+    pushd $wd
+    wget -q http://drive5.com/python/python_scripts.tar.gz
+    tar zxf python_scripts.tar.gz
+    mv uc2otutab.py die.py fasta.py progress.py uc.py $install_dir/bin
+    popd
+    # Clean up
+    rm -rf $wd/*
+    rmdir $wd
+    # Make setup file
+cat > $install_dir/env.sh <<EOF
+#!/bin/sh
+# Source this to setup uc2otutab/default
+echo Setting up uc2otutab \(default\)
+export PATH=$install_dir/bin:\$PATH
+#
+EOF
+}
 ##########################################################
 # Main script starts here
 ##########################################################
@@ -498,5 +527,6 @@ install_fasta_number $TOP_DIR
 install_fasta_splitter_0_2_4 $TOP_DIR
 install_rdp_classifier_2_2 $TOP_DIR
 install_R_3_2_0 $TOP_DIR
+install_uc2otutab $TOP_DIR
 ##
 #
