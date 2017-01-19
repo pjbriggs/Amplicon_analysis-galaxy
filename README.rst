@@ -1,4 +1,4 @@
-Amplicon-analysis-galaxy
+Amplicon_analysis-galaxy
 ========================
 
 Development of Galaxy tools to wrap the Amplicon_analysis pipeline:
