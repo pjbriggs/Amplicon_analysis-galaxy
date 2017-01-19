@@ -1,4 +1,4 @@
-<tool id="microbiome_ppln" name="Amplicon Analysis Pipeline" version="0.0.0.1">
+<tool id="amplicon_analysis_pipeline" name="Amplicon Analysis Pipeline" version="0.0.0.1">
   <description>analyse 16S rRNA data from Illumina Miseq paired-end reads</description>
   <requirements>
     <requirement type="package">amplicon_analysis_pipeline</requirement>

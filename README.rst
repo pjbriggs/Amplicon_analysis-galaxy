@@ -1,8 +1,8 @@
-microbiome-ppln-galaxy
-======================
+Amplicon-analysis-galaxy
+========================
 
-Development of Galaxy tools to wrap Mauro Tutino's microbiome pipeline
-scripts (not currently available publicly).
+Development of Galaxy tools to wrap the Amplicon_analysis pipeline:
+https://github.com/MTutino/Amplicon-analysis
 
 Pipeline options to interface
 -----------------------------
