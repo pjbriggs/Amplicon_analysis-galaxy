@@ -35,6 +35,33 @@ EOF
     rm -rf $wd/*
     rmdir $wd
 }
+function install_amplicon_analysis_pipeline_1_0() {
+    install_amplicon_analysis_pipeline $1 1.0
+}
+function install_amplicon_analysis_pipeline() {
+    version=$2
+    echo Installing Amplicon_analysis $version
+    install_dir=$1/amplicon_analysis_pipeline/$version
+    if [ -f $install_dir/env.sh ] ; then
+	return
+    fi
+    mkdir -p $install_dir
+    echo Moving to $install_dir
+    pushd $install_dir
+    wget -q https://github.com/MTutino/Amplicon_analysis/archive/v${version}.tar.gz
+    tar zxf v${version}.tar.gz
+    mv Amplicon_analysis-${version} Amplicon_analysis
+    rm -rf v${version}.tar.gz
+    popd
+    # Make setup file
+    cat > $install_dir/env.sh <<EOF
+#!/bin/sh
+# Source this to setup Amplicon_analysis/$version
+echo Setting up Amplicon analysis pipeline $version
+export PATH=$install_dir/Amplicon_analysis:\$PATH
+#
+EOF
+}
 function install_cutadapt_1_11() {
     echo Installing cutadapt 1.11
     INSTALL_DIR=$1/cutadapt/1.11
@@ -516,6 +543,7 @@ if [ ! -d "$TOP_DIR" ] ; then
     mkdir -p $TOP_DIR
 fi
 # Install dependencies
+install_amplicon_analysis_pipeline_1_0 $TOP_DIR
 install_cutadapt_1_11 $TOP_DIR
 install_sickle_1_33 $TOP_DIR
 install_bioawk_27_08_2013 $TOP_DIR
