@@ -2,7 +2,7 @@ Amplicon_analysis-galaxy
 ========================
 
 Development of Galaxy tools to wrap the Amplicon_analysis pipeline:
-https://github.com/MTutino/Amplicon-analysis
+https://github.com/MTutino/Amplicon_analysis
 
 Pipeline options to interface
 -----------------------------
