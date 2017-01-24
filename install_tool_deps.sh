@@ -385,17 +385,24 @@ function install_fasta_number() {
     echo Installing fasta_number
     # Install to "default" version i.e. essentially a versionless
     # installation (see Galaxy dependency resolver docs)
-    local install_dir=$1/fasta_number/default
-    if [ -f $install_dir/env.sh ] ; then
-	return
-    fi
-    mkdir -p $install_dir/bin
+    local install_dir=$1/fasta_number
     local wd=$(mktemp -d)
     echo Moving to $wd
     pushd $wd
+    # Download and use MD5 as local version
     wget -q http://drive5.com/python/python_scripts.tar.gz
+    local version=$(md5sum python_scripts.tar.gz | cut -d" " -f1)
+    # Check for existing installation
+    local default_dir=$install_dir/default
+    install_dir=$install_dir/$version
+    if [ -f $install_dir/env.sh ] ; then
+	return
+    fi
+    # Install script and make 'default' link
+    mkdir -p $install_dir/bin
     tar zxf python_scripts.tar.gz
     mv fasta_number.py $install_dir/bin
+    ln -s $version $default_dir
     popd
     # Clean up
     rm -rf $wd/*
@@ -403,8 +410,8 @@ function install_fasta_number() {
     # Make setup file
 cat > $install_dir/env.sh <<EOF
 #!/bin/sh
-# Source this to setup fasta_number/default
-echo Setting up fasta_number \(default\)
+# Source this to setup fasta_number/$version
+echo Setting up fasta_number $version
 export PATH=$install_dir/bin:\$PATH
 #
 EOF
