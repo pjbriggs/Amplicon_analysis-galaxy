@@ -62,6 +62,38 @@ export PATH=$install_dir/Amplicon_analysis:\$PATH
 #
 EOF
 }
+function install_amplicon_analysis_pipeline_1_0_patched() {
+    version="1.0-patched"
+    echo Installing Amplicon_analysis $version
+    install_dir=$1/amplicon_analysis_pipeline/$version
+    if [ -f $install_dir/env.sh ] ; then
+	return
+    fi
+    mkdir -p $install_dir
+    echo Moving to $install_dir
+    pushd $install_dir
+    # Clone and patch analysis pipeline script
+    git clone https://github.com/pjbriggs/Amplicon_analysis.git
+    cd Amplicon_analysis
+    git checkout -b $version
+    branches="remove-dependency-on-JOB_ID allow-arbitrary-location-for-reference-data"
+    for branch in $branches ; do
+	git checkout -b $branch origin/$branch
+	git checkout $version
+	git merge -m "Merge $branch into $version" $branch
+    done
+    cd ..
+    popd
+    # Make setup file
+    cat > $install_dir/env.sh <<EOF
+#!/bin/sh
+# Source this to setup Amplicon_analysis/$version
+echo Setting up Amplicon analysis pipeline $version
+export PATH=$install_dir/Amplicon_analysis:\$PATH
+export AMPLICON_ANALYSIS_REF_DATA_PATH=/home/pjb/scratchpad/test_Amplicon_Analysis_Pipeline/ReferenceData
+#
+EOF
+}
 function install_cutadapt_1_11() {
     echo Installing cutadapt 1.11
     INSTALL_DIR=$1/cutadapt/1.11
@@ -551,6 +583,7 @@ if [ ! -d "$TOP_DIR" ] ; then
 fi
 # Install dependencies
 install_amplicon_analysis_pipeline_1_0 $TOP_DIR
+install_amplicon_analysis_pipeline_1_0_patched $TOP_DIR
 install_cutadapt_1_11 $TOP_DIR
 install_sickle_1_33 $TOP_DIR
 install_bioawk_27_08_2013 $TOP_DIR
