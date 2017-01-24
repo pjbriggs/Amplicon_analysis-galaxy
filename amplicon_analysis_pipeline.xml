@@ -30,11 +30,13 @@
   #end if
 
   ## Create links to input FASTQs and Final_names.txt file
+  ## NB file names must have .fastq extension and contain
+  ## "_R1_" or "_R2_"
   #for $fq_pair in $fastq_pairs
-    ln -s "${fq_pair.fastq_r1}" &&
-    ln -s "${fq_pair.fastq_r2}" &&
-    echo \$(basename ${fq_pair.fastq_r1})\$'\t'"${fq_pair.name}" >> Final_name.txt &&
-    echo \$(basename ${fq_pair.fastq_r2})\$'\t'"${fq_pair.name}" >> Final_name.txt &&
+    ln -s "${fq_pair.fastq_r1}" "${fq_pair.name}_R1_.fastq" &&
+    ln -s "${fq_pair.fastq_r2}" "${fq_pair.name}_R2_.fastq" &&
+    echo ${fq_pair.name}_R1_.fastq\$'\t'"${fq_pair.name}" >> Final_name.txt &&
+    echo ${fq_pair.name}_R2_.fastq\$'\t'"${fq_pair.name}" >> Final_name.txt &&
   #end for
 
   ## Make links to Categories.txt and Metatable.txt
