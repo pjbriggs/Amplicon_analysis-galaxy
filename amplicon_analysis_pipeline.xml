@@ -15,7 +15,7 @@
     <requirement type="package" version="3.2.0">R</requirement>
     <requirement type="package" version="1.1.3">vsearch</requirement>
     <requirement type="package" version="2010-04-29">microbiomeutil</requirement>
-    <requirement type="package" version="default">fasta_number</requirement>
+    <requirement type="package">fasta_number</requirement>
     <requirement type="package">uc2otutab</requirement>
   </requirements>
   <stdio>
