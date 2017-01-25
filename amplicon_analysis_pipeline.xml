@@ -68,8 +68,22 @@
   cp RESULTS/${pipeline}_${reference_database_name}/phylum_genus_charts/bar_charts.html "${phylum_genus_dist_barcharts_html}" &&
   cp RESULTS/${pipeline}_${reference_database_name}/OTUs_count.txt "${otus_count_file}" &&
   cp RESULTS/${pipeline}_${reference_database_name}/table_summary.txt "${table_summary_file}" &&
+
+  ## HTML outputs
+
+  ## OTU table
+  mkdir $heatmap_otu_table_html.files_path &&
+  cp -r RESULTS/${pipeline}_${reference_database_name}/Heatmap/js $heatmap_otu_table_html.files_path &&
   cp RESULTS/${pipeline}_${reference_database_name}/Heatmap/otu_table.html "${heatmap_otu_table_html}" &&
+
+  ## Beta diversity weighted 2d plots
+  mkdir $beta_div_even_weighted_2d_plots.files_path &&
+  cp -r RESULTS/${pipeline}_${reference_database_name}/beta_div_even/weighted_2d_plot/* $beta_div_even_weighted_2d_plots.files_path &&
   cp RESULTS/${pipeline}_${reference_database_name}/beta_div_even/weighted_2d_plot/weighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_weighted_2d_plots}" &&
+
+  ## Beta diversity unweighted 2d plots
+  mkdir $beta_div_even_unweighted_2d_plots.files_path &&
+  cp -r RESULTS/${pipeline}_${reference_database_name}/beta_div_even/unweighted_2d_plot/* $beta_div_even_unweighted_2d_plots.files_path &&
   cp RESULTS/${pipeline}_${reference_database_name}/beta_div_even/unweighted_2d_plot/unweighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_unweighted_2d_plots}"
   ]]></command>
   <inputs>
