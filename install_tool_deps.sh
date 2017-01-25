@@ -270,10 +270,85 @@ function install_qiime_1_8_0() {
 	return
     fi
     mkdir -p $INSTALL_DIR
+    # Atlas 3.10 (precompiled)
+    # NB this stolen from galaxyproject/iuc-tools
+    local wd=$(mktemp -d)
+    echo Moving to $wd
+    pushd $wd
+    wget -q https://depot.galaxyproject.org/software/atlas/atlas_3.10.2_linux_x64.tar.gz
+    tar zxvf atlas_3.10.2_linux_x64.tar.gz
+    mv lib $INSTALL_DIR
+    command -v gfortran || return 0
+    BUNDLED_LGF_CANON=$INSTALL_DIR/lib/libgfortran.so.3.0.0
+    BUNDLED_LGF_VERS=`objdump -p $BUNDLED_LGF_CANON | grep GFORTRAN_1 | sed -r 's/.*GFORTRAN_1\.([0-9])+/\1/' | sort -n | tail -1`
+    echo 'program test; end program test' > test.f90
+    gfortran -o test test.f90
+    LGF=`ldd test | grep libgfortran | awk '{print $3}'`
+    LGF_CANON=`readlink -f $LGF`
+    LGF_VERS=`objdump -p $LGF_CANON | grep GFORTRAN_1 | sed -r 's/.*GFORTRAN_1\.([0-9])+/\1/' | sort -n | tail -1`
+    if [ $LGF_VERS -gt $BUNDLED_LGF_VERS ]; then
+        cp -p $BUNDLED_LGF_CANON ${BUNDLED_LGF_CANON}.bundled
+        cp -p $LGF_CANON $BUNDLED_LGF_CANON
+    fi
+    popd
+    rm -rf $wd/*
+    rmdir $wd
+    # Atlas 3.10 (build from source)
+    # NB this stolen from galaxyproject/iuc-tools
+    ##local wd=$(mktemp -d)
+    ##echo Moving to $wd
+    ##pushd $wd
+    ##wget -q https://depot.galaxyproject.org/software/atlas/atlas_3.10.2+gx0_src_all.tar.bz2
+    ##wget -q https://depot.galaxyproject.org/software/lapack/lapack_3.5.0_src_all.tar.gz
+    ##wget -q https://depot.galaxyproject.org/software/atlas/atlas_patch-blas-lapack-1.0_src_all.diff
+    ##wget -q https://depot.galaxyproject.org/software/atlas/atlas_patch-shared-lib-1.0_src_all.diff
+    ##wget -q https://depot.galaxyproject.org/software/atlas/atlas_patch-cpu-throttle-1.0_src_all.diff
+    ##tar -jxvf atlas_3.10.2+gx0_src_all.tar.bz2
+    ##cd ATLAS
+    ##mkdir build
+    ##patch -p1 < ../atlas_patch-blas-lapack-1.0_src_all.diff
+    ##patch -p1 < ../atlas_patch-shared-lib-1.0_src_all.diff
+    ##patch -p1 < ../atlas_patch-cpu-throttle-1.0_src_all.diff
+    ##cd build
+    ##../configure --prefix="$INSTALL_DIR" -D c -DWALL -b 64 -Fa alg '-fPIC' --with-netlib-lapack-tarfile=../../lapack_3.5.0_src_all.tar.gz -v 2 -t 0 -Si cputhrchk 0
+    ##make
+    ##make install
+    ##popd
+    ##rm -rf $wd/*
+    ##rmdir $wd
+    export ATLAS_LIB_DIR=$INSTALL_DIR/lib
+    export ATLAS_INCLUDE_DIR=$INSTALL_DIR/include
+    export ATLAS_BLAS_LIB_DIR=$INSTALL_DIR/lib/atlas
+    export ATLAS_LAPACK_LIB_DIR=$INSTALL_DIR/lib/atlas
+    export ATLAS_ROOT_PATH=$INSTALL_DIR
+    export LD_LIBRARY_PATH=$INSTALL_DIR/lib:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=$INSTALL_DIR/lib/atlas:$LD_LIBRARY_PATH
+    # Numpy 1.7.1
+    local wd=$(mktemp -d)
+    echo Moving to $wd
+    pushd $wd
+    wget -q https://depot.galaxyproject.org/software/numpy/numpy_1.7_src_all.tar.gz
+    tar -zxvf numpy_1.7_src_all.tar.gz
+    cd numpy-1.7.1
+    cat > site.cfg <<EOF
+[DEFAULT]
+library_dirs = $ATLAS_LIB_DIR
+include_dirs = $ATLAS_INCLUDE_DIR
+[blas_opt]
+libraries = blas, atlas
+[lapack_opt]
+libraries = lapack, atlas
+EOF
+    export PYTHONPATH=$PYTHONPATH:$INSTALL_DIR/lib/python2.7
+    export ATLAS=$ATLAS_ROOT_PATH
+    python setup.py install --install-lib $INSTALL_DIR/lib/python2.7 --install-scripts $INSTALL_DIR/bin
+    popd
+    rm -rf $wd/*
+    rmdir $wd
     # Python packages
-    install_python_package $INSTALL_DIR numpy 1.7.1 \
-	https://pypi.python.org/packages/84/fb/5e9dfeeb5d8909d659e6892c97c9aa66d3798fad50e1d3d66b3c614a9c35/numpy-1.7.1.tar.gz \
-	numpy-1.7.1
+    ##install_python_package $INSTALL_DIR numpy 1.7.1 \
+    ## https://pypi.python.org/packages/84/fb/5e9dfeeb5d8909d659e6892c97c9aa66d3798fad50e1d3d66b3c614a9c35/numpy-1.7.1.tar.gz \
+    ## numpy-1.7.1
     install_python_package $INSTALL_DIR matplotlib 1.3.1 \
 	https://pypi.python.org/packages/d4/d0/17f17792a4d50994397052220dbe3ac9850ecbde0297b7572933fa4a5c98/matplotlib-1.3.1.tar.gz \
 	matplotlib-1.3.1
@@ -326,6 +401,8 @@ export PYTHONPATH=$INSTALL_DIR:\$PYTHONPATH
 export PYTHONPATH=$INSTALL_DIR/lib:\$PYTHONPATH
 export PYTHONPATH=$INSTALL_DIR/lib/python2.7:\$PYTHONPATH
 export PYTHONPATH=$INSTALL_DIR/lib/python2.7/site-packages:\$PYTHONPATH
+export LD_LIBRARY_PATH=$ATLAS_LIB_DIR:\$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$ATLAS_LIB_DIR/atlas::\$LD_LIBRARY_PATH
 #
 EOF
 }
