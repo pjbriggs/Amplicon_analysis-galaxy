@@ -76,7 +76,7 @@ function install_amplicon_analysis_pipeline_1_0_patched() {
     git clone https://github.com/pjbriggs/Amplicon_analysis.git
     cd Amplicon_analysis
     git checkout -b $version
-    branches="remove-dependency-on-JOB_ID allow-arbitrary-location-for-reference-data"
+    branches="improve-checking-for-required-progs allow-arbitrary-location-for-reference-data"
     for branch in $branches ; do
 	git checkout -b $branch origin/$branch
 	git checkout $version
