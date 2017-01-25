@@ -63,14 +63,14 @@
   ## Collect outputs
   cp Final_name.txt "${final_name_file}" &&
   cp Metatable_log/Metatable_corrected.txt "${metatable_corrected}" &&
-  cp ${pipeline.name}_OTU_tables/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_tax_OTU_table.biom "${tax_otu_table_biom_file}" &&
-  cp ${pipeline.name}_OTU_tables/otus.tre "${otus_tre_file}" &&
-  cp RESULTS/${pipeline.name}_${reference_database_name}/phylum_genus_dist/bar_charts.html "${phylum_genus_dist_barcharts_html}" &&
-  cp RESULTS/${pipeline.name}_${reference_database_name}/OTUs_count.txt "${otus_count_file}" &&
-  cp RESULTS/${pipeline.name}_${reference_database_name}/table_summary.txt "${table_summary_file}" &&
-  cp RESULTS/${pipeline.name}_${reference_database_name}/Heatmap/otu_table.html "${heatmap_otu_table_html}" &&
-  cp RESULTS/${pipeline.name}_${reference_database_name}/beta_div_even/weighted_2d_plot/weighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_weighted_2d_plots}" &&
-  cp RESULTS/${pipeline.name}_${reference_database_name}/beta_div_even/unweighted_2d_plot/unweighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_unweighted_2d_plots}"
+  cp ${pipeline}_OTU_tables/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_tax_OTU_table.biom "${tax_otu_table_biom_file}" &&
+  cp ${pipeline}_OTU_tables/otus.tre "${otus_tre_file}" &&
+  cp RESULTS/${pipeline}_${reference_database_name}/phylum_genus_charts/bar_charts.html "${phylum_genus_dist_barcharts_html}" &&
+  cp RESULTS/${pipeline}_${reference_database_name}/OTUs_count.txt "${otus_count_file}" &&
+  cp RESULTS/${pipeline}_${reference_database_name}/table_summary.txt "${table_summary_file}" &&
+  cp RESULTS/${pipeline}_${reference_database_name}/Heatmap/otu_table.html "${heatmap_otu_table_html}" &&
+  cp RESULTS/${pipeline}_${reference_database_name}/beta_div_even/weighted_2d_plot/weighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_weighted_2d_plots}" &&
+  cp RESULTS/${pipeline}_${reference_database_name}/beta_div_even/unweighted_2d_plot/unweighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_unweighted_2d_plots}"
   ]]></command>
   <inputs>
     <param type="data" name="metatable_file_in" format="tabular"
@@ -102,9 +102,9 @@
 	   help="Default is 380 (-L)" />
     <param type="select" name="pipeline"
 	    label="Pipeline to use for analysis">
-      <option value="vsearch" selected="true" >Vsearch</option>
+      <option value="Vsearch" selected="true" >Vsearch</option>
       <option value="QIIME">QIIME</option>
-      <option value="uparse">Uparse</option>
+      <option value="Uparse">Uparse</option>
     </param>
     <param type="select" name="reference_database"
 	   label="Reference database">
