@@ -65,7 +65,6 @@
   cp Metatable_log/Metatable_corrected.txt "${metatable_corrected}" &&
   cp ${pipeline}_OTU_tables/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_tax_OTU_table.biom "${tax_otu_table_biom_file}" &&
   cp ${pipeline}_OTU_tables/otus.tre "${otus_tre_file}" &&
-  cp RESULTS/${pipeline}_${reference_database_name}/phylum_genus_charts/bar_charts.html "${phylum_genus_dist_barcharts_html}" &&
   cp RESULTS/${pipeline}_${reference_database_name}/OTUs_count.txt "${otus_count_file}" &&
   cp RESULTS/${pipeline}_${reference_database_name}/table_summary.txt "${table_summary_file}" &&
 
@@ -75,6 +74,12 @@
   mkdir $heatmap_otu_table_html.files_path &&
   cp -r RESULTS/${pipeline}_${reference_database_name}/Heatmap/js $heatmap_otu_table_html.files_path &&
   cp RESULTS/${pipeline}_${reference_database_name}/Heatmap/otu_table.html "${heatmap_otu_table_html}" &&
+
+  ## Phylum genus barcharts
+  mkdir $phylum_genus_dist_barcharts_html.files_path &&
+  cp -r RESULTS/${pipeline}_${reference_database_name}/phylum_genus_charts/charts $phylum_genus_dist_barcharts_html.files_path &&
+  cp -r RESULTS/${pipeline}_${reference_database_name}/phylum_genus_charts/raw_data $phylum_genus_dist_barcharts_html.files_path &&
+  cp RESULTS/${pipeline}_${reference_database_name}/phylum_genus_charts/bar_charts.html "${phylum_genus_dist_barcharts_html}" &&
 
   ## Beta diversity weighted 2d plots
   mkdir $beta_div_even_weighted_2d_plots.files_path &&
