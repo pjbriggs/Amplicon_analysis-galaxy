@@ -28,15 +28,23 @@
     #set reference_database_name = "silva"
   #end if
 
+  ## Make links to Categories.txt and Metatable.txt
+  ln -s "${categories_file_in}" Categories.txt &&
+  ln -s "${metatable_file_in}" Metatable.txt &&
+
   ## Create links to input FASTQs and Final_names.txt file
   ## NB file names must have .fastq extension and contain
   ## "_R1_" or "_R2_"
   #if str($input_type.pairs_or_collection) == "collection"
+    i=0 &&
     #for $fq_pair in $input_type.fastq_collection
-      ln -s "${fq_pair.forward}" "${fq_pair.name}_R1_.fastq" &&
-      ln -s "${fq_pair.reverse}" "${fq_pair.name}_R2_.fastq" &&
-      echo ${fq_pair.name}_R1_.fastq\$'\t'"${fq_pair.name}" >> Final_name.txt &&
-      echo ${fq_pair.name}_R2_.fastq\$'\t'"${fq_pair.name}" >> Final_name.txt &&
+      i=\$((i+1)) &&
+      ## Get sample id (=name) directly from Metatable file
+      sample_id=\$(grep -v "^#" Metatable.txt | cut -f1 | paste -s | cut -f\$i) &&
+      ln -s "${fq_pair.forward}" "\${sample_id}_R1_.fastq" &&
+      ln -s "${fq_pair.reverse}" "\${sample_id}_R2_.fastq" &&
+      echo \${sample_id}_R1_.fastq\$'\t'"\${sample_id}" >> Final_name.txt &&
+      echo \${sample_id}_R2_.fastq\$'\t'"\${sample_id}" >> Final_name.txt &&
     #end for
   #else
     #for $fq_pair in $input_type.fastq_pairs
@@ -46,10 +54,6 @@
       echo ${fq_pair.name}_R2_.fastq\$'\t'"${fq_pair.name}" >> Final_name.txt &&
     #end for
   #end if
-
-  ## Make links to Categories.txt and Metatable.txt
-  ln -s "${categories_file_in}" Categories.txt &&
-  ln -s "${metatable_file_in}" Metatable.txt &&
 
   ## Run the amplicon analysis pipeline script
   Amplicon_analysis_pipeline.sh
