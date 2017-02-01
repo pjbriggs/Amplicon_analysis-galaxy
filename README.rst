@@ -44,18 +44,18 @@ Pipeline dependencies
 =====================
 
 
- - cutadapt ?/1.11 Toolshed: [1.6](https://toolshed.g2.bx.psu.edu/view/lparsons/package_cutadapt_1_6/), [1.8](https://toolshed.g2.bx.psu.edu/view/iuc/package_cutadapt_1_8/)
- - sickle 1.33/1.33 Toolshed: [1.33](https://toolshed.g2.bx.psu.edu/view/slegras/package_sickle_1_33/)
- - bioawk 27-08-2013/27-08-2013  Toolshed: none but [WIP](https://github.com/fls-bioinformatics-core/galaxy-tools/tree/package_bioawk_27_08_2013/packages/package_bioawk_1_0)
- - pandaseq 2.8/2.8.1 Toolshed: none but [WIP](https://github.com/fls-bioinformatics-core/galaxy-tools/tree/master/packages/package_pandaseq_2_8_1)
- - spades 3.5.0/3.5.0 Toolshed: [3.6.2](https://toolshed.g2.bx.psu.edu/view/nml/package_spades_3_6_2/)
- - fastqc 0.11.3/0.11.3 Toolshed: [0.11.4](https://toolshed.g2.bx.psu.edu/view/iuc/package_fastqc_0_11_4/)
- - qiime 1.8.0/1.8.0 Toolshed: [1.9.1](https://toolshed.g2.bx.psu.edu/view/iuc/package_python_2_7_qiime_1_9_1/)
- - blast 2.2.26/2.2.26 Toolshed: [2.2.26](https://toolshed.g2.bx.psu.edu/view/iyad/package_blast_2_2_26/) **BROKEN**
- - fasta_number 02jun2015/- Toolshed: none, but part of [uparse](http://drive5.com/python/summary.html)?
- - fasta-splitter 0.2.4/0.2.4 Toolshed: none but [WIP](https://github.com/fls-bioinformatics-core/galaxy-tools/tree/package_fasta_splitter_0_2_4/packages/package_fasta_splitter_0_2_4)
+ - cutadapt ?/1.11 Toolshed: `1.6 <https://toolshed.g2.bx.psu.edu/view/lparsons/package_cutadapt_1_6/>`_, `1.8 <https://toolshed.g2.bx.psu.edu/view/iuc/package_cutadapt_1_8/>`_
+ - sickle 1.33/1.33 Toolshed: `1.33 <https://toolshed.g2.bx.psu.edu/view/slegras/package_sickle_1_33/>`_
+ - bioawk 27-08-2013/27-08-2013 Toolshed: none but `WIP <https://github.com/fls-bioinformatics-core/galaxy-tools/tree/package_bioawk_27_08_2013/packages/package_bioawk_1_0>`_)
+ - pandaseq 2.8/2.8.1 Toolshed: none but `WIP <https://github.com/fls-bioinformatics-core/galaxy-tools/tree/master/packages/package_pandaseq_2_8_1>`_
+ - spades 3.5.0/3.5.0 Toolshed: `3.6.2 <https://toolshed.g2.bx.psu.edu/view/nml/package_spades_3_6_2/>`_
+ - fastqc 0.11.3/0.11.3 Toolshed: `0.11.4 <https://toolshed.g2.bx.psu.edu/view/iuc/package_fastqc_0_11_4/>`_
+ - qiime 1.8.0/1.8.0 Toolshed: `1.9.1 <https://toolshed.g2.bx.psu.edu/view/iuc/package_python_2_7_qiime_1_9_1/>`_
+ - blast 2.2.26/2.2.26 Toolshed: `2.2.26 <https://toolshed.g2.bx.psu.edu/view/iyad/package_blast_2_2_26/>`_ **BROKEN**
+ - fasta_number 02jun2015/- Toolshed: none, but part of `uparse <http://drive5.com/python/summary.html>`_?
+ - fasta-splitter 0.2.4/0.2.4 Toolshed: none but `WIP <https://github.com/fls-bioinformatics-core/galaxy-tools/tree/package_fasta_splitter_0_2_4/packages/package_fasta_splitter_0_2_4>`_
  - rdp_classifier 2.2/2.2 Toolshed: ?
- - R 3.2.0/3.2.0 Toolshed: [3.2.1](https://toolshed.g2.bx.psu.edu/view/iuc/package_r_3_2_1/)
+ - R 3.2.0/3.2.0 Toolshed: `3.2.1 <https://toolshed.g2.bx.psu.edu/view/iuc/package_r_3_2_1/>`_
  - microbiomeutil r20110519/2010-04-29
  - vsearch 1.1.3/1.1.3       -
  - usearch 6.1.544/n/a       -
