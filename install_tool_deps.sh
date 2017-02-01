@@ -72,16 +72,18 @@ function install_amplicon_analysis_pipeline_1_0_patched() {
     mkdir -p $install_dir
     echo Moving to $install_dir
     pushd $install_dir
-    # Clone and patch analysis pipeline script
+    # Clone and patch analysis pipeline scripts
     git clone https://github.com/pjbriggs/Amplicon_analysis.git
     cd Amplicon_analysis
     git checkout -b $version
-    branches="improve-checking-for-required-progs allow-arbitrary-location-for-reference-data"
-    for branch in $branches ; do
-	git checkout -b $branch origin/$branch
-	git checkout $version
-	git merge -m "Merge $branch into $version" $branch
-    done
+    branches=
+    if [ ! -z "$branches" ] ; then
+	for branch in $branches ; do
+	    git checkout -b $branch origin/$branch
+	    git checkout $version
+	    git merge -m "Merge $branch into $version" $branch
+	done
+    fi
     cd ..
     popd
     # Make setup file
