@@ -509,10 +509,12 @@ function install_fasta_number() {
     if [ -f $install_dir/env.sh ] ; then
 	return
     fi
-    # Install script and make 'default' link
+    # Install scripts and make 'default' link
     mkdir -p $install_dir/bin
+    mkdir -p $install_dir/lib
     tar zxf python_scripts.tar.gz
     mv fasta_number.py $install_dir/bin
+    mv die.py $install_dir/lib
     ln -s $version $default_dir
     popd
     # Clean up
@@ -524,6 +526,7 @@ cat > $install_dir/env.sh <<EOF
 # Source this to setup fasta_number/$version
 echo Setting up fasta_number $version
 export PATH=$install_dir/bin:\$PATH
+export PYTHONPATH=$install_dir/lib:\$PYTHONPATH
 #
 EOF
 }
