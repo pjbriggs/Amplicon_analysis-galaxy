@@ -117,7 +117,9 @@
       </param>
       <when value="collection">
 	<param name="fastq_collection" type="data_collection"
-	       format="fastqsanger" collection_type="list:paired"/>
+	       format="fastqsanger" collection_type="list:paired"
+	       label="Collection of FASTQ forward and reverse (R1/R2) pairs"
+	       help="Each FASTQ pair will be treated as one sample; the name of each sample will be taken from the first column of the Metatable file " />
       </when>
       <when value="pairs_of_files">
 	<repeat name="fastq_pairs" title="Input fastq pairs" min="1">
