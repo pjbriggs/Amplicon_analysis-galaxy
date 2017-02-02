@@ -47,85 +47,52 @@ Outputs to collect
  - RESULTS/<PIPELINE>_<reference>/beta_div_even/weighted_2d_plot/...html
  - RESULTS/<PIPELINE>_<reference>/beta_div_even/unweighted_2d_plot/...html
 
-Pipeline dependencies
-=====================
+Dependencies
+============
 
-The pipeline script has the following dependencies
+The tool takes its dependencies from the underlying pipeline script (see
+https://github.com/MTutino/Amplicon_analysis/blob/master/README.md
+for details).
 
- - cutadapt (version not specified):
+The ``install_tool_deps.sh`` script can be used to install the
+dependencies locally, for example::
 
-   * Using 1.11
-   * Toolshed has `1.6 <https://toolshed.g2.bx.psu.edu/view/lparsons/package_cutadapt_1_6/>`_, `1.8 <https://toolshed.g2.bx.psu.edu/view/iuc/package_cutadapt_1_8/>`_
+    install_tool_deps.sh /path/to/local_tool_dependencies
 
- - sickle 1.33:
+This can then be targeted in a Galaxy installation by adding the
+following lines to the ``dependency_resolvers_conf.xml`` file::
 
-   * Using 1.33
-   * Toolshed has `1.33 <https://toolshed.g2.bx.psu.edu/view/slegras/package_sickle_1_33/>`_
+    <galaxy_packages base_path="/path/to/local_tool_dependencies" />
+    <galaxy_packages base_path="/path/to/local_tool_dependencies" versionless="true" />
 
- - bioawk 27-08-2013
+ideally before the ``<conda ... />`` resolvers; see
+https://docs.galaxyproject.org/en/latest/admin/dependency_resolvers.html#galaxy-packages-dependency-resolver.
 
-   * Using 27-08-2013
-   * Toolshed doesn't have a version but there is a `WIP <https://github.com/fls-bioinformatics-core/galaxy-tools/tree/package_bioawk_27_08_2013/packages/package_bioawk_1_0>`_
+Alternatively (or in addition), a number of dependencies are also
+available via (Bio)conda:
 
- - pandaseq 2.8
-
-   * Using 2.8.1
-   * Toolshed doesn't have a version but there is a `WIP <https://github.com/fls-bioinformatics-core/galaxy-tools/tree/master/packages/package_pandaseq_2_8_1>`_
-
- - spades 3.5.0
-
-   * Using 3.5.0
-   * Toolshed has `3.6.2 <https://toolshed.g2.bx.psu.edu/view/nml/package_spades_3_6_2/>`_
-
+ - cutadapt 1.8.1
+ - sickle-trim 1.33
+ - bioawk 1.0
  - fastqc 0.11.3
-
-   * Using 0.11.3
-   * Toolshed has `0.11.4 <https://toolshed.g2.bx.psu.edu/view/iuc/package_fastqc_0_11_4/>`_
-
- - qiime 1.8.0
-
-   * Using 1.8.0
-   * Toolshed has `1.9.1 <https://toolshed.g2.bx.psu.edu/view/iuc/package_python_2_7_qiime_1_9_1/>`_
-
- - blast 2.2.26
-
-   * Using 2.2.26
-   * Toolshed has broken `2.2.26 <https://toolshed.g2.bx.psu.edu/view/iyad/package_blast_2_2_26/>`_
-
- - fasta_number 02jun2015
-
-   * Unspecified verion (latest from `uparse <http://drive5.com/python/summary.html>`_)
-   * Toolshed doesn't have a version
-
- - fasta-splitter 0.2.4
-
-   * Using 0.2.4
-   * Toolshed doesn't have a version but there is a `WIP <https://github.com/fls-bioinformatics-core/galaxy-tools/tree/package_fasta_splitter_0_2_4/packages/package_fasta_splitter_0_2_4>`_
-
- - rdp_classifier 2.2
-
-   * Using 2.2
-   * Toolshed doesn't have a version?
-
  - R 3.2.0
 
-   * Using 3.2.0
-   * Toolshed has `3.2.1 <https://toolshed.g2.bx.psu.edu/view/iuc/package_r_3_2_1/>`_
+Some dependencies are available but with the "wrong" versions:
 
- - microbiomeutil r20110519
+ - spades (need 3.5.0)
+ - qiime (need 1.8.0)
+ - blast (need 2.2.26)
+ - vsearch (need 1.1.3)
 
-   * Using 2010-04-29
+The following dependencies are currently unavailable:
 
- - vsearch 1.1.3/1.1.3
+ - fasta_number (need 02jun2015)
+ - fasta-splitter (need 0.2.4)
+ - rdp_classifier (need 2.2)
+ - microbiomeutil (need r20110519)
 
-   * Using 1.1.3
-
- - usearch 6.1.544 and 8.0.1623
-
-   * ?
-
-There is an installer script which attempts to install the dependencies
-locally (``install_tool_deps.sh``).
+(NB usearch 6.1.544 and 8.0.1623 are special cases which must be
+handled outside of Galaxy's dependency management systems.)
 
 Other notes
 ===========
