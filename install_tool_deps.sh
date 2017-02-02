@@ -562,7 +562,7 @@ cat > $install_dir/env.sh <<EOF
 # Source this to setup fasta-splitter/0.2.4
 echo Setting up fasta-splitter 0.2.4
 export PATH=$install_dir/bin:\$PATH
-export PERL5LIB=$install_dir/lib/perl5:$PERL5LIB
+export PERL5LIB=$install_dir/lib/perl5:\$PERL5LIB
 #
 EOF
 }
