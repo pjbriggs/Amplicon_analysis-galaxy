@@ -540,6 +540,17 @@ function install_fasta_splitter_0_2_4() {
     local wd=$(mktemp -d)
     echo Moving to $wd
     pushd $wd
+    # Install Perl packages using cpanm
+    mkdir -p $install_dir/lib/perl5
+    wget -q -L https://cpanmin.us/ -O cpanm
+    chmod +x cpanm
+    for package in "File::Util" ; do
+	/bin/bash <<EOF
+export PATH=$install_dir/bin:$PATH PERL5LIB=$install_dir/lib/perl5:$PERL5LIB && \
+./cpanm -l $install_dir $package >>$install_dir/INSTALLATION.log
+EOF
+    done
+    # Install fasta-splitter
     wget -q http://kirill-kryukov.com/study/tools/fasta-splitter/files/fasta-splitter-0.2.4.zip
     unzip -qq fasta-splitter-0.2.4.zip
     chmod 0755 fasta-splitter.pl
@@ -554,6 +565,7 @@ cat > $install_dir/env.sh <<EOF
 # Source this to setup fasta-splitter/0.2.4
 echo Setting up fasta-splitter 0.2.4
 export PATH=$install_dir/bin:\$PATH
+export PERL5LIB=$install_dir/lib/perl5:$PERL5LIB
 #
 EOF
 }
