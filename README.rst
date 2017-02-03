@@ -34,6 +34,27 @@ Pipeline options to interface
 
    * no options required at present
 
+Setup and configuration
+=======================
+
+To ensure that HTML outputs are displayed correctly in Galaxy (for example
+the Vsearch OTU table heatmaps), Galaxy needs to be configured not to
+sanitize the outputs from the ``Amplicon_analysis`` tool.
+
+Either:
+
+ - Set ``sanitize_all_html = False`` in ``config/galaxy.ini`` (nb don't do
+   this on production servers or public instances!); or
+ - Add the ``Amplicon_analysis`` tool to the display whitelist in the
+   Galaxy instance:
+
+   * Set ``sanitize_whitelist_file = config/whitelist.txt`` in
+     ``config/galaxy.ini`` and restart Galaxy;
+   * Go to ``Admin>Manage Display Whitelist``, check the box for
+     ``Amplicon_analysis`` (hint: use your browser's 'find-in-page'
+     search function to help locate it) and click on
+     ``Submit new whitelist`` to update the settings.
+
 Outputs to collect
 ==================
 
