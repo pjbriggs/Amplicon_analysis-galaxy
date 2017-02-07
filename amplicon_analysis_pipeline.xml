@@ -1,4 +1,4 @@
-<tool id="amplicon_analysis_pipeline" name="Amplicon Analysis Pipeline" version="1.0.1">
+<tool id="amplicon_analysis_pipeline" name="Amplicon Analysis Pipeline" version="1.0.2">
   <description>analyse 16S rRNA data from Illumina Miseq paired-end reads</description>
   <requirements>
     <requirement type="package" version="1.0-patched">amplicon_analysis_pipeline</requirement>

@@ -131,5 +131,7 @@ History
 ========== ======================================================================
 Version    Changes
 ---------- ----------------------------------------------------------------------
-1.0.0      Initial version
+1.0.2      Enable support for FASTQs supplied via dataset collections and
+           fix some broken output datasets.
+1.0.1      Initial version
 ========== ======================================================================
