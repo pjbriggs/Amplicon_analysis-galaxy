@@ -1,0 +1,45 @@
+<tool id="relabel_samples" name="Relabel samples in collection" version="0.1.0">
+  <description>for input into Amplicon Analysis Pipeline</description>
+  <command><![CDATA[
+  i=0 &&
+  #for $fq_pair in $fastqs_in
+    i=\$((i+1)) &&
+    sample_id=\$(grep -v "^#" $new_labels | cut -f1 | paste -s | cut -f\$i) &&
+    cp "${fq_pair.forward}" \${sample_id}_forward.fastq &&
+    cp "${fq_pair.reverse}" \${sample_id}_reverse.fastq &&
+  #end for
+  echo
+  ]]></command>
+  <inputs>
+    <param name="fastqs_in" type="data_collection"
+	   format="fastqsanger" collection_type="list:paired"
+	   label="Collection of FASTQ forward and reverse (R1/R2) pairs" />
+    <param name="new_labels" type="data" format="text"
+	   label="List of new labels" />
+  </inputs>
+  <outputs>
+    <collection name="fastqs_out" type="list:paired"
+		label="${fastqs_in.name} (relabeled)">
+      <discover_datasets pattern="(?P&lt;identifier_0&gt;.+)_(?P&lt;identifier_1&gt;[^_]+)\.fastq" ext="fastqsanger" visible="true" />
+    </collection>
+  </outputs>
+  <help><![CDATA[
+.. class:: infomark
+
+**What it does**
+
+This tool creates a new dataset collection from an existing list
+of paired FASTQ files, with new labels for each pair taken from
+the supplied list.
+
+**Usage**
+
+TBA
+
+**Authors**
+
+Peter Briggs
+
+  ]]></help>
+</tool>
+
