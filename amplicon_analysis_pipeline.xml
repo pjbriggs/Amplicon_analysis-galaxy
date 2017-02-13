@@ -80,6 +80,7 @@
   cp ${pipeline}_OTU_tables/otus.tre "${otus_tre_file}" &&
   cp RESULTS/${pipeline}_${reference_database_name}/OTUs_count.txt "${otus_count_file}" &&
   cp RESULTS/${pipeline}_${reference_database_name}/table_summary.txt "${table_summary_file}" &&
+  cp Multiplexed_files/${pipeline}_pipeline/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_OTUs.fasta "${dereplicated_nonchimera_otus_fasta}" &&
 
   ## HTML outputs
 
@@ -174,6 +175,8 @@
 	  label="${tool.name}: ${pipeline} OTUs count file" />
     <data format="tabular" name="table_summary_file"
 	  label="${tool.name}: ${pipeline} table summary file" />
+    <data format="fasta" name="dereplicated_nonchimera_otus_fasta"
+	  label="${tool.name}: ${pipeline} multiplexed linearized dereplicated mc2 repset nonchimeras OTUs FASTA" />
     <data format="html" name="heatmap_otu_table_html"
 	  label="${tool.name}: ${pipeline} heatmap OTU table HTML" />
     <data format="html" name="beta_div_even_weighted_2d_plots"
