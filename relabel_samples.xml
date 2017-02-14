@@ -11,6 +11,9 @@
   echo
   ]]></command>
   <inputs>
+    <param name="new_collection_name" type="text"
+	   value="Relabelled collection"
+	   label="Name for relabelled collection" />
     <param name="fastqs_in" type="data_collection"
 	   format="fastqsanger" collection_type="list:paired"
 	   label="Collection of FASTQ forward and reverse (R1/R2) pairs" />
@@ -19,7 +22,7 @@
   </inputs>
   <outputs>
     <collection name="fastqs_out" type="list:paired"
-		label="${fastqs_in.name} (relabeled)">
+		label="${new_collection_name}">
       <discover_datasets pattern="(?P&lt;identifier_0&gt;.+)_(?P&lt;identifier_1&gt;[^_]+)\.fastq" ext="fastqsanger" visible="true" />
     </collection>
   </outputs>
@@ -34,7 +37,19 @@ the supplied list.
 
 **Usage**
 
-TBA
+The tool requires an appropriate dataset collection plus a text file
+consisting of new names to use as labels (one per line).
+
+There must be as many new labels as FASTQ pairs in the collection;
+new labels are applied in the order that they appear in the file.
+
+.. class:: warningmark
+
+This tool has lots of issues, the principal of which is that in
+order to create the new collection it also creates new FASTQ pairs
+which duplicate those from the original collection. This makes it
+slow, and the outputs also consume additional quota space to the
+size of the input collection.
 
 **Authors**
 
