@@ -162,7 +162,7 @@
     <data format="tabular" name="otus_tre_file"
 	  label="${tool.name}: ${pipeline} otus.tre" />
     <data format="html" name="phylum_genus_dist_barcharts_html"
-	  label="${tool.name}: ${pipeline} phylum_genus_dist barcharts HTML" />
+	  label="${tool.name}: ${pipeline} phylum genus dist barcharts HTML" />
     <data format="tabular" name="otus_count_file"
 	  label="${tool.name}: ${pipeline} OTUs count file" />
     <data format="tabular" name="table_summary_file"
