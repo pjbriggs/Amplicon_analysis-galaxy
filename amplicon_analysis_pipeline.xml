@@ -143,8 +143,11 @@
     <param type="select" name="pipeline"
 	    label="Pipeline to use for analysis">
       <option value="Vsearch" selected="true" >Vsearch</option>
+      <!--
+      Remove the QIIME and Uparse options for now
       <option value="QIIME">QIIME</option>
       <option value="Uparse">Uparse</option>
+      -->
     </param>
     <param type="select" name="reference_database"
 	   label="Reference database">
