@@ -131,6 +131,10 @@ History
 ========== ======================================================================
 Version    Changes
 ---------- ----------------------------------------------------------------------
+1.0.3      Take the sample names from the collection dataset names when
+           using collection as input (this is now the default input mode);
+           collect additional output dataset; disable ``usearch``-based
+           pipelines (i.e. ``UPARSE`` and ``QIIME``).
 1.0.2      Enable support for FASTQs supplied via dataset collections and
            fix some broken output datasets.
 1.0.1      Initial version
