@@ -100,7 +100,7 @@
   <inputs>
     <param type="data" name="metatable_file_in" format="tabular"
 	   label="Input Metatable.txt file" />
-    <param type="data" name="categories_file_in" format="tabular"
+    <param type="data" name="categories_file_in" format="txt,tabular"
 	   label="Input Categories.txt file" />
     <conditional name="input_type">
       <param name="pairs_or_collection" type="select"
