@@ -49,8 +49,12 @@
 
   ## Run the amplicon analysis pipeline script
   Amplicon_analysis_pipeline.sh
+  #if str( $forward_pcr_primer ) != ""
   -g "$forward_pcr_primer"
+  #end if
+  #if str( $reverse_pcr_primer ) != ""
   -G "$reverse_pcr_primer"
+  #end if
   #if str( $trimming_threshold ) != ""
   -q $trimming_threshold
   #end if
