@@ -131,10 +131,10 @@
     </conditional>
     <param type="text" name="forward_pcr_primer" value=""
 	   label="Forward PCR primer sequence"
-	   help="Must not include barcode or adapter sequence (-g)" />
+	   help="Optional; must not include barcode or adapter sequence (-g)" />
     <param type="text" name="reverse_pcr_primer" value=""
 	   label="Reverse PCR primer sequence"
-	   help="Must not include barcode or adapter sequence (-G)" />
+	   help="Optional; must not include barcode or adapter sequence (-G)" />
     <param type="integer" name="trimming_threshold" value="20"
 	   label="Threshold quality below which read will be trimmed"
 	   help="Phred score; default is 20 (-q)" />
