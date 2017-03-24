@@ -99,6 +99,7 @@ if __name__ == "__main__":
     # Echo log file contents to stdout
     log_file = "Amplicon_analysis_pipeline.log"
     if os.path.exists(log_file):
+        sys.stdout.write("\nOutput from %s:\n\n" % log_file)
         with open(log_file,'rb') as log:
             sys.stdout.write(log.read())
     else:
