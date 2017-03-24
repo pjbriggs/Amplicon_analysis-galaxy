@@ -79,7 +79,7 @@ if __name__ == "__main__":
     if args.reference_data_path:
         pipeline.add_args("-r",args.reference_data_path)
     pipeline.add_args("-P",args.pipeline)
-    if args.reference_database:
+    if args.use_silva:
         pipeline.add_args("-S")
 
     # Echo the pipeline command to stdout

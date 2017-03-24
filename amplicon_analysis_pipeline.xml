@@ -48,8 +48,10 @@
   #end if
   -P $pipeline
   -r \$AMPLICON_ANALYSIS_REF_DATA_PATH
-  "${reference_database}"
-  # Input files
+  #if str( $reference_database ) != ""
+    "${reference_database}"
+  #end if
+  ## Input files
   "${categories_file_in}"
   "${metatable_file_in}"
   ## FASTQ pairs
