@@ -36,6 +36,7 @@ if __name__ == "__main__":
     p.add_argument("-L",dest="minimum_length")
     p.add_argument("-P",dest="pipeline",
                    choices=["vsearch","uparse","qiime"],
+                   type=str.lower,
                    default="vsearch")
     p.add_argument("-S",dest="use_silva",action="store_true")
     p.add_argument("-r",dest="reference_data_path")
