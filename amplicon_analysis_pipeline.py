@@ -3,9 +3,10 @@
 # Wrapper script to run Amplicon_analysis_pipeline.sh
 # from Galaxy tool
 
+import sys
 import os
 import argparse
-import tempfile
+import subprocess
 
 class PipelineCmd(object):
     def __init__(self,cmd):
@@ -85,9 +86,15 @@ if __name__ == "__main__":
     sys.stdout.write("Running %s\n" % pipeline.cmd)
 
     # Run the pipeline
-    exit_code = subprocess.check_call(pipeline.cmd,
-                                      stdout=sys.stdout,
-                                      stderr=sys.stderr)
+    try:
+        subprocess.check_call(pipeline.cmd,
+                              stdout=sys.stdout,
+                              stderr=sys.stderr)
+        exit_code = 0
+    except subprocess.CalledProcessError as ex:
+        # Non-zero exit status
+        sys.stderr.write(ex)
+        exit_code = ex.returncode
 
     # Echo log file contents to stdout
     log_file = "Amplicon_analysis_pipeline.log"
