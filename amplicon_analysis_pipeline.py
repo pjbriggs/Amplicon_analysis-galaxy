@@ -23,7 +23,7 @@ if __name__ == "__main__":
     p.add_argument("metatable",
                    metavar="METATABLE_FILE",
                    help="Metatable.txt file")
-    p.add_argument("fastq_pair",
+    p.add_argument("fastq_pairs",
                    metavar="SAMPLE_NAME FQ_R1 FQ_R2",
                    nargs="+",
                    default=list(),
@@ -54,7 +54,7 @@ if __name__ == "__main__":
 
     # Link to FASTQs and construct Final_name.txt file
     with open("Final_name.txt",'w') as final_name:
-        fastqs = iter(args.fastq_pair)
+        fastqs = iter(args.fastq_pairs)
         for sample_name,fqr1,fqr2 in zip(fastqs,fastqs,fastqs):
             r1 = "%s_R1_.fastq" % sample_name
             r2 = "%s_R2_.fastq" % sample_name

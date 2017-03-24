@@ -49,6 +49,9 @@
   -P $pipeline
   -r \$AMPLICON_ANALYSIS_REF_DATA_PATH
   "${reference_database}"
+  # Input files
+  "${categories_file_in}"
+  "${metatable_file_in}"
   ## FASTQ pairs
   #if str($input_type.pairs_or_collection) == "collection"
     #set fastq_pairs = $input_type.fastq_collection
@@ -56,11 +59,8 @@
     #set fastq_pairs = $input_type.fastq_pairs
   #end if
   #for $fq_pair in $fastq_pairs
-    --fastq_pair "${fq_pair.name}" "${fq_pair.forward}" "${fq_pair.reverse}"
-    #end for
-  # Input files
-  "${categories_file_in}"
-  "${metatable_file_in}"
+    "${fq_pair.name}" "${fq_pair.forward}" "${fq_pair.reverse}"
+  #end for
   &&
 
   ## Collect outputs
