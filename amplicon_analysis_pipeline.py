@@ -93,7 +93,7 @@ if __name__ == "__main__":
         exit_code = 0
     except subprocess.CalledProcessError as ex:
         # Non-zero exit status
-        sys.stderr.write(ex)
+        sys.stderr.write(str(ex))
         exit_code = ex.returncode
 
     # Echo log file contents to stdout
