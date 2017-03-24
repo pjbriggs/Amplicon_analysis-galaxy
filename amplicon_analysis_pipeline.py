@@ -61,8 +61,8 @@ if __name__ == "__main__":
             r2 = "%s_R2_.fastq" % sample_name
             os.symlink(fqr1,r1)
             os.symlink(fqr2,r2)
-            final_name.write('\t'.join((sample_name,r1)))
-            final_name.write('\t'.join((sample_name,r2)))
+            final_name.write('\t'.join((r1,sample_name)))
+            final_name.write('\t'.join((r2,sample_name)))
 
     # Construct the pipeline command
     pipeline = PipelineCmd("Amplicon_analysis_pipeline.sh")
