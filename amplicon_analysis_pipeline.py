@@ -46,8 +46,8 @@ if __name__ == "__main__":
     os.symlink(metatable_file,"Metatable.txt")
 
     # Link to Categories.txt file (if provided)
-    if args.categories is not None:
-        categories_file = os.path.abspath(args.categories)
+    if args.categories_file is not None:
+        categories_file = os.path.abspath(args.categories_file)
         os.symlink(categories_file,"Categories.txt")
 
     # Link to FASTQs and construct Final_name.txt file
