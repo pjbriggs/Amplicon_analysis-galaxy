@@ -51,8 +51,10 @@
   #if str( $reference_database ) != ""
     "${reference_database}"
   #end if
+  #if str( $categories_file_in ) != ""
+    -c "${categories_file_in}"
+  #end if
   ## Input files
-  "${categories_file_in}"
   "${metatable_file_in}"
   ## FASTQ pairs
   #if str($input_type.pairs_or_collection) == "collection"
@@ -101,7 +103,8 @@
     <param type="data" name="metatable_file_in" format="tabular"
 	   label="Input Metatable.txt file" />
     <param type="data" name="categories_file_in" format="txt,tabular"
-	   label="Input Categories.txt file" />
+	   label="Input Categories.txt file" optional="true"
+	   help="(optional)" />
     <conditional name="input_type">
       <param name="pairs_or_collection" type="select"
 	     label="Input FASTQ type">

@@ -18,9 +18,6 @@ class PipelineCmd(object):
 if __name__ == "__main__":
     # Command line
     p = argparse.ArgumentParser()
-    p.add_argument("categories",
-                   metavar="CATEGORIES_FILE",
-                   help="Categories.txt file")
     p.add_argument("metatable",
                    metavar="METATABLE_FILE",
                    help="Metatable.txt file")
@@ -41,17 +38,17 @@ if __name__ == "__main__":
                    default="vsearch")
     p.add_argument("-S",dest="use_silva",action="store_true")
     p.add_argument("-r",dest="reference_data_path")
+    p.add_argument("-c",dest="categories_file")
     args = p.parse_args()
 
-    # Sort out command line arguments
-    metatable_file = os.path.abspath(args.metatable)
-    categories_file = os.path.abspath(args.categories)
-
     # Build the environment for running the pipeline
-
-    # Link to Categories.txt and Metatable.txt
+    metatable_file = os.path.abspath(args.metatable)
     os.symlink(metatable_file,"Metatable.txt")
-    os.symlink(categories_file,"Categories.txt")
+
+    # Link to Categories.txt file (if provided)
+    if args.categories is not None:
+        categories_file = os.path.abspath(args.categories)
+        os.symlink(categories_file,"Categories.txt")
 
     # Link to FASTQs and construct Final_name.txt file
     with open("Final_name.txt",'w') as final_name:
