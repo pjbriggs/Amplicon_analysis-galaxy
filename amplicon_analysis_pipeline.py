@@ -103,5 +103,13 @@ if __name__ == "__main__":
         sys.stderr.write("ERROR missing log file \"%s\"\n" %
                          log_file)
 
+    # List the output directory contents
+    sys.stdout.write("\nOutput files:\n")
+    results_dir = os.path.abspath("RESULTS")
+    for d,dirs,files in os.walk(results_dir):
+        sys.stdout.write("-- %s\n" % os.path.relpath(d,results_dir))
+        for f in files:
+            sys.stdout.write("---- %s\n" % os.path.relpath(f,results_dir))
+
     # Finish
     sys.exit(exit_code)
