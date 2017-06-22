@@ -100,9 +100,9 @@
   cp RESULTS/${pipeline}_${reference_database_name}/beta_div_even/unweighted_2d_plot/unweighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_unweighted_2d_plots}"
   ]]></command>
   <inputs>
-    <param type="data" name="metatable_file_in" format="tabular"
+    <param type="data" name="metatable_file_in" format="txt"
 	   label="Input Metatable.txt file" />
-    <param type="data" name="categories_file_in" format="txt,tabular"
+    <param type="data" name="categories_file_in" format="txt"
 	   label="Input Categories.txt file" optional="true"
 	   help="(optional)" />
     <conditional name="input_type">
@@ -113,7 +113,7 @@
       </param>
       <when value="collection">
 	<param name="fastq_collection" type="data_collection"
-	       format="fastqsanger" collection_type="list:paired"
+	       format="fastqsanger,fastq" collection_type="list:paired"
 	       label="Collection of FASTQ forward and reverse (R1/R2) pairs"
 	       help="Each FASTQ pair will be treated as one sample; the name of each sample will be taken from the first column of the Metatable file " />
       </when>
@@ -121,9 +121,9 @@
 	<repeat name="fastq_pairs" title="Input fastq pairs" min="1">
 	  <param type="text" name="name" value=""
 		 label="Final name for FASTQ pair" />
-	  <param type="data" name="fastq_r1" format="fastqsanger"
+	  <param type="data" name="fastq_r1" format="fastqsanger,fastq"
 		 label="FASTQ with forward reads (R1)" />
-	  <param type="data" name="fastq_r2" format="fastqsanger"
+	  <param type="data" name="fastq_r2" format="fastqsanger,fastq"
 		 label="FASTQ with reverse reads (R2)" />
 	</repeat>
       </when>
