@@ -107,6 +107,8 @@
   cp pipeline_outputs.html "$log_files"
   ]]></command>
   <inputs>
+    <param name="title" type="text" value="test" size="25"
+	   label="Title" help="Optional text that will be added to the output dataset names" />
     <param type="data" name="metatable_file_in" format="txt"
 	   label="Input Metatable.txt file" />
     <param type="data" name="categories_file_in" format="txt"
@@ -167,29 +169,29 @@
   </inputs>
   <outputs>
     <data format="tabular" name="final_name_file"
-	  label="${tool.name}: Final_name.txt" />
+	  label="${tool.name}:${title} Final_name.txt" />
     <data format="tabular" name="metatable_corrected"
-	  label="${tool.name}: Metatable_corrected.txt" />
+	  label="${tool.name}:${title} Metatable_corrected.txt" />
     <data format="biom" name="tax_otu_table_biom_file"
-	  label="${tool.name}: ${pipeline} tax OTU table (biom format)" />
+	  label="${tool.name}:${title} ${pipeline} tax OTU table (biom format)" />
     <data format="tabular" name="otus_tre_file"
-	  label="${tool.name}: ${pipeline} otus.tre" />
+	  label="${tool.name}:${title} ${pipeline} otus.tre" />
     <data format="html" name="phylum_genus_dist_barcharts_html"
-	  label="${tool.name}: ${pipeline} phylum genus dist barcharts HTML" />
+	  label="${tool.name}:${title} ${pipeline} phylum genus dist barcharts HTML" />
     <data format="tabular" name="otus_count_file"
-	  label="${tool.name}: ${pipeline} OTUs count file" />
+	  label="${tool.name}:${title} ${pipeline} OTUs count file" />
     <data format="tabular" name="table_summary_file"
-	  label="${tool.name}: ${pipeline} table summary file" />
+	  label="${tool.name}:${title} ${pipeline} table summary file" />
     <data format="fasta" name="dereplicated_nonchimera_otus_fasta"
-	  label="${tool.name}: ${pipeline} multiplexed linearized dereplicated mc2 repset nonchimeras OTUs FASTA" />
+	  label="${tool.name}:${title} ${pipeline} multiplexed linearized dereplicated mc2 repset nonchimeras OTUs FASTA" />
     <data format="html" name="heatmap_otu_table_html"
-	  label="${tool.name}: ${pipeline} heatmap OTU table HTML" />
+	  label="${tool.name}:${title} ${pipeline} heatmap OTU table HTML" />
     <data format="html" name="beta_div_even_weighted_2d_plots"
-	  label="${tool.name}: ${pipeline} beta diversity weighted 2D plots HTML" />
+	  label="${tool.name}:${title} ${pipeline} beta diversity weighted 2D plots HTML" />
     <data format="html" name="beta_div_even_unweighted_2d_plots"
-	  label="${tool.name}: ${pipeline} beta diversity unweighted 2D plots HTML" />
+	  label="${tool.name}:${title} ${pipeline} beta diversity unweighted 2D plots HTML" />
     <data format="html" name="log_files"
-	  label="${tool.name}: ${pipeline} log files" />
+	  label="${tool.name}:${title} ${pipeline} log files" />
   </outputs>
   <tests>
   </tests>
