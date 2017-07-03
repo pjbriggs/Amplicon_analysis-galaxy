@@ -97,7 +97,14 @@
   ## Beta diversity unweighted 2d plots
   mkdir $beta_div_even_unweighted_2d_plots.files_path &&
   cp -r RESULTS/${pipeline}_${reference_database_name}/beta_div_even/unweighted_2d_plot/* $beta_div_even_unweighted_2d_plots.files_path &&
-  cp RESULTS/${pipeline}_${reference_database_name}/beta_div_even/unweighted_2d_plot/unweighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_unweighted_2d_plots}"
+  cp RESULTS/${pipeline}_${reference_database_name}/beta_div_even/unweighted_2d_plot/unweighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_unweighted_2d_plots}" &&
+
+  ## Pipeline outputs (log files etc)
+  mkdir $log_files.files_path &&
+  cp Amplicon_analysis_pipeline.log $log_files.files_path &&
+  cp pipeline.log $log_files.files_path $log_files.files_path &&
+  cp Metatable_log/Metatable.html $log_files.files_path &&
+  cp pipeline_outputs.html "$log_files"
   ]]></command>
   <inputs>
     <param type="data" name="metatable_file_in" format="txt"
@@ -181,6 +188,8 @@
 	  label="${tool.name}: ${pipeline} beta diversity weighted 2D plots HTML" />
     <data format="html" name="beta_div_even_unweighted_2d_plots"
 	  label="${tool.name}: ${pipeline} beta diversity unweighted 2D plots HTML" />
+    <data format="html" name="log_files"
+	  label="${tool.name}: ${pipeline} log files" />
   </outputs>
   <tests>
   </tests>
