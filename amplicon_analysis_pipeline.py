@@ -103,13 +103,35 @@ if __name__ == "__main__":
             # Some other problem
             sys.stderr.write("Unexpected error: %s\n" % str(ex))
 
-    # Echo log file contents to stdout
+    # Check for log file
     log_file = "Amplicon_analysis_pipeline.log"
     if os.path.exists(log_file):
         print "Found log file: %s" % log_file
     else:
         sys.stderr.write("ERROR missing log file \"%s\"\n" %
                          log_file)
+
+    # Create an HTML file to link to log files etc
+    # NB the paths to the files should be correct once
+    # copied by Galaxy on job completion
+    with open("pipeline_outputs.html","w") as html_out:
+        html_out.write("""<html>
+<head>
+<title>Amplicon analysis pipeline: log files</title>
+<head>
+<body>
+<h1>Amplicon analysis pipeline: log files</h1>
+<ul>
+""")
+        html_out.write("<li><a href='Amplicon_analysis_pipeline.log'>"
+                       "Amplicon_analysis_pipeline.log</a></li>\n")
+        html_out.write("<li><a href='pipeline.out'>pipeline.out</a></li>\n")
+        html_out.write("<li><a href='Metatable.html'>"
+                       "Metatable.html</a></li>\n")
+        html_out.write("""<ul>
+</body>
+</html>
+""")
 
     # List the output directory contents
     results_dir = os.path.abspath("RESULTS")
