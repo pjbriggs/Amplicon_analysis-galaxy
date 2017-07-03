@@ -88,7 +88,7 @@ if __name__ == "__main__":
     print "Running %s" % pipeline
 
     # Run the pipeline
-    with open("pipeline.out","w") as pipeline_out:
+    with open("pipeline.log","w") as pipeline_out:
         try:
             subprocess.check_call(pipeline.cmd,
                                   stdout=pipeline_out,
@@ -125,7 +125,7 @@ if __name__ == "__main__":
 """)
         html_out.write("<li><a href='Amplicon_analysis_pipeline.log'>"
                        "Amplicon_analysis_pipeline.log</a></li>\n")
-        html_out.write("<li><a href='pipeline.out'>pipeline.out</a></li>\n")
+        html_out.write("<li><a href='pipeline.log'>pipeline.log</a></li>\n")
         html_out.write("<li><a href='Metatable.html'>"
                        "Metatable.html</a></li>\n")
         html_out.write("""<ul>
