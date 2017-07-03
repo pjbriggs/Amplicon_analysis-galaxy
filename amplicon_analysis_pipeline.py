@@ -14,9 +14,12 @@ class PipelineCmd(object):
     def add_args(self,*args):
         for arg in args:
             self.cmd.append(str(arg))
+    def __repr__(self):
+        return ' '.join([str(arg) for arg in self.cmd])
 
 if __name__ == "__main__":
     # Command line
+    print "Amplicon analysis: starting"
     p = argparse.ArgumentParser()
     p.add_argument("metatable",
                    metavar="METATABLE_FILE",
@@ -42,6 +45,7 @@ if __name__ == "__main__":
     args = p.parse_args()
 
     # Build the environment for running the pipeline
+    print "Amplicon analysis: building the environment"
     metatable_file = os.path.abspath(args.metatable)
     os.symlink(metatable_file,"Metatable.txt")
 
@@ -62,6 +66,7 @@ if __name__ == "__main__":
             final_name.write("%s\n" % '\t'.join((r2,sample_name)))
 
     # Construct the pipeline command
+    print "Amplicon analysis: constructing pipeline command"
     pipeline = PipelineCmd("Amplicon_analysis_pipeline.sh")
     if args.forward_pcr_primer:
         pipeline.add_args("-g",args.forward_pcr_primer)
@@ -80,36 +85,40 @@ if __name__ == "__main__":
         pipeline.add_args("-S")
 
     # Echo the pipeline command to stdout
-    sys.stdout.write("Running %s\n" % pipeline.cmd)
+    print "Running %s" % pipeline
 
     # Run the pipeline
-    try:
-        subprocess.check_call(pipeline.cmd,
-                              stdout=sys.stdout,
-                              stderr=sys.stderr)
-        exit_code = 0
-    except subprocess.CalledProcessError as ex:
-        # Non-zero exit status
-        sys.stderr.write(str(ex))
-        exit_code = ex.returncode
+    with open("pipeline.out","w") as pipeline_out:
+        try:
+            subprocess.check_call(pipeline.cmd,
+                                  stdout=pipeline_out,
+                                  stderr=subprocess.STDOUT)
+            exit_code = 0
+            print "Pipeline completed ok"
+        except subprocess.CalledProcessError as ex:
+            # Non-zero exit status
+            sys.stderr.write("Pipeline failed: %s\n" % str(ex))
+            exit_code = ex.returncode
+        except Exception as ex:
+            # Some other problem
+            sys.stderr.write("Unexpected error: %s\n" % str(ex))
 
     # Echo log file contents to stdout
     log_file = "Amplicon_analysis_pipeline.log"
     if os.path.exists(log_file):
-        sys.stdout.write("\nOutput from %s:\n\n" % log_file)
-        with open(log_file,'rb') as log:
-            sys.stdout.write(log.read())
+        print "Found log file: %s" % log_file
     else:
         sys.stderr.write("ERROR missing log file \"%s\"\n" %
                          log_file)
 
     # List the output directory contents
-    sys.stdout.write("\nOutput files:\n")
     results_dir = os.path.abspath("RESULTS")
+    print "Listing contents of output dir %s:" % results_dir
     for d,dirs,files in os.walk(results_dir):
-        sys.stdout.write("-- %s\n" % os.path.relpath(d,results_dir))
+        print "-- %s" % os.path.relpath(d,results_dir)
         for f in files:
-            sys.stdout.write("---- %s\n" % os.path.relpath(f,results_dir))
+            print "---- %s" % os.path.relpath(f,results_dir)
 
     # Finish
+    print "Amplicon analysis: finishing, exit code: %s" % exit_code
     sys.exit(exit_code)
