@@ -102,7 +102,7 @@
   ## Pipeline outputs (log files etc)
   mkdir $log_files.files_path &&
   cp Amplicon_analysis_pipeline.log $log_files.files_path &&
-  cp pipeline.log $log_files.files_path $log_files.files_path &&
+  cp pipeline.log $log_files.files_path &&
   cp Metatable_log/Metatable.html $log_files.files_path &&
   cp pipeline_outputs.html "$log_files"
   ]]></command>
