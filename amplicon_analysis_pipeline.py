@@ -17,6 +17,47 @@ class PipelineCmd(object):
     def __repr__(self):
         return ' '.join([str(arg) for arg in self.cmd])
 
+def ahref(target,name=None,type=None):
+    if name is None:
+        name = os.path.basename(target)
+    ahref = "<a href='%s'" % target
+    if type is not None:
+        ahref += " type='%s'" % type
+    ahref += ">%s</a>" % name
+    return ahref
+
+def check_errors():
+    # Errors in Amplicon_analysis_pipeline.log
+    with open('Amplicon_analysis_pipeline.log','r') as pipeline_log:
+        log = pipeline_log.read()
+        if "Names in the first column of Metatable.txt and in the second column of Final_name.txt do not match" in log:
+            print_error("""*** Sample IDs don't match dataset names ***
+
+The sample IDs (first column of the Metatable file) don't match the
+supplied sample names for the input Fastq pairs.
+""")
+    # Errors in pipeline output
+    with open('pipeline.log','r') as pipeline_log:
+        log = pipeline_log.read()
+        if "Errors and/or warnings detected in mapping file" in log:
+            with open("Metatable_log/Metatable.log","r") as metatable_log:
+                # Echo the Metatable log file to the tool log
+                print_error("""*** Error in Metatable mapping file ***
+
+%s""" % metatable_log.read())
+        elif "No header line was found in mapping file" in log:
+            # Report error to the tool log
+            print_error("""*** No header in Metatable mapping file ***
+
+Check you've specified the correct file as the input Metatable""")
+
+def print_error(message):
+    width = max([len(line) for line in message.split('\n')]) + 4
+    sys.stderr.write("\n%s\n" % ('*'*width))
+    for line in message.split('\n'):
+        sys.stderr.write("* %s%s *\n" % (line,' '*(width-len(line)-4)))
+    sys.stderr.write("%s\n\n" % ('*'*width))
+
 if __name__ == "__main__":
     # Command line
     print "Amplicon analysis: starting"
@@ -97,7 +138,8 @@ if __name__ == "__main__":
             print "Pipeline completed ok"
         except subprocess.CalledProcessError as ex:
             # Non-zero exit status
-            sys.stderr.write("Pipeline failed: %s\n" % str(ex))
+            sys.stderr.write("Pipeline failed: exit code %s\n" %
+                             ex.returncode)
             exit_code = ex.returncode
         except Exception as ex:
             # Some other problem
@@ -107,15 +149,12 @@ if __name__ == "__main__":
     log_file = "Amplicon_analysis_pipeline.log"
     if os.path.exists(log_file):
         print "Found log file: %s" % log_file
-    else:
-        sys.stderr.write("ERROR missing log file \"%s\"\n" %
-                         log_file)
-
-    # Create an HTML file to link to log files etc
-    # NB the paths to the files should be correct once
-    # copied by Galaxy on job completion
-    with open("pipeline_outputs.html","w") as html_out:
-        html_out.write("""<html>
+        if exit_code == 0:
+            # Create an HTML file to link to log files etc
+            # NB the paths to the files should be correct once
+            # copied by Galaxy on job completion
+            with open("pipeline_outputs.html","w") as html_out:
+                html_out.write("""<html>
 <head>
 <title>Amplicon analysis pipeline: log files</title>
 <head>
@@ -123,15 +162,34 @@ if __name__ == "__main__":
 <h1>Amplicon analysis pipeline: log files</h1>
 <ul>
 """)
-        html_out.write("<li><a href='Amplicon_analysis_pipeline.log'>"
-                       "Amplicon_analysis_pipeline.log</a></li>\n")
-        html_out.write("<li><a href='pipeline.log'>pipeline.log</a></li>\n")
-        html_out.write("<li><a href='Metatable.html'>"
-                       "Metatable.html</a></li>\n")
-        html_out.write("""<ul>
+                html_out.write(
+                    "<li>%s</li>\n" %
+                    ahref("Amplicon_analysis_pipeline.log",
+                          type="text/plain"))
+                html_out.write(
+                    "<li>%s</li>\n" %
+                    ahref("pipeline.log",type="text/plain"))
+                html_out.write(
+                    "<li>%s</li>\n" %
+                    ahref("Metatable.html"))
+                html_out.write("""<ul>
 </body>
 </html>
 """)
+        else:
+            # Check for known error messages
+            check_errors()
+            # Write pipeline stdout to tool stderr
+            sys.stderr.write("\nOutput from pipeline:\n")
+            with open("pipeline.log",'r') as log:
+                sys.stderr.write("%s" % log.read())
+            # Write log file contents to tool log
+            print "\nAmplicon_analysis_pipeline.log:"
+            with open(log_file,'r') as log:
+                print "%s" % log.read()
+    else:
+        sys.stderr.write("ERROR missing log file \"%s\"\n" %
+                         log_file)
 
     # List the output directory contents
     results_dir = os.path.abspath("RESULTS")
