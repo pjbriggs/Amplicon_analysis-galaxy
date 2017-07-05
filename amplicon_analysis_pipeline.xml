@@ -173,25 +173,25 @@
     <data format="tabular" name="metatable_corrected"
 	  label="${tool.name}:${title} Metatable_corrected.txt" />
     <data format="biom" name="tax_otu_table_biom_file"
-	  label="${tool.name}:${title} ${pipeline} tax OTU table (biom format)" />
+	  label="${tool.name} (${pipeline}):${title} tax OTU table (biom format)" />
     <data format="tabular" name="otus_tre_file"
-	  label="${tool.name}:${title} ${pipeline} otus.tre" />
+	  label="${tool.name} (${pipeline}):${title} otus.tre" />
     <data format="html" name="phylum_genus_dist_barcharts_html"
-	  label="${tool.name}:${title} ${pipeline} phylum genus dist barcharts HTML" />
+	  label="${tool.name} (${pipeline}):${title} phylum genus dist barcharts HTML" />
     <data format="tabular" name="otus_count_file"
-	  label="${tool.name}:${title} ${pipeline} OTUs count file" />
+	  label="${tool.name} (${pipeline}):${title} OTUs count file" />
     <data format="tabular" name="table_summary_file"
-	  label="${tool.name}:${title} ${pipeline} table summary file" />
+	  label="${tool.name} (${pipeline}):${title} table summary file" />
     <data format="fasta" name="dereplicated_nonchimera_otus_fasta"
-	  label="${tool.name}:${title} ${pipeline} multiplexed linearized dereplicated mc2 repset nonchimeras OTUs FASTA" />
+	  label="${tool.name} (${pipeline}):${title} multiplexed linearized dereplicated mc2 repset nonchimeras OTUs FASTA" />
     <data format="html" name="heatmap_otu_table_html"
-	  label="${tool.name}:${title} ${pipeline} heatmap OTU table HTML" />
+	  label="${tool.name} (${pipeline}):${title} heatmap OTU table HTML" />
     <data format="html" name="beta_div_even_weighted_2d_plots"
-	  label="${tool.name}:${title} ${pipeline} beta diversity weighted 2D plots HTML" />
+	  label="${tool.name} (${pipeline}):${title} beta diversity weighted 2D plots HTML" />
     <data format="html" name="beta_div_even_unweighted_2d_plots"
-	  label="${tool.name}:${title} ${pipeline} beta diversity unweighted 2D plots HTML" />
+	  label="${tool.name} (${pipeline}):${title} beta diversity unweighted 2D plots HTML" />
     <data format="html" name="log_files"
-	  label="${tool.name}:${title} ${pipeline} log files" />
+	  label="${tool.name} (${pipeline}):${title} log files" />
   </outputs>
   <tests>
   </tests>
