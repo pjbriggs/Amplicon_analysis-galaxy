@@ -239,6 +239,25 @@ if __name__ == "__main__":
         sys.stderr.write("ERROR missing log file \"%s\"\n" %
                          log_file)
 
+    # Handle additional output when categories file was supplied
+    if args.categories_file is not None:
+        with open("categories_data.html","w") as categories_out:
+            categories_out.write("""<html>
+<head>
+<title>Amplicon analysis pipeline: Categories</title>
+<head>
+<body>
+<h1>Amplicon analysis pipeline: Categories</h1>
+""")
+            categories_out.write("<h2>Rarefaction curves</h2>\n")
+            categories_out.write("<ul>\n")
+            categories_out.write("<li>%s</li>\n" %
+                                 ahref("rarefaction_plots.html"))
+            categories_out.write("<ul>\n")
+            categories_out.write("""</body>
+</html>
+""")
+
     # Finish
     print "Amplicon analysis: finishing, exit code: %s" % exit_code
     sys.exit(exit_code)
