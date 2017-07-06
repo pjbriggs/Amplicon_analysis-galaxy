@@ -72,6 +72,29 @@ def clean_up_name(sample):
             pass
     return '_'.join(split_name)
 
+def list_outputs(filen=None):
+    # List the output directory contents
+    # If filen is specified then will be the filename to
+    # write to, otherwise write to stdout
+    if filen is not None:
+        fp = open(filen,'w')
+    else:
+        fp = sys.stdout
+    results_dir = os.path.abspath("RESULTS")
+    fp.write("Listing contents of output dir %s:\n" % results_dir)
+    ix = 0
+    for d,dirs,files in os.walk(results_dir):
+        ix += 1
+        fp.write("-- %d: %s\n" % (ix,
+                                  os.path.relpath(d,results_dir)))
+        for f in files:
+            ix += 1
+            fp.write("---- %d: %s\n" % (ix,
+                                        os.path.relpath(f,results_dir)))
+    # Close output file
+    if filen is not None:
+        fp.close()
+
 if __name__ == "__main__":
     # Command line
     print "Amplicon analysis: starting"
@@ -103,11 +126,13 @@ if __name__ == "__main__":
     print "Amplicon analysis: building the environment"
     metatable_file = os.path.abspath(args.metatable)
     os.symlink(metatable_file,"Metatable.txt")
+    print "-- made symlink to Metatable.txt"
 
     # Link to Categories.txt file (if provided)
     if args.categories_file is not None:
         categories_file = os.path.abspath(args.categories_file)
         os.symlink(categories_file,"Categories.txt")
+        print "-- made symlink to Categories.txt"
 
     # Link to FASTQs and construct Final_name.txt file
     with open("Final_name.txt",'w') as final_name:
@@ -160,6 +185,10 @@ if __name__ == "__main__":
             # Some other problem
             sys.stderr.write("Unexpected error: %s\n" % str(ex))
 
+    # Write out the list of outputs
+    outputs_file = "Pipeline_outputs.txt"
+    list_outputs(outputs_file)
+
     # Check for log file
     log_file = "Amplicon_analysis_pipeline.log"
     if os.path.exists(log_file):
@@ -186,6 +215,10 @@ if __name__ == "__main__":
                     ahref("pipeline.log",type="text/plain"))
                 html_out.write(
                     "<li>%s</li>\n" %
+                    ahref("Pipeline_outputs.txt",
+                          type="text/plain"))
+                html_out.write(
+                    "<li>%s</li>\n" %
                     ahref("Metatable.html"))
                 html_out.write("""<ul>
 </body>
@@ -205,14 +238,6 @@ if __name__ == "__main__":
     else:
         sys.stderr.write("ERROR missing log file \"%s\"\n" %
                          log_file)
-
-    # List the output directory contents
-    results_dir = os.path.abspath("RESULTS")
-    print "Listing contents of output dir %s:" % results_dir
-    for d,dirs,files in os.walk(results_dir):
-        print "-- %s" % os.path.relpath(d,results_dir)
-        for f in files:
-            print "---- %s" % os.path.relpath(f,results_dir)
 
     # Finish
     print "Amplicon analysis: finishing, exit code: %s" % exit_code
