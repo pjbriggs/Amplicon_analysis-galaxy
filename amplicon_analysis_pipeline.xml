@@ -99,10 +99,19 @@
   cp -r RESULTS/${pipeline}_${reference_database_name}/beta_div_even/unweighted_2d_plot/* $beta_div_even_unweighted_2d_plots.files_path &&
   cp RESULTS/${pipeline}_${reference_database_name}/beta_div_even/unweighted_2d_plot/unweighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_unweighted_2d_plots}" &&
 
+  ## Categories data
+  #if str( $categories_file_in ) != ""
+    mkdir $categories_out.files_path &&
+    cp categories_data.html "$categories_out" &&
+    cp RESULTS/${pipeline}_${reference_database_name}/Alpha_diversity/rarefaction_curves/rarefaction_plots.html $categories_out.files_path &&
+    cp RESULTS/${pipeline}_${reference_database_name}/Alpha_diversity/rarefaction_curves/average_plots/* $categories_out.files_path &&
+  #end if
+
   ## Pipeline outputs (log files etc)
   mkdir $log_files.files_path &&
   cp Amplicon_analysis_pipeline.log $log_files.files_path &&
   cp pipeline.log $log_files.files_path &&
+  cp Pipeline_outputs.txt $log_files.files_path &&
   cp Metatable_log/Metatable.html $log_files.files_path &&
   cp pipeline_outputs.html "$log_files"
   ]]></command>
@@ -190,6 +199,10 @@
 	  label="${tool.name} (${pipeline}):${title} beta diversity weighted 2D plots HTML" />
     <data format="html" name="beta_div_even_unweighted_2d_plots"
 	  label="${tool.name} (${pipeline}):${title} beta diversity unweighted 2D plots HTML" />
+    <data format="html" name="categories_out"
+	  label="${tool.name} (${pipeline}):${title} categories data">
+      <filter>str( $categories_file_in ) != ""</filter>
+    </data>
     <data format="html" name="log_files"
 	  label="${tool.name} (${pipeline}):${title} log files" />
   </outputs>
