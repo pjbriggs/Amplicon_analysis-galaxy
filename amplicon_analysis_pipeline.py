@@ -252,7 +252,7 @@ if __name__ == "__main__":
                          "Alpha_diversity",
                          "Alpha_diversity_boxplot",
                          "Categories_shannon"))
-        print "Amplicon analysis: gathering PDFS from %s" % boxplots_dir
+        print "Amplicon analysis: gathering PDFs from %s" % boxplots_dir
         boxplot_pdfs = [os.path.basename(pdf)
                         for pdf in
                         sorted(glob.glob(
