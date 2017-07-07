@@ -51,7 +51,7 @@
   #if str( $reference_database ) != ""
     "${reference_database}"
   #end if
-  #if $categories_file_in is not None
+  #if str($categories_file_in) != 'None'
     -c "${categories_file_in}"
   #end if
   ## Input files
@@ -100,7 +100,7 @@
   cp RESULTS/${pipeline}_${reference_database_name}/beta_div_even/unweighted_2d_plot/unweighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_unweighted_2d_plots}" &&
 
   ## Categories data
-  #if $categories_file_in is not None
+  #if str($categories_file_in) != 'None'
     ## Alpha diversity rarefaction plots
     mkdir $alpha_div_rarefaction_plots.files_path &&
     cp RESULTS/${pipeline}_${reference_database_name}/Alpha_diversity/rarefaction_curves/rarefaction_plots.html $alpha_div_rarefaction_plots &&
