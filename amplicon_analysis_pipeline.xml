@@ -101,10 +101,14 @@
 
   ## Categories data
   #if str( $categories_file_in ) != ""
-    mkdir $categories_out.files_path &&
-    cp categories_data.html "$categories_out" &&
-    cp RESULTS/${pipeline}_${reference_database_name}/Alpha_diversity/rarefaction_curves/rarefaction_plots.html $categories_out.files_path &&
-    cp -r RESULTS/${pipeline}_${reference_database_name}/Alpha_diversity/rarefaction_curves/average_plots $categories_out.files_path &&
+    # Alpha diversity rarefaction plots
+    mkdir $alpha_div_rarefaction_plots.files_path &&
+    cp RESULTS/${pipeline}_${reference_database_name}/Alpha_diversity/rarefaction_curves/rarefaction_plots.html $alpha_div_rarefaction_plots &&
+    cp -r RESULTS/${pipeline}_${reference_database_name}/Alpha_diversity/rarefaction_curves/average_plots $alpha_div_rarefaction_plots.files_path &&
+    # Alpha diversity boxplots
+    mkdir $alpha_div_boxplots.files_path &&
+    cp alpha_diversity_boxplots.html "$alpha_div_boxplots" &&
+    cp RESULTS/${pipeline}_${reference_database_name}/Alpha_diversity/Alpha_diversity_boxplot/Categories_shannon/*.pdf $alpha_div_boxplots.files_path &&
   #end if
 
   ## Pipeline outputs (log files etc)
@@ -199,8 +203,12 @@
 	  label="${tool.name} (${pipeline}):${title} beta diversity weighted 2D plots HTML" />
     <data format="html" name="beta_div_even_unweighted_2d_plots"
 	  label="${tool.name} (${pipeline}):${title} beta diversity unweighted 2D plots HTML" />
-    <data format="html" name="categories_out"
-	  label="${tool.name} (${pipeline}):${title} categories data">
+    <data format="html" name="alpha_div_rarefaction_plots"
+	  label="${tool.name} (${pipeline}):${title} alpha diversity rarefaction plots HTML">
+      <filter>categories_file_in is not None</filter>
+    </data>
+    <data format="html" name="alpha_div_boxplots"
+	  label="${tool.name} (${pipeline}):${title} alpha diversity boxplots">
       <filter>categories_file_in is not None</filter>
     </data>
     <data format="html" name="log_files"

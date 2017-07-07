@@ -7,6 +7,7 @@ import sys
 import os
 import argparse
 import subprocess
+import glob
 
 class PipelineCmd(object):
     def __init__(self,cmd):
@@ -241,20 +242,34 @@ if __name__ == "__main__":
 
     # Handle additional output when categories file was supplied
     if args.categories_file is not None:
-        with open("categories_data.html","w") as categories_out:
-            categories_out.write("""<html>
+        # Alpha diversity boxplots
+        print "Amplicon analysis: indexing alpha diversity boxplots"
+        boxplots_dir = os.path.abspath(
+            os.path.join("RESULTS",
+                         "%s_%s" % (args.pipeline.title(),
+                                    ("gg" if not args.use_silva
+                                     else "silva")),
+                         "Alpha_diversity",
+                         "Alpha_diversity_boxplot",
+                         "Categories_shannon"))
+        print "Amplicon analysis: gathering PDFS from %s" % boxplots_dir
+        boxplot_pdfs = [os.path.basename(pdf)
+                        for pdf in
+                        sorted(glob.glob(
+                            os.path.join(boxplots_dir,"*.pdf")))]
+        with open("alpha_diversity_boxplots.html","w") as boxplots_out:
+            boxplots_out.write("""<html>
 <head>
-<title>Amplicon analysis pipeline: Categories</title>
+<title>Amplicon analysis pipeline: Alpha Diversity Boxplots (Shannon)</title>
 <head>
 <body>
-<h1>Amplicon analysis pipeline: Categories</h1>
+<h1>Amplicon analysis pipeline: Alpha Diversity Boxplots (Shannon)</h1>
 """)
-            categories_out.write("<h2>Rarefaction curves</h2>\n")
-            categories_out.write("<ul>\n")
-            categories_out.write("<li>%s</li>\n" %
-                                 ahref("rarefaction_plots.html"))
-            categories_out.write("<ul>\n")
-            categories_out.write("""</body>
+            boxplots_out.write("<ul>\n")
+            for pdf in boxplot_pdfs:
+                boxplots_out.write("<li>%s</li>\n" % ahref(pdf))
+            boxplots_out.write("<ul>\n")
+            boxplots_out.write("""</body>
 </html>
 """)
 
