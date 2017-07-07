@@ -132,7 +132,8 @@ History
 Version    Changes
 ---------- ----------------------------------------------------------------------
 1.0.4      Various updates:
-           - Additional outputs are captured when a "Categories" file is
+
+	   - Additional outputs are captured when a "Categories" file is
 	     supplied (alpha diversity rarefaction curves and boxplots)
 	   - Sample names derived from Fastqs in a collection of pairs
 	     are trimmed to SAMPLE_S* (for Illumina-style Fastq filenames)
