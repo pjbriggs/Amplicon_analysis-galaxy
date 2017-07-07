@@ -131,6 +131,17 @@ History
 ========== ======================================================================
 Version    Changes
 ---------- ----------------------------------------------------------------------
+1.0.4      Various updates:
+           - Additional outputs are captured when a "Categories" file is
+	     supplied (alpha diversity rarefaction curves and boxplots)
+	   - Sample names derived from Fastqs in a collection of pairs
+	     are trimmed to SAMPLE_S* (for Illumina-style Fastq filenames)
+           - Input Fastqs can now be of more general ``fastq`` type
+	   - Log file outputs are captured in new output dataset
+	   - User can specify a "title" for the job which is copied into
+	     the dataset names (to distinguish outputs from different runs)
+	   - Improved detection and reporting of problems with input
+	     Metatable
 1.0.3      Take the sample names from the collection dataset names when
            using collection as input (this is now the default input mode);
            collect additional output dataset; disable ``usearch``-based
