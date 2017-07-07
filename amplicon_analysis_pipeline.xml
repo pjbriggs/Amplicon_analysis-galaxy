@@ -201,7 +201,7 @@
 	  label="${tool.name} (${pipeline}):${title} beta diversity unweighted 2D plots HTML" />
     <data format="html" name="categories_out"
 	  label="${tool.name} (${pipeline}):${title} categories data">
-      <filter>categories_file_in != ""</filter>
+      <filter>categories_file_in is not None</filter>
     </data>
     <data format="html" name="log_files"
 	  label="${tool.name} (${pipeline}):${title} log files" />
