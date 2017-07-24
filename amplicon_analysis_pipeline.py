@@ -114,6 +114,7 @@ if __name__ == "__main__":
     p.add_argument("-q",dest="trimming_threshold")
     p.add_argument("-O",dest="minimum_overlap")
     p.add_argument("-L",dest="minimum_length")
+    p.add_argument("-l",dest="sliding_window_length")
     p.add_argument("-P",dest="pipeline",
                    choices=["vsearch","uparse","qiime"],
                    type=str.lower,
@@ -160,6 +161,8 @@ if __name__ == "__main__":
         pipeline.add_args("-O",args.minimum_overlap)
     if args.minimum_length:
         pipeline.add_args("-L",args.minimum_length)
+    if args.sliding_window_length:
+        pipeline.add_args("-l",args.sliding_window_length)
     if args.reference_data_path:
         pipeline.add_args("-r",args.reference_data_path)
     pipeline.add_args("-P",args.pipeline)
