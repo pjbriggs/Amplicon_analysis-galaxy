@@ -137,6 +137,7 @@ if __name__ == "__main__":
         print "-- made symlink to Categories.txt"
 
     # Link to FASTQs and construct Final_name.txt file
+    sample_names = []
     with open("Final_name.txt",'w') as final_name:
         fastqs = iter(args.fastq_pairs)
         for sample_name,fqr1,fqr2 in zip(fastqs,fastqs,fastqs):
@@ -147,6 +148,7 @@ if __name__ == "__main__":
             os.symlink(fqr2,r2)
             final_name.write("%s\n" % '\t'.join((r1,sample_name)))
             final_name.write("%s\n" % '\t'.join((r2,sample_name)))
+            sample_names.append(sample_name)
 
     # Construct the pipeline command
     print "Amplicon analysis: constructing pipeline command"
@@ -242,6 +244,42 @@ if __name__ == "__main__":
     else:
         sys.stderr.write("ERROR missing log file \"%s\"\n" %
                          log_file)
+
+    # Handle FastQC boxplots
+    print "Amplicon analysis: collating per base quality boxplots"
+    with open("fastqc_quality_boxplots.html","w") as quality_boxplots:
+        quality_boxplots.write("""<html>
+<head>
+<title>Amplicon analysis pipeline: Per-base Quality Boxplots (FastQC)</title>
+<head>
+<body>
+<h1>Amplicon analysis pipeline: Per-base Quality Boxplots (FastQC)</h1>
+""")
+        for sample_name in sample_names:
+            fastqc_dir = os.path.join(sample_name,"FastQC")
+            quality_boxplots.write("<h2>%s</h2>" % sample_name)
+            for d in ("Raw","cutadapt_sickle"):
+                quality_boxplots.write("<h3>%s</h3>" % d)
+                fastqc_html_files = glob.glob(
+                    os.path.join(fastqc_dir,d,"*_fastqc.html"))
+                for f in fastqc_html_files:
+                    boxplot = None
+                    with open(f) as fp:
+                        for line in fp.read().split(">"):
+                            try:
+                                line.index("alt=\"Per base quality graph\"")
+                                boxplot = line + ">"
+                                break
+                            except ValueError:
+                                pass
+                    if boxplot is None:
+                        boxplot = "Missing plot"
+                    quality_boxplots.write("<h4>%s</h4><p>%s</p>" %
+                                           (os.path.basename(f),
+                                            boxplot))
+            quality_boxplots.write("""</body>
+</html>
+""")
 
     # Handle additional output when categories file was supplied
     if args.categories_file is not None:
