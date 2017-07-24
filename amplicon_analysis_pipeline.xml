@@ -40,6 +40,9 @@
   #if str( $trimming_threshold ) != ""
   -q $trimming_threshold
   #end if
+  #if str( $sliding_window_length ) != ""
+  -l $sliding_window_length
+  #end if
   #if str( $minimum_overlap ) != ""
   -O $minimum_overlap
   #end if
@@ -166,6 +169,9 @@
     <param type="integer" name="minimum_length" value="200"
 	   label="Minimum length in bp to keep sequence after overlapping"
 	   help="Default is 200 (-L)" />
+    <param type="integer" name="sliding_window_length" value="10"
+	   label="Length of the sliding window in bp"
+	   help="Supplied to Sickle; default is 10 (-l)" />
     <param type="select" name="pipeline"
 	    label="Pipeline to use for analysis">
       <option value="Vsearch" selected="true" >Vsearch</option>
