@@ -78,6 +78,7 @@
   cp RESULTS/${pipeline}_${reference_database_name}/OTUs_count.txt "${otus_count_file}" &&
   cp RESULTS/${pipeline}_${reference_database_name}/table_summary.txt "${table_summary_file}" &&
   cp Multiplexed_files/${pipeline}_pipeline/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_OTUs.fasta "${dereplicated_nonchimera_otus_fasta}" &&
+  cp QUALITY_CONTROL/Reads_count.txt "$read_counts_out" &&
 
   ## HTML outputs
 
@@ -192,6 +193,8 @@
 	  label="${tool.name}:${title} Final_name.txt" />
     <data format="tabular" name="metatable_corrected"
 	  label="${tool.name}:${title} Metatable_corrected.txt" />
+    <data format="tabular" name="read_counts_out"
+	  label="${tool.name} (${pipeline}):${title} read counts" />
     <data format="biom" name="tax_otu_table_biom_file"
 	  label="${tool.name} (${pipeline}):${title} tax OTU table (biom format)" />
     <data format="tabular" name="otus_tre_file"
