@@ -123,7 +123,7 @@
   <inputs>
     <param name="title" type="text" value="test" size="25"
 	   label="Title" help="Optional text that will be added to the output dataset names" />
-    <param type="data" name="metatable_file_in" format="txt"
+    <param type="data" name="metatable_file_in" format="tabular"
 	   label="Input Metatable.txt file" />
     <param type="data" name="categories_file_in" format="txt"
 	   label="Input Categories.txt file" optional="true"
