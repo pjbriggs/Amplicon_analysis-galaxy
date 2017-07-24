@@ -163,9 +163,9 @@
     <param type="integer" name="minimum_overlap" value="10"
 	   label="Minimum overlap in bp between forward and reverse reads"
 	   help="Default is 10 (-O)" />
-    <param type="integer" name="minimum_length" value="380"
+    <param type="integer" name="minimum_length" value="200"
 	   label="Minimum length in bp to keep sequence after overlapping"
-	   help="Default is 380 (-L)" />
+	   help="Default is 200 (-L)" />
     <param type="select" name="pipeline"
 	    label="Pipeline to use for analysis">
       <option value="Vsearch" selected="true" >Vsearch</option>
