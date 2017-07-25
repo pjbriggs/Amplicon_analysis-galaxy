@@ -248,6 +248,11 @@ if __name__ == "__main__":
     # Handle FastQC boxplots
     print "Amplicon analysis: collating per base quality boxplots"
     with open("fastqc_quality_boxplots.html","w") as quality_boxplots:
+        # PHRED value for trimming
+        phred_score = 20
+        if args.trimming_threshold is not None:
+            phred_score = args.trimming_threshold
+        # Write header for HTML output file
         quality_boxplots.write("""<html>
 <head>
 <title>Amplicon analysis pipeline: Per-base Quality Boxplots (FastQC)</title>
@@ -255,13 +260,18 @@ if __name__ == "__main__":
 <body>
 <h1>Amplicon analysis pipeline: Per-base Quality Boxplots (FastQC)</h1>
 """)
+        # Look for raw and trimmed FastQC output for each sample
         for sample_name in sample_names:
             fastqc_dir = os.path.join(sample_name,"FastQC")
             quality_boxplots.write("<h2>%s</h2>" % sample_name)
-            for d in ("Raw","cutadapt_sickle"):
+            for d in ("Raw","cutadapt_sickle/Q%s" % phred_score):
                 quality_boxplots.write("<h3>%s</h3>" % d)
                 fastqc_html_files = glob.glob(
                     os.path.join(fastqc_dir,d,"*_fastqc.html"))
+                if not fastqc_html_files:
+                    quality_boxplots.write("<p>No FastQC outputs found</p>")
+                    continue
+                # Pull out the per-base quality boxplots
                 for f in fastqc_html_files:
                     boxplot = None
                     with open(f) as fp:
