@@ -264,7 +264,7 @@ if __name__ == "__main__":
         for sample_name in sample_names:
             fastqc_dir = os.path.join(sample_name,"FastQC")
             quality_boxplots.write("<h2>%s</h2>" % sample_name)
-            for d in ("Raw","cutadapt_sickle/Q%s" % phred_score):
+            for d in ("Raw","cutdapt_sickle/Q%s" % phred_score):
                 quality_boxplots.write("<h3>%s</h3>" % d)
                 fastqc_html_files = glob.glob(
                     os.path.join(fastqc_dir,d,"*_fastqc.html"))
