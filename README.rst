@@ -131,6 +131,13 @@ History
 ========== ======================================================================
 Version    Changes
 ---------- ----------------------------------------------------------------------
+1.05       Updates including:
+
+           - Capture read counts from quality control as new output dataset
+           - Capture FastQC per-base quality boxplots for each sample as
+             new output dataset
+           - Add support for -l option (sliding window length for trimming)
+           - Default for -L set to "200"
 1.0.4      Various updates:
 
 	   - Additional outputs are captured when a "Categories" file is
