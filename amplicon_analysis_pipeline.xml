@@ -172,7 +172,7 @@
 	   label="Minimum length in bp to keep sequence after overlapping"
 	   help="Default is 200 (-L)" />
     <param type="integer" name="sliding_window_length" value="10"
-	   label="Length of the sliding window in bp"
+	   label="Minimum length in bp to retain a read after trimming"
 	   help="Supplied to Sickle; default is 10 (-l)" />
     <param type="select" name="pipeline"
 	    label="Pipeline to use for analysis">
