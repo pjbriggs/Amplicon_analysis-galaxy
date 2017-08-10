@@ -249,6 +249,8 @@ labels will include everything between the beginning of the name and
 the sample number (from C11 to S19 in Fig. 1)
 
 .. image:: placeholder.png
+   :height: 50
+   :width: 50
 
 If analysing 16S data from multiple runs: 
 
@@ -258,6 +260,8 @@ the same position in both the runs. This would cause the fastq files
 to have exactly the same IDs (Fig. 2).
 
 .. image:: placeholder.png
+   :height: 50
+   :width: 50
 
 In case of identical sample IDs the pipeline will fail to run and
 generate an error at the beginning of the analysis.
@@ -274,16 +278,11 @@ left hand side.
 From the pop-up window, choose how to upload the file. The
 **Choose local file** option can be used for files up to 4Gb. Fastq files
 from Illumina MiSeq will rarely be bigger than 4Gb and this option is
-recommended. 
+recommended.
 
-.. class:: warningmark
-
-   Before clicking Start, Galaxy requires the file datatype to be set to
-   ``fastqsanger``. Click on the scroll down menu *Type (set all)* and
-   change the datatype to ``fastqsanger``. Then **Start** the upload. 
-
-The window can now be closed. The files will be uploaded onto the Galaxy
-server. You will see the progress on the ``HISTORY`` panel on the right
+After choosing the files click **Start** to begin the upload. The window can
+now be closed and the files will be uploaded onto the Galaxy server. You
+will see the progress on the ``HISTORY`` panel on the right
 side of the screen. The colour will change from grey (queuing), to yellow
 (uploading) and finally green (uploaded).
 
@@ -293,6 +292,8 @@ Click on the tab **For all selected...** and on the option
 **Build List of Dataset pairs** (Fig. 3).
 
 .. image:: placeholder.png
+   :height: 50
+   :width: 50
 
 Change the filter parameter ``_1`` and ``_2`` to be ``_R1`` and ``_R2``.
 The fastq files forward R1 and reverse R2 should now appear in the
@@ -358,11 +359,7 @@ EXAMPLE::
     Gender
 
 Metatable and categories files can be uploaded using Get Data as done
-with the fatsq files. 
-
-The name of the files has to be Metatable.txt and Categories.txt
-respectively. The usage of a different name will return an error during
-the analysis.
+with the fatsq files.
 
 4. Analysis
 ***********
@@ -390,11 +387,11 @@ Under **Amplicon_Analysis_Pipeline**
    Only include the sequences if still present in the fastq files.
 
  * **Threshold quality below which reads will be trimmed** Choose the
-   Phred score used by Sickle to trim the reads at the 3’ end. Default is 20
+   Phred score used by Sickle to trim the reads at the 3’ end.
 
  * **Minimum length to retain a read after trimming** If the read length
    after trimming is shorter than a user defined length, the read, along
-   with the corresponding read pair, will be discarded. Default  10
+   with the corresponding read pair, will be discarded.
 
  * **Minimum overlap in bp between forward and reverse reads** Choose the
    minimum basepair overlap used by Pandaseq to assemble the reads.
