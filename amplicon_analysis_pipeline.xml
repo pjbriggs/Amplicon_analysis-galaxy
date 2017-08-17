@@ -248,9 +248,11 @@ from the fastq files names that are generated from the sequencing. The
 labels will include everything between the beginning of the name and
 the sample number (from C11 to S19 in Fig. 1)
 
-.. image:: placeholder.png
-   :height: 50
-   :width: 50
+.. image:: Pipeline_description_Fig1.png
+   :height: 46
+   :width: 382
+
+**Figure 1**
 
 If analysing 16S data from multiple runs: 
 
@@ -259,9 +261,11 @@ when sequencing the same samples twice, by chance, these could be at
 the same position in both the runs. This would cause the fastq files
 to have exactly the same IDs (Fig. 2).
 
-.. image:: placeholder.png
-   :height: 50
-   :width: 50
+.. image:: Pipeline_description_Fig2.png
+   :height: 100
+   :width: 463
+
+**Figure 2**
 
 In case of identical sample IDs the pipeline will fail to run and
 generate an error at the beginning of the analysis.
@@ -291,9 +295,11 @@ datasets icon and select the fastq files that need to be analysed.
 Click on the tab **For all selected...** and on the option
 **Build List of Dataset pairs** (Fig. 3).
 
-.. image:: placeholder.png
-   :height: 50
-   :width: 50
+.. image:: Pipeline_description_Fig3.png
+   :height: 247
+   :width: 586
+
+**Figure 3**
 
 Change the filter parameter ``_1`` and ``_2`` to be ``_R1`` and ``_R2``.
 The fastq files forward R1 and reverse R2 should now appear in the
