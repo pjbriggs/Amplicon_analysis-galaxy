@@ -59,6 +59,7 @@ function install_amplicon_analysis_pipeline() {
 # Source this to setup Amplicon_analysis/$version
 echo Setting up Amplicon analysis pipeline $version
 export PATH=$install_dir/Amplicon_analysis:\$PATH
+export AMPLICON_ANALYSIS_REF_DATA_PATH=
 #
 EOF
 }
@@ -92,7 +93,7 @@ function install_amplicon_analysis_pipeline_1_0_patched() {
 # Source this to setup Amplicon_analysis/$version
 echo Setting up Amplicon analysis pipeline $version
 export PATH=$install_dir/Amplicon_analysis:\$PATH
-export AMPLICON_ANALYSIS_REF_DATA_PATH=/home/pjb/scratchpad/test_Amplicon_Analysis_Pipeline/ReferenceData
+export AMPLICON_ANALYSIS_REF_DATA_PATH=
 #
 EOF
 }
