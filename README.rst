@@ -1,96 +1,171 @@
 Amplicon_analysis-galaxy
 ========================
 
-Development of Galaxy tools to wrap the Amplicon_analysis pipeline:
-https://github.com/MTutino/Amplicon_analysis
+A Galaxy tool wrapper to Mauro Tutino's ``Amplicon_analysis`` pipeline
+script at https://github.com/MTutino/Amplicon_analysis
 
-Pipeline options to interface
-=============================
+The pipeline can analyse paired-end 16S rRNA data from Illumina Miseq
+(Casava >= 1.8) and performs the following operations:
 
- - Input files:
+ * QC and clean up of input data
+ * Removal of singletons and chimeras and building of OTU table
+   and phylogenetic tree
+ * Beta and alpha diversity of analysis
 
-   * List of Fastq R1/R2 pairs
-   * ``Categories.txt`` file
-   * ``Final_name.txt`` file
-   * ``Metatable.txt`` file
+Usage documentation
+===================
 
- - Step one (quality control):
+Usage of the tool (including required inputs) is documented within
+the ``help`` section of the tool XML.
 
-   * Cutadapt: forward and reverse PCR primers, without any
-     barcode/adapter (-g and -G options). Must be supplied.
-   * Sickle: threshold below which read will be trimmed (-q) (default 20)
-   * Pandaseq: minimum overlap (in bp) between forward and reverse reads
-     (-O) (default 10)
-   * Pandaseq: minimum length (in bp) for a sequence to be kept after
-     overlapping (-L) (default 380)
+Installing the tool in a Galaxy instance
+========================================
 
- - Step two (pipeline):
+The tool is not currently hosted on a Galaxy toolshed both the tool
+files and the dependencies must be installed manually. In addition
+it is necessary to fetch and install the reference data.
 
-   * Pipeline: one of 'uparse', 'vsearch' or 'QIIME' (e.g. -P vsearch)
-   * Reference database: by default the reference database is GreenGenes,
-     use -S to use Silva instead
+1. Install the dependencies
+---------------------------
 
- - Step three (reporting):
+The ``install_tool_deps.sh`` script can be used to fetch and install the
+dependencies locally, for example::
 
-   * no options required at present
+    install_tool_deps.sh /path/to/local_tool_dependencies
 
-Setup and configuration
-=======================
+This can take some time to complete. When finished it should have
+created a set of directories containing the dependencies under the
+specified top level directory.
 
-To ensure that HTML outputs are displayed correctly in Galaxy (for example
-the Vsearch OTU table heatmaps), Galaxy needs to be configured not to
-sanitize the outputs from the ``Amplicon_analysis`` tool.
+2. Install the tool files
+-------------------------
+
+There are two files to install:
+
+ * ``amplicon_analysis_pipeline.xml`` (the Galaxy tool definition)
+ * ``amplicon_analysis_pipeline.py`` (the shell script wrapper)
+
+Put these in a directory that is visible to Galaxy (e.g. a
+``tools/Amplicon_analysis/`` folder), and modify the ``tools_conf.xml``
+file to tell Galaxy to offer the tool by adding the line e.g.::
+
+    <tool file="Amplicon_analysis/amplicon_analysis_pipeline.xml" />
+
+3. Install the reference data
+-----------------------------
+
+**TBA**
+
+4. Configure dependencies and reference data in Galaxy
+------------------------------------------------------
+
+The final steps are to make your Galaxy installation aware of the
+tool dependencies and reference data, so it can locate them both when
+the tool is run.
+
+To target the tool dependencies installed previously, add the
+following lines to the ``dependency_resolvers_conf.xml`` file in the
+Galaxy ``config`` directory::
+
+    <dependency_resolvers>
+    ...
+      <galaxy_packages base_path="/path/to/local_tool_dependencies" />
+      <galaxy_packages base_path="/path/to/local_tool_dependencies" versionless="true" />
+      ...
+    </dependency_resolvers>
+
+(NB it is recommended to place these *before* the ``<conda ... />``
+resolvers)
+
+(If you're not familiar with dependency resolvers in Galaxy then
+see the documentation at
+https://docs.galaxyproject.org/en/master/admin/dependency_resolvers.html
+for more details.)
+
+The tool locates the reference data via an environment variable called
+``AMPLICON_ANALYSIS_REF_DATA_PATH``, which needs to set to the parent
+directory where the reference data has been installed.
+
+There are various ways to do this, for example:
+
+ * Add a line to set it in the ``local_env.sh`` file of your Galaxy
+   installation, e.g.::
+
+       export AMPLICON_ANALYSIS_REF_DATA_PATH=/path/to/pipeline/data
+
+ * Set the value in the ``job_conf.xml``, e.g.::
+
+       <destination id="amplicon_analysis">
+          <env id="AMPLICON_ANALYSIS_REF_DATA_PATH">/path/to/pipeline/data</env>
+       </destination>
+
+   and then specify that the pipeline tool uses this destination::
+
+       <tool id="amplicon_analysis_pipeline" destination="amplicon_analysis"/>
+
+   (For more about job destinations see the Galaxy documentation at
+   https://galaxyproject.org/admin/config/jobs/#job-destinations)
+
+5. Enable rendering of HTML outputs from pipeline
+-------------------------------------------------
+
+To ensure that HTML outputs are displayed correctly in Galaxy
+(for example the Vsearch OTU table heatmaps), Galaxy needs to be
+configured not to sanitize the outputs from the ``Amplicon_analysis``
+tool.
 
 Either:
 
- - Set ``sanitize_all_html = False`` in ``config/galaxy.ini`` (nb don't do
+ * Set ``sanitize_all_html = False`` in ``config/galaxy.ini`` (nb don't do
    this on production servers or public instances!); or
- - Add the ``Amplicon_analysis`` tool to the display whitelist in the
+ * Add the ``Amplicon_analysis`` tool to the display whitelist in the
    Galaxy instance:
 
-   * Set ``sanitize_whitelist_file = config/whitelist.txt`` in
+   - Set ``sanitize_whitelist_file = config/whitelist.txt`` in
      ``config/galaxy.ini`` and restart Galaxy;
-   * Go to ``Admin>Manage Display Whitelist``, check the box for
+   - Go to ``Admin>Manage Display Whitelist``, check the box for
      ``Amplicon_analysis`` (hint: use your browser's 'find-in-page'
      search function to help locate it) and click on
      ``Submit new whitelist`` to update the settings.
 
-Outputs to collect
+Additional details
 ==================
 
- - <PIPELINE>_OTU_tables/*_tax_OTU_table.biom
- - <PIPELINE>_OTU_tables/otus.tre
- - Metatable_log/Metatable_corrected.txt (final metatable file)
- - RESULTS/<PIPELINE>_<reference>/phylum_genus_dist/bar_charts.html
- - RESULTS/<PIPELINE>_<reference>/OTUS_count.txt
- - RESULTS/<PIPELINE>_<reference>/table_summary.txt
- - RESULTS/<PIPELINE>_<reference>/Heatmap/otu_table.html
- - RESULTS/<PIPELINE>_<reference>/beta_div_even/weighted_2d_plot/...html
- - RESULTS/<PIPELINE>_<reference>/beta_div_even/unweighted_2d_plot/...html
+Some other things to be aware of:
 
-Dependencies
-============
+ * Note that using the Silva database requires a minimum of 18Gb RAM
+
+Known problems
+==============
+
+ * Only the ``VSEARCH`` pipeline in Mauro's script is currently
+   available via the Galaxy tool; the ``USEARCH`` and ``QIIME``
+   pipelines have yet to be implemented.
+ * The images in the tool help section are not visible if the
+   tool has been installed locally, or if it has been installed in
+   a Galaxy instance which is served from a subdirectory.
+
+   These are both problems with Galaxy and not the tool, see
+   https://github.com/galaxyproject/galaxy/issues/4490 and
+   https://github.com/galaxyproject/galaxy/issues/1676
+
+Appendix: availability of tool dependencies
+===========================================
 
 The tool takes its dependencies from the underlying pipeline script (see
 https://github.com/MTutino/Amplicon_analysis/blob/master/README.md
 for details).
 
-The ``install_tool_deps.sh`` script can be used to install the
-dependencies locally, for example::
+As noted above, currently the ``install_tool_deps.sh`` script can be
+used to manually install the dependencies for a local tool install.
 
-    install_tool_deps.sh /path/to/local_tool_dependencies
+In principle these should also be available if the tool were installed
+from a toolshed. However it would be preferrable in this case to get as
+many of the dependencies as possible via the ``conda`` dependency
+resolver.
 
-This can then be targeted in a Galaxy installation by adding the
-following lines to the ``dependency_resolvers_conf.xml`` file::
-
-    <galaxy_packages base_path="/path/to/local_tool_dependencies" />
-    <galaxy_packages base_path="/path/to/local_tool_dependencies" versionless="true" />
-
-ideally before the ``<conda ... />`` resolvers; see
-https://docs.galaxyproject.org/en/latest/admin/dependency_resolvers.html#galaxy-packages-dependency-resolver.
-
-Alternatively (or in addition), a number of dependencies are also
-available via (Bio)conda:
+The following are known to be available via conda, with the required
+version:
 
  - cutadapt 1.8.1
  - sickle-trim 1.33
@@ -122,8 +197,6 @@ Other notes
    potentially a challenge for implementing a Galaxy wrapper. One possible
    approach could be to use Galaxy collections, along the lines of:
    - _Processing many samples at once (Galaxy wiki):https://github.com/nekrut/galaxy/wiki/Processing-many-samples-at-once
-
- * Silva database requires minimum 18Gb RAM
 
 History
 =======
