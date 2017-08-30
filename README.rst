@@ -43,7 +43,7 @@ specified top level directory.
 There are two files to install:
 
  * ``amplicon_analysis_pipeline.xml`` (the Galaxy tool definition)
- * ``amplicon_analysis_pipeline.py`` (the shell script wrapper)
+ * ``amplicon_analysis_pipeline.py`` (the Python wrapper script)
 
 Put these in a directory that is visible to Galaxy (e.g. a
 ``tools/Amplicon_analysis/`` folder), and modify the ``tools_conf.xml``
