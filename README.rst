@@ -54,7 +54,15 @@ file to tell Galaxy to offer the tool by adding the line e.g.::
 3. Install the reference data
 -----------------------------
 
-**TBA**
+The script ``References.sh`` from the pipeline package at
+https://github.com/MTutino/Amplicon_analysis can be run to install
+the reference data, for example::
+
+    cd /path/to/pipeline/data
+    wget https://github.com/MTutino/Amplicon_analysis/raw/master/References.sh
+    ./References.sh
+
+will install the data in ``/path/to/pipeline/data``.
 
 4. Configure dependencies and reference data in Galaxy
 ------------------------------------------------------
