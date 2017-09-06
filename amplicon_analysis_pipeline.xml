@@ -71,8 +71,7 @@
   &&
 
   ## Collect outputs
-  cp Final_name.txt "${final_name_file}" &&
-  cp Metatable_log/Metatable_corrected.txt "${metatable_corrected}" &&
+  cp Metatable_log/Metatable_mod.txt "${metatable_mod}" &&
   cp ${pipeline}_OTU_tables/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_tax_OTU_table.biom "${tax_otu_table_biom_file}" &&
   cp ${pipeline}_OTU_tables/otus.tre "${otus_tre_file}" &&
   cp RESULTS/${pipeline}_${reference_database_name}/OTUs_count.txt "${otus_count_file}" &&
@@ -190,10 +189,8 @@
     </param>
   </inputs>
   <outputs>
-    <data format="tabular" name="final_name_file"
-	  label="${tool.name}:${title} Final_name.txt" />
-    <data format="tabular" name="metatable_corrected"
-	  label="${tool.name}:${title} Metatable_corrected.txt" />
+    <data format="tabular" name="metatable_mod"
+	  label="${tool.name}:${title} Metatable_mod.txt" />
     <data format="tabular" name="read_counts_out"
 	  label="${tool.name} (${pipeline}):${title} read counts" />
     <data format="biom" name="tax_otu_table_biom_file"
@@ -346,7 +343,7 @@ During the analysis the Metatable.txt will be checked to ensure that the
 file has the correct format. If necessary, this will be modified and will
 be available as Metatable_corrected.txt in the history panel. If you are
 going to use the metatable file for any other statistical analyses,
-remember to use the Metatable_corrected.txt one, otherwise the sample
+remember to use the ``Metatable_mod.txt`` one, otherwise the sample
 names might not match!
 
 Categories.txt (optional) 
