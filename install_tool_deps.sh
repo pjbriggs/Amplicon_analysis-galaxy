@@ -59,7 +59,10 @@ function install_amplicon_analysis_pipeline() {
 # Source this to setup Amplicon_analysis/$version
 echo Setting up Amplicon analysis pipeline $version
 export PATH=$install_dir/Amplicon_analysis:\$PATH
-export AMPLICON_ANALYSIS_REF_DATA_PATH=
+## AMPLICON_ANALYSIS_REF_DATA_PATH should be set in
+## config/local_env.sh or in the job_conf.xml file
+## - see the README
+##export AMPLICON_ANALYSIS_REF_DATA_PATH=
 #
 EOF
 }
@@ -93,7 +96,10 @@ function install_amplicon_analysis_pipeline_1_0_patched() {
 # Source this to setup Amplicon_analysis/$version
 echo Setting up Amplicon analysis pipeline $version
 export PATH=$install_dir/Amplicon_analysis:\$PATH
-export AMPLICON_ANALYSIS_REF_DATA_PATH=
+## AMPLICON_ANALYSIS_REF_DATA_PATH should be set in
+## config/local_env.sh or in the job_conf.xml file
+## - see the README
+##export AMPLICON_ANALYSIS_REF_DATA_PATH=
 #
 EOF
 }
