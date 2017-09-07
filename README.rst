@@ -60,9 +60,12 @@ the reference data, for example::
 
     cd /path/to/pipeline/data
     wget https://github.com/MTutino/Amplicon_analysis/raw/master/References.sh
-    ./References.sh
+    /bin/bash ./References.sh
 
 will install the data in ``/path/to/pipeline/data``.
+
+**NB** The final amount of data downloaded and uncompressed will be
+around 6GB.
 
 4. Configure dependencies and reference data in Galaxy
 ------------------------------------------------------
@@ -94,14 +97,16 @@ The tool locates the reference data via an environment variable called
 ``AMPLICON_ANALYSIS_REF_DATA_PATH``, which needs to set to the parent
 directory where the reference data has been installed.
 
-There are various ways to do this, for example:
+There are various ways to do this, depending on how your Galaxy
+installation is configured:
 
- * Add a line to set it in the ``local_env.sh`` file of your Galaxy
-   installation, e.g.::
+ * **For local instances:** add a line to set it in the
+   ``config/local_env.sh`` file of your Galaxy installation, e.g.::
 
        export AMPLICON_ANALYSIS_REF_DATA_PATH=/path/to/pipeline/data
 
- * Set the value in the ``job_conf.xml``, e.g.::
+ * **For production instances:** set the value in the ``job_conf.xml``
+   configuration file, e.g.::
 
        <destination id="amplicon_analysis">
           <env id="AMPLICON_ANALYSIS_REF_DATA_PATH">/path/to/pipeline/data</env>
@@ -124,10 +129,12 @@ tool.
 
 Either:
 
- * Set ``sanitize_all_html = False`` in ``config/galaxy.ini`` (nb don't do
-   this on production servers or public instances!); or
- * Add the ``Amplicon_analysis`` tool to the display whitelist in the
-   Galaxy instance:
+ * **For local instances:** set ``sanitize_all_html = False`` in
+   ``config/galaxy.ini`` (nb don't do this on production servers or
+   public instances!); or
+
+ * **For production instances:** add the ``Amplicon_analysis`` tool
+   to the display whitelist in the Galaxy instance:
 
    - Set ``sanitize_whitelist_file = config/whitelist.txt`` in
      ``config/galaxy.ini`` and restart Galaxy;
