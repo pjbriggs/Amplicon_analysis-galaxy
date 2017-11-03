@@ -164,6 +164,7 @@ if __name__ == "__main__":
             sample_names.append(sample_name)
 
     # Check the sample names
+    sample_names_error = False
     for sample_name in metatable_sample_names:
         if sample_name not in metatable_sample_names:
             sys.stderr.write("WARNING Sample name '%s' in "
