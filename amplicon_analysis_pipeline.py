@@ -133,7 +133,7 @@ if __name__ == "__main__":
     with open(args.metatable,'r') as metatable_in:
         with open(metatable_file,'w') as metatable_out:
             for line in metatable_in:
-                if line.startswith('#') is None:
+                if line.startswith('#'):
                     metatable_out.write(line)
                     continue
                 data = line.split('\t')
