@@ -133,7 +133,7 @@ if __name__ == "__main__":
     with open(args.metatable,'r') as metatable_in:
         with open(metatable_file,'w') as metatable_out:
             for line in metatable_in:
-                if line.startswith('#') and metatable_header is None:
+                if line.startswith('#') is None:
                     metatable_out.write(line)
                     continue
                 data = line.split('\t')
@@ -169,7 +169,7 @@ if __name__ == "__main__":
         sample_names_error = True
     else:
         for sample_name in sample_names:
-            if sample_name not in sample_names_metatable:
+            if sample_name not in metatable_sample_names:
                 sys.stderr.write("WARNING Sample name '%s' not in "
                                  "Metatable\n" % sample_name)
                 sample_names_error = True
