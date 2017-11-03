@@ -126,9 +126,22 @@ if __name__ == "__main__":
 
     # Build the environment for running the pipeline
     print "Amplicon analysis: building the environment"
-    metatable_file = os.path.abspath(args.metatable)
-    os.symlink(metatable_file,"Metatable.txt")
-    print "-- made symlink to Metatable.txt"
+
+    # Build the Metatable file and collect sample names
+    metatable_file = "Metatable.txt"
+    metatable_sample_names = []
+    with open(args.metatable,'r') as metatable_in:
+        with open(metatable_file,'w') as metatable_out:
+            for line in metatable_in:
+                if line.startswith('#') and metatable_header is None:
+                    metatable_out.write(line)
+                    continue
+                data = line.split('\t')
+                sample_name = clean_up_name(data[0])
+                data[0] = sample_name
+                metatable_out.write('\t'.join(data))
+                metatable_sample_names.append(sample_name)
+    print "-- constructed local Metatable.txt file"
 
     # Link to Categories.txt file (if provided)
     if args.categories_file is not None:
@@ -149,6 +162,23 @@ if __name__ == "__main__":
             final_name.write("%s\n" % '\t'.join((r1,sample_name)))
             final_name.write("%s\n" % '\t'.join((r2,sample_name)))
             sample_names.append(sample_name)
+
+    # Check the sample names
+    sample_names_error = False
+    if len(sample_names) != len(metatable_sample_names):
+        sample_names_error = True
+    else:
+        for sample_name in sample_names:
+            if sample_name not in sample_names_metatable:
+                sys.stderr.write("WARNING Sample name '%s' not in "
+                                 "Metatable\n" % sample_name)
+                sample_names_error = True
+            else:
+                print "Sample name '%s' ok" % sample_name
+    if sample_names_error:
+        sys.stderr.write("ERROR Sample names from Fastqs don't "
+                         "match those in Metatable\n")
+        sys.exit(1)
 
     # Construct the pipeline command
     print "Amplicon analysis: constructing pipeline command"
