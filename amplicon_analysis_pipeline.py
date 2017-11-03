@@ -164,17 +164,15 @@ if __name__ == "__main__":
             sample_names.append(sample_name)
 
     # Check the sample names
-    sample_names_error = False
-    if len(sample_names) != len(metatable_sample_names):
-        sample_names_error = True
-    else:
-        for sample_name in sample_names:
-            if sample_name not in metatable_sample_names:
-                sys.stderr.write("WARNING Sample name '%s' not in "
-                                 "Metatable\n" % sample_name)
-                sample_names_error = True
-            else:
-                print "Sample name '%s' ok" % sample_name
+    for sample_name in metatable_sample_names:
+        if sample_name not in metatable_sample_names:
+            sys.stderr.write("WARNING Sample name '%s' in "
+                             "updated metatable not found "
+                             "in list of Fastq pairs\n" %
+                             sample_name)
+            sample_names_error = True
+        else:
+            print "Sample name '%s' ok" % sample_name
     if sample_names_error:
         sys.stderr.write("ERROR Sample names from Fastqs don't "
                          "match those in Metatable\n")
