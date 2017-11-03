@@ -177,9 +177,8 @@ if __name__ == "__main__":
         else:
             print "Sample name '%s' ok" % sample_name
     if sample_names_error:
-        sys.stderr.write("ERROR Sample names from Fastqs don't "
+        sys.stderr.write("WARNING Sample names from Fastqs don't "
                          "match those in Metatable\n")
-        sys.exit(1)
 
     # Construct the pipeline command
     print "Amplicon analysis: constructing pipeline command"
