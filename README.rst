@@ -21,9 +21,10 @@ the ``help`` section of the tool XML.
 Installing the tool in a Galaxy instance
 ========================================
 
-The tool is not currently hosted on a Galaxy toolshed both the tool
-files and the dependencies must be installed manually. In addition
-it is necessary to fetch and install the reference data.
+The following sections describe how to install the tool files,
+dependencies and reference data, and how to configure the Galaxy
+instance to detect the dependencies and reference data correctly
+at run time.
 
 1. Install the dependencies
 ---------------------------
@@ -40,7 +41,13 @@ specified top level directory.
 2. Install the tool files
 -------------------------
 
-There are two files to install:
+The core tool is hosted on the Galaxy toolshed, so it can be installed
+directly from there (this is the recommended route):
+
+ * https://toolshed.g2.bx.psu.edu/view/pjbriggs/amplicon_analysis_pipeline/
+
+Alternatively it can be installed manually; in this case there are two
+files to install:
 
  * ``amplicon_analysis_pipeline.xml`` (the Galaxy tool definition)
  * ``amplicon_analysis_pipeline.py`` (the Python wrapper script)
