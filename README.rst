@@ -205,14 +205,6 @@ The following dependencies are currently unavailable:
 (NB usearch 6.1.544 and 8.0.1623 are special cases which must be
 handled outside of Galaxy's dependency management systems.)
 
-Other notes
-===========
-
- * The pipeline takes as input multiple pairs of Fastq files, which is
-   potentially a challenge for implementing a Galaxy wrapper. One possible
-   approach could be to use Galaxy collections, along the lines of:
-   - _Processing many samples at once (Galaxy wiki):https://github.com/nekrut/galaxy/wiki/Processing-many-samples-at-once
-
 History
 =======
 
