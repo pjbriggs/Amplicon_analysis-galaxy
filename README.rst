@@ -211,7 +211,8 @@ History
 ========== ======================================================================
 Version    Changes
 ---------- ----------------------------------------------------------------------
-1.0.6      - Expand inline documentation to provide detailed usage guidance.
+1.1.0      First official version on Galaxy toolshed.
+1.0.6      Expand inline documentation to provide detailed usage guidance.
 1.0.5      Updates including:
 
            - Capture read counts from quality control as new output dataset
