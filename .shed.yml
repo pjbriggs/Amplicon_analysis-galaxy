@@ -1,0 +1,16 @@
+---
+categories:
+- Metagenomics
+description: Analyse paired-end 16S rRNA data from Illumina Miseq
+homepage_url: https://github.com/MTutino/Amplicon_analysis
+long_description: |
+  A Galaxy tool wrapper to Mauro Tutino's Amplicon_analysis pipeline
+  at https://github.com/MTutino/Amplicon_analysis
+
+  The pipeline can analyse paired-end 16S rRNA data from Illumina Miseq
+  (Casava >= 1.8) and performs: QC and clean up of input data; removal of
+  singletons and chimeras and building of OTU table and phylogenetic tree;
+  beta and alpha diversity analysis
+name: amplicon_analysis_pipeline
+owner: pjbriggs
+remote_repository_url: https://github.com/pjbriggs/Amplicon_analysis-galaxy

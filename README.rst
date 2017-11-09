@@ -21,9 +21,10 @@ the ``help`` section of the tool XML.
 Installing the tool in a Galaxy instance
 ========================================
 
-The tool is not currently hosted on a Galaxy toolshed both the tool
-files and the dependencies must be installed manually. In addition
-it is necessary to fetch and install the reference data.
+The following sections describe how to install the tool files,
+dependencies and reference data, and how to configure the Galaxy
+instance to detect the dependencies and reference data correctly
+at run time.
 
 1. Install the dependencies
 ---------------------------
@@ -40,7 +41,13 @@ specified top level directory.
 2. Install the tool files
 -------------------------
 
-There are two files to install:
+The core tool is hosted on the Galaxy toolshed, so it can be installed
+directly from there (this is the recommended route):
+
+ * https://toolshed.g2.bx.psu.edu/view/pjbriggs/amplicon_analysis_pipeline/
+
+Alternatively it can be installed manually; in this case there are two
+files to install:
 
  * ``amplicon_analysis_pipeline.xml`` (the Galaxy tool definition)
  * ``amplicon_analysis_pipeline.py`` (the Python wrapper script)
@@ -205,21 +212,14 @@ The following dependencies are currently unavailable:
 (NB usearch 6.1.544 and 8.0.1623 are special cases which must be
 handled outside of Galaxy's dependency management systems.)
 
-Other notes
-===========
-
- * The pipeline takes as input multiple pairs of Fastq files, which is
-   potentially a challenge for implementing a Galaxy wrapper. One possible
-   approach could be to use Galaxy collections, along the lines of:
-   - _Processing many samples at once (Galaxy wiki):https://github.com/nekrut/galaxy/wiki/Processing-many-samples-at-once
-
 History
 =======
 
 ========== ======================================================================
 Version    Changes
 ---------- ----------------------------------------------------------------------
-1.0.6      - Expand inline documentation to provide detailed usage guidance.
+1.1.0      First official version on Galaxy toolshed.
+1.0.6      Expand inline documentation to provide detailed usage guidance.
 1.0.5      Updates including:
 
            - Capture read counts from quality control as new output dataset

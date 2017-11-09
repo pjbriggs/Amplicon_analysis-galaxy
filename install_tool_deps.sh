@@ -35,6 +35,9 @@ EOF
     rm -rf $wd/*
     rmdir $wd
 }
+function install_amplicon_analysis_pipeline_1_1() {
+    install_amplicon_analysis_pipeline $1 1.1
+}
 function install_amplicon_analysis_pipeline_1_0() {
     install_amplicon_analysis_pipeline $1 1.0
 }
@@ -683,8 +686,7 @@ if [ ! -d "$TOP_DIR" ] ; then
     mkdir -p $TOP_DIR
 fi
 # Install dependencies
-install_amplicon_analysis_pipeline_1_0 $TOP_DIR
-install_amplicon_analysis_pipeline_1_0_patched $TOP_DIR
+install_amplicon_analysis_pipeline_1_1 $TOP_DIR
 install_cutadapt_1_11 $TOP_DIR
 install_sickle_1_33 $TOP_DIR
 install_bioawk_27_08_2013 $TOP_DIR
