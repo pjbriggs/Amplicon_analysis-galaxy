@@ -190,6 +190,7 @@ if __name__ == "__main__":
         except Exception as ex:
             # Some other problem
             sys.stderr.write("Unexpected error: %s\n" % str(ex))
+            exit_code = 1
 
     # Write out the list of outputs
     outputs_file = "Pipeline_outputs.txt"
