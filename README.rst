@@ -218,6 +218,9 @@ History
 ========== ======================================================================
 Version    Changes
 ---------- ----------------------------------------------------------------------
+1.2.1.0    Updated to Amplicon_Analysis_Pipeline version 1.2.1 (adds
+           option to use the Human Oral Microbiome Database v15.1, and
+           updates SILVA database to v123)
 1.1.0      First official version on Galaxy toolshed.
 1.0.6      Expand inline documentation to provide detailed usage guidance.
 1.0.5      Updates including:
