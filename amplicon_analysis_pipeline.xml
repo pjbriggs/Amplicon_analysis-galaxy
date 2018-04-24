@@ -1,7 +1,7 @@
-<tool id="amplicon_analysis_pipeline" name="Amplicon Analysis Pipeline" version="1.0.6">
+<tool id="amplicon_analysis_pipeline" name="Amplicon Analysis Pipeline" version="1.2.1.0">
   <description>analyse 16S rRNA data from Illumina Miseq paired-end reads</description>
   <requirements>
-    <requirement type="package" version="1.1">amplicon_analysis_pipeline</requirement>
+    <requirement type="package" version="1.2.1">amplicon_analysis_pipeline</requirement>
     <requirement type="package" version="1.11">cutadapt</requirement>
     <requirement type="package" version="1.33">sickle</requirement>
     <requirement type="package" version="27-08-2013">bioawk</requirement>
@@ -22,10 +22,12 @@
   </stdio>
   <command><![CDATA[
   ## Set the reference database name
-  #if $reference_database == ""
-    #set reference_database_name = "gg"
-  #else
+  #if $reference_database == "-S"
     #set reference_database_name = "silva"
+  #else if $reference_database == "-H"
+    #set reference_database_name = "homd"
+  #else
+    #set reference_database_name = "gg"
   #end if
 
   ## Run the amplicon analysis pipeline wrapper
@@ -52,7 +54,7 @@
   -P $pipeline
   -r \$AMPLICON_ANALYSIS_REF_DATA_PATH
   #if str( $reference_database ) != ""
-    "${reference_database}"
+    ${reference_database}
   #end if
   #if str($categories_file_in) != 'None'
     -c "${categories_file_in}"
@@ -186,6 +188,7 @@
 	   label="Reference database">
       <option value="" selected="true">GreenGenes</option>
       <option value="-S">Silva</option>
+      <option value="-H">Human Oral Microbiome Database (HOMD)</option>
     </param>
   </inputs>
   <outputs>

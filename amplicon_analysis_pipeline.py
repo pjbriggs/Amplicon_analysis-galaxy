@@ -120,6 +120,7 @@ if __name__ == "__main__":
                    type=str.lower,
                    default="vsearch")
     p.add_argument("-S",dest="use_silva",action="store_true")
+    p.add_argument("-H",dest="use_homd",action="store_true")
     p.add_argument("-r",dest="reference_data_path")
     p.add_argument("-c",dest="categories_file")
     args = p.parse_args()
@@ -150,6 +151,14 @@ if __name__ == "__main__":
             final_name.write("%s\n" % '\t'.join((r2,sample_name)))
             sample_names.append(sample_name)
 
+    # Reference database
+    if args.use_silva:
+        ref_database = "silva"
+    elif args.use_homd:
+        ref_database = "homd"
+    else:
+        ref_database = "gg"
+
     # Construct the pipeline command
     print "Amplicon analysis: constructing pipeline command"
     pipeline = PipelineCmd("Amplicon_analysis_pipeline.sh")
@@ -168,8 +177,10 @@ if __name__ == "__main__":
     if args.reference_data_path:
         pipeline.add_args("-r",args.reference_data_path)
     pipeline.add_args("-P",args.pipeline)
-    if args.use_silva:
+    if ref_database == "silva":
         pipeline.add_args("-S")
+    elif ref_database == "homd":
+        pipeline.add_args("-H")
 
     # Echo the pipeline command to stdout
     print "Running %s" % pipeline
@@ -299,8 +310,7 @@ if __name__ == "__main__":
         boxplots_dir = os.path.abspath(
             os.path.join("RESULTS",
                          "%s_%s" % (args.pipeline.title(),
-                                    ("gg" if not args.use_silva
-                                     else "silva")),
+                                    ref_database),
                          "Alpha_diversity",
                          "Alpha_diversity_boxplot",
                          "Categories_shannon"))
