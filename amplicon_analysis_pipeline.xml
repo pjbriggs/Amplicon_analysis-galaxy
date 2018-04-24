@@ -54,7 +54,7 @@
   -P $pipeline
   -r \$AMPLICON_ANALYSIS_REF_DATA_PATH
   #if str( $reference_database ) != ""
-    "${reference_database}"
+    ${reference_database}
   #end if
   #if str($categories_file_in) != 'None'
     -c "${categories_file_in}"
