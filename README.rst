@@ -194,19 +194,16 @@ version:
  - bioawk 1.0
  - fastqc 0.11.3
  - R 3.2.0
-
-Some dependencies are available but with the "wrong" versions:
-
- - spades (need 3.5.0)
- - qiime (need 1.8.0)
- - blast (need 2.2.26)
- - vsearch (need 1.1.3)
+ - spades 3.5.0
+ - qiime 1.8.0
+ - blast-legacy 2.2.26
+ - vsearch 1.1.3
+ - fasta-splitter 0.2.4
+ - rdp_classifier 2.2
 
 The following dependencies are currently unavailable:
 
  - fasta_number (need 02jun2015)
- - fasta-splitter (need 0.2.4)
- - rdp_classifier (need 2.2)
  - microbiomeutil (need r20110519)
 
 (NB usearch 6.1.544 and 8.0.1623 are special cases which must be
@@ -218,6 +215,7 @@ History
 ========== ======================================================================
 Version    Changes
 ---------- ----------------------------------------------------------------------
+1.2.2.1    Update to get dependencies from bioconda
 1.2.2.0    Updated to Amplicon_Analysis_Pipeline version 1.2.2 (removes
            jackknifed analysis which is not captured by Galaxy tool)
 1.2.1.0    Updated to Amplicon_Analysis_Pipeline version 1.2.1 (adds
