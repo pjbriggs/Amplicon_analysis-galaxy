@@ -1,7 +1,7 @@
-<tool id="amplicon_analysis_pipeline" name="Amplicon Analysis Pipeline" version="1.2.1.0">
+<tool id="amplicon_analysis_pipeline" name="Amplicon Analysis Pipeline" version="1.2.2.0">
   <description>analyse 16S rRNA data from Illumina Miseq paired-end reads</description>
   <requirements>
-    <requirement type="package" version="1.2.1">amplicon_analysis_pipeline</requirement>
+    <requirement type="package" version="1.2.2">amplicon_analysis_pipeline</requirement>
     <requirement type="package" version="1.11">cutadapt</requirement>
     <requirement type="package" version="1.33">sickle</requirement>
     <requirement type="package" version="27-08-2013">bioawk</requirement>

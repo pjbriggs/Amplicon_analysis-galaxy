@@ -218,6 +218,8 @@ History
 ========== ======================================================================
 Version    Changes
 ---------- ----------------------------------------------------------------------
+1.2.2.0    Updated to Amplicon_Analysis_Pipeline version 1.2.2 (removes
+           jackknifed analysis which is not captured by Galaxy tool)
 1.2.1.0    Updated to Amplicon_Analysis_Pipeline version 1.2.1 (adds
            option to use the Human Oral Microbiome Database v15.1, and
            updates SILVA database to v123)
