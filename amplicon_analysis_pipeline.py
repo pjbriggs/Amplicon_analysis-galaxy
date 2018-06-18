@@ -99,7 +99,7 @@ def list_outputs(filen=None):
 def find_executable(name):
     # Locate executable on PATH
     for p in os.environ['PATH'].split(os.pathsep):
-        exe = os.path.join(name)
+        exe = os.path.join(p,name)
         if os.path.isfile(exe) and os.access(exe,os.X_OK):
             return exe
     return None
@@ -191,6 +191,7 @@ if __name__ == "__main__":
             find_executable("fasta-splitter"))
     if fasta_splitter:
         os.symlink(vsearch,os.path.join("bin","fasta-splitter.pl"))
+        print "-- made symlink to %s" % fasta_splitter
     else:
         sys.stderr.write("Missing 'fasta-splitter[.pl]'\n")
 
