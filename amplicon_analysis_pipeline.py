@@ -96,6 +96,14 @@ def list_outputs(filen=None):
     if filen is not None:
         fp.close()
 
+def find_executable(name):
+    # Locate executable on PATH
+    for p in os.environ['PATH'].split(os.pathsep):
+        exe = os.path.join(name)
+        if os.path.isfile(exe) and os.access(exe,os.X_OK):
+            return exe
+    return None
+
 if __name__ == "__main__":
     # Command line
     print "Amplicon analysis: starting"
@@ -158,6 +166,33 @@ if __name__ == "__main__":
         ref_database = "homd"
     else:
         ref_database = "gg"
+
+    # Executables
+    os.mkdir("bin")
+    os.environ["PATH"] = os.path.abspath("bin") + \
+                         os.pathsep + \
+                         os.environ["PATH"]
+    print "-- updated PATH: %s" % os.environ["PATH"]
+    # Pipeline wants 'vsearch113' but bioconda version is just
+    # 'vsearch'
+    vsearch = find_executable("vsearch113")
+    if vsearch is None:
+        vsearch = find_executable("vsearch")
+    if vsearch:
+        os.symlink(vsearch,os.path.join("bin","vsearch113"))
+        print "-- made symlink to %s" % vsearch
+    else:
+        sys.stderr.write("Missing 'vsearch[113]'\n")
+    # Pipeline wants 'fasta-splitter.pl' but bioconda provides
+    # 'fasta-splitter'
+    fasta_splitter = find_executable("fasta-splitter.pl")
+    if fasta_splitter is None:
+        fasta_splitter = os.path.readlink(
+            find_executable("fasta-splitter"))
+    if fasta_splitter:
+        os.symlink(vsearch,os.path.join("bin","fasta-splitter.pl"))
+    else:
+        sys.stderr.write("Missing 'fasta-splitter[.pl]'\n")
 
     # Construct the pipeline command
     print "Amplicon analysis: constructing pipeline command"
