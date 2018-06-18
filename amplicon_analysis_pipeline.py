@@ -187,7 +187,7 @@ if __name__ == "__main__":
     # 'fasta-splitter'
     fasta_splitter = find_executable("fasta-splitter.pl")
     if fasta_splitter is None:
-        fasta_splitter = os.path.readlink(
+        fasta_splitter = os.readlink(
             find_executable("fasta-splitter"))
     if fasta_splitter:
         os.symlink(vsearch,os.path.join("bin","fasta-splitter.pl"))
