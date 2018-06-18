@@ -24,6 +24,10 @@
 	    <source>THIRD_STEP.sh</source>
 	    <destination>$INSTALL_DIR/Amplicon_analysis_pipeline</destination>
 	  </action>
+	  <action type="move_directory_files">
+	    <source_directory>uc2otutab</source_directory>
+	    <destination_directory>$INSTALL_DIR/Amplicon_analysis_pipeline/uc2otutab</destination_directory>
+	  </action>
 	  <action type="set_environment">
 	    <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/Amplicon_analysis_pipeline</environment_variable>
 	  </action>
