@@ -10,6 +10,7 @@
 	  </action>
 	  <action type="set_environment">
 	    <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/Amplicon_analysis_pipeline</environment_variable>
+	  </action>
 	</actions>
       </install>
   </package>
