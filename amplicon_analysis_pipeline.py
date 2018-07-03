@@ -194,6 +194,37 @@ if __name__ == "__main__":
         print "-- made symlink to %s" % fasta_splitter
     else:
         sys.stderr.write("Missing 'fasta-splitter[.pl]'\n")
+    # Qiime 1.8.0 wants 'RDP_JAR_PATH' env var to point to
+    # the rdp_classifier.jar file
+    # biconda provides this in the 'share/rdp_classifier/' dir
+    # which is a link to the 'share/rdp_classifier-<VERSION>/' dir
+    rdp_classifier = find_executable("rdp_classifier")
+    if rdp_classifier:
+        # Generate expected path to JAR file
+        rdp_classifier = os.path.normpath(
+            os.path.join(os.path.dirname(rdp_classifier),
+                         "..",
+                         "share",
+                         "rdp_classifier",
+                         "rdp_classifier.jar"))
+    if rdp_classifier and os.path.exists(rdp_classifier):
+        # Get real directory (which contains version)
+        rdp_classifier_dir = os.readlink(
+            os.path.dirname(rdp_classifier))
+        # Extract the version
+        rdp_version = '-'.join(os.path.basename(
+            rdp_classifier_dir).split('-')[1:])
+        # Make a symlink to JAR file with version in the name
+        rdp_jar_path = os.path.join(os.path.abspath("bin"),
+                                    "rdp_classifier-%s.jar" %
+                                    rdp_version)
+        os.symlink(rdp_classifier,rdp_jar_path)
+        print "-- made symlink to %s" % rdp_classifier
+        # Set the RDP_JAR_PATH env var
+        os.environ["RDP_JAR_PATH"] = rdp_jar_path
+        print "-- set RDP_JAR_PATH: %s" % os.environ["RDP_JAR_PATH"]
+    else:
+        sys.stderr.write("Missing 'rdp_classifier.jar'\n")
 
     # Construct the pipeline command
     print "Amplicon analysis: constructing pipeline command"
