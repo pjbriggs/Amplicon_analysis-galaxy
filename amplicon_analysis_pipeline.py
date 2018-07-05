@@ -225,6 +225,15 @@ if __name__ == "__main__":
         print "-- set RDP_JAR_PATH: %s" % os.environ["RDP_JAR_PATH"]
     else:
         sys.stderr.write("Missing 'rdp_classifier.jar'\n")
+    # Set up qiime_config file
+    qiime_config_file = os.path.abspath("qiime_config")
+    with open(qiime_config_file,'w') as qiime_config:
+        # Set qiime_scripts_dir
+        qiime_config.write("qiime_scripts_dir\t%s" %
+                           os.path.dirname(
+                               find_executable("single_rarefaction.py")))
+    os.environ["QIIME_CONFIG_FP"] = qiime_config_file
+    print "-- set QIIME_CONFIG_FP: %s" % os.environ["QIIME_CONFIG_FP"]
 
     # Construct the pipeline command
     print "Amplicon analysis: constructing pipeline command"
