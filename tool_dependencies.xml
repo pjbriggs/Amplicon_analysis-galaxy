@@ -35,6 +35,23 @@
       </install>
   </package>
   <!--
+      microbiomeutil provides ChimeraSlayer
+  -->
+  <package name="microbiomeutil-chimeraslayer" version="2010-04-29">
+    <install version="1.0">
+      <actions>
+	<action type="download_by_url">https://sourceforge.net/projects/microbiomeutil/files/__OLD_VERSIONS/microbiomeutil_2010-04-29.tar.gz</action>
+	<action type="move_directory_files">
+	  <source_directory>ChimeraSlayer</source_directory>
+	  <destination_directory>$INSTALL_DIR/ChimeraSlayer</destination_directory>
+	</action>
+	<action type="set_environment">
+	    <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/ChimeraSlayer</environment_variable>
+	</action>
+      </actions>
+    </install>
+  </package>
+  <!--
       uclust required for QIIME/pyNAST
       License only allows this version to be used with those two packages
       See:
