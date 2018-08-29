@@ -234,6 +234,15 @@ if __name__ == "__main__":
                                find_executable("single_rarefaction.py")))
     os.environ["QIIME_CONFIG_FP"] = qiime_config_file
     print "-- set QIIME_CONFIG_FP: %s" % os.environ["QIIME_CONFIG_FP"]
+    # Check for fasta_number.py
+    fasta_number = find_executable("fasta_number.py")
+    if not fasta_number:
+        # Make a link to relabel_fasta.py
+        relabel_fasta_path = os.path.join(os.path.realpath(__file__),
+                                          "relabel_fasta.py")
+        fasta_number_path = os.path.join(os.path.abspath("bin"),
+                                         "fasta_number.py")
+        os.symlink(relabel_fasta_path,fasta_number_path)
 
     # Construct the pipeline command
     print "Amplicon analysis: constructing pipeline command"
