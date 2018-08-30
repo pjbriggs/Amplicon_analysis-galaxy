@@ -5,7 +5,6 @@
     <requirement type="package" version="1.2.2">amplicon_analysis_pipeline</requirement>
     <requirement type="package" version="2010-04-29">microbiomeutil-chimeraslayer</requirement>
     <requirement type="package" version="1.2.22">uclust-qiime</requirement>
-    <requirement type="package">fasta_number</requirement>
     <!-- bioconda dependencies -->
     <requirement type="package" version="2.7">python</requirement>
     <requirement type="package" version="1.11">cutadapt</requirement>
