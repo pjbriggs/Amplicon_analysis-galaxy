@@ -190,7 +190,7 @@ if __name__ == "__main__":
         fasta_splitter = os.readlink(
             find_executable("fasta-splitter"))
     if fasta_splitter:
-        os.symlink(vsearch,os.path.join("bin","fasta-splitter.pl"))
+        os.symlink(fasta_splitter,os.path.join("bin","fasta-splitter.pl"))
         print "-- made symlink to %s" % fasta_splitter
     else:
         sys.stderr.write("Missing 'fasta-splitter[.pl]'\n")
