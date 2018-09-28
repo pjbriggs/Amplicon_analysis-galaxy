@@ -29,8 +29,12 @@ at run time.
 1. Install the dependencies
 ---------------------------
 
-The ``install_amplicon_analysis.sh`` script can be used to fetch
-and install the dependencies locally, for example::
+If the tool is installed from the Galaxy toolshed (recommended) then
+the dependencies should be installed automatically and this step can
+be skipped.
+
+Otherwise the ``install_amplicon_analysis_deps.sh`` script can be used
+to fetch and install the dependencies locally, for example::
 
     install_amplicon_analysis.sh /path/to/local_tool_dependencies
 
@@ -207,8 +211,10 @@ version:
 
 The following dependencies are currently unavailable:
 
- - fasta_number (need 02jun2015)
+ - R 3.2.1 (installed from the toolshed as the bioconda version
+   has conflicts )
  - microbiomeutil (need r20110519)
+
 
 (NB usearch 6.1.544 and 8.0.1623 are special cases which must be
 handled outside of Galaxy's dependency management systems.)
@@ -219,7 +225,8 @@ History
 ========== ======================================================================
 Version    Changes
 ---------- ----------------------------------------------------------------------
-1.2.2.1    Update to get dependencies from bioconda
+1.2.3.0    Updated to Amplicon_Analysis_Pipeline version 1.2.3; install
+           dependencies from bioconda and via tool_dependencies.xml
 1.2.2.0    Updated to Amplicon_Analysis_Pipeline version 1.2.2 (removes
            jackknifed analysis which is not captured by Galaxy tool)
 1.2.1.0    Updated to Amplicon_Analysis_Pipeline version 1.2.1 (adds
