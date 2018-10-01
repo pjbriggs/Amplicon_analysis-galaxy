@@ -101,7 +101,6 @@ def find_executable(name):
     for p in os.environ['PATH'].split(os.pathsep):
         exe = os.path.normpath(
             os.path.abspath(os.path.join(p,name)))
-        print "Checking %s" % exe
         if os.path.isfile(exe) and os.access(exe,os.X_OK):
             return exe
     return None
