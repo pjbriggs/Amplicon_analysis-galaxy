@@ -3,7 +3,7 @@
   <package name="amplicon_analysis_pipeline" version="1.2.3">
       <install version="1.0">
 	<actions>
-	  <action type="download_by_url">https://github.com/MTutino/Amplicon_analysis/archive/v1.2.2.tar.gz</action>
+	  <action type="download_by_url">https://github.com/MTutino/Amplicon_analysis/archive/v1.2.3.tar.gz</action>
 	  <action type="move_file">
 	    <source>Amplicon_analysis_pipeline.sh</source>
 	    <destination>$INSTALL_DIR/Amplicon_analysis_pipeline</destination>
