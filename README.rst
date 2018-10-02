@@ -178,47 +178,6 @@ Known problems
    https://github.com/galaxyproject/galaxy/issues/4490 and
    https://github.com/galaxyproject/galaxy/issues/1676
 
-Appendix: availability of tool dependencies
-===========================================
-
-The tool takes its dependencies from the underlying pipeline script (see
-https://github.com/MTutino/Amplicon_analysis/blob/master/README.md
-for details).
-
-As noted above, currently the ``install_amplicon_analysis.sh`` script
-can be used to manually install the dependencies for a local tool
-install.
-
-In principle these should also be available if the tool were installed
-from a toolshed. However it would be preferrable in this case to get as
-many of the dependencies as possible via the ``conda`` dependency
-resolver.
-
-The following are known to be available via conda, with the required
-version:
-
- - cutadapt 1.8.1
- - sickle-trim 1.33
- - bioawk 1.0
- - fastqc 0.11.3
- - R 3.2.0
- - spades 3.5.0
- - qiime 1.8.0
- - blast-legacy 2.2.26
- - vsearch 1.1.3
- - fasta-splitter 0.2.4
- - rdp_classifier 2.2
-
-The following dependencies are currently unavailable:
-
- - R 3.2.1 (installed from the toolshed as the bioconda version
-   has conflicts )
- - microbiomeutil (need r20110519)
-
-
-(NB usearch 6.1.544 and 8.0.1623 are special cases which must be
-handled outside of Galaxy's dependency management systems.)
-
 History
 =======
 
@@ -226,7 +185,7 @@ History
 Version    Changes
 ---------- ----------------------------------------------------------------------
 1.2.3.0    Updated to Amplicon_Analysis_Pipeline version 1.2.3; install
-           dependencies from bioconda and via tool_dependencies.xml
+           dependencies from bioconda and via tool_dependencies.xml.
 1.2.2.0    Updated to Amplicon_Analysis_Pipeline version 1.2.2 (removes
            jackknifed analysis which is not captured by Galaxy tool)
 1.2.1.0    Updated to Amplicon_Analysis_Pipeline version 1.2.1 (adds
