@@ -14,6 +14,7 @@
     <requirement type="package" version="3.5.0">spades</requirement>
     <requirement type="package" version="0.11.3">fastqc</requirement>
     <requirement type="package" version="1.8.0">qiime</requirement>
+    <requirement type="package" version="1.0">libgfortran</requirement>
     <requirement type="package" version="2.2.26">blast-legacy</requirement>
     <requirement type="package" version="0.2.4">fasta-splitter</requirement>
     <requirement type="package" version="2.2">rdp_classifier</requirement>
