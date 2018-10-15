@@ -150,7 +150,7 @@ DATA_DIR=\$(pwd)
 echo "Installing reference data under \$DATA_DIR"
 $INSTALL_DIR/References.sh
 echo ""
-echo "Use '-R \$DATA_DIR' when running Amplicon_analysis_pipeline.sh"
+echo "Use '-r \$DATA_DIR' when running Amplicon_analysis_pipeline.sh"
 echo "to use the reference data from this directory"
 echo ""
 echo "\$(basename \$0): finished"
