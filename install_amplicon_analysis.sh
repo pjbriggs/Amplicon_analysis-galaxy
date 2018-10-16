@@ -1,11 +1,12 @@
-#!/bin/bash -e
+#!/bin/sh -e
 #
 # Prototype script to setup a conda environment with the
 # dependencies needed for the Amplicon_analysis_pipeline
 # script
 #
 # Handle command line
-function usage() {
+usage()
+{
     echo "Usage: $(basename $0) [DIR]"
     echo ""
     echo "Installs the Amplicon_analysis_pipeline package plus"
@@ -14,10 +15,12 @@ function usage() {
 }
 if [ ! -z "$1" ] ; then
     # Check if help was requested
-    if [ "$1" == "--help" ] || [ "$1" == "-h" ] ; then
-	usage
-	exit 0
-    fi
+    case "$1" in
+	--help|-h)
+	    usage
+	    exit 0
+	    ;;
+    esac
     # Assume it's the installation directory
     cd $1
 fi
@@ -27,27 +30,62 @@ RDP_CLASSIFIER_VERSION=2.2
 # Directories
 TOP_DIR=$(pwd)/Amplicon_analysis-${PIPELINE_VERSION}
 BIN_DIR=${TOP_DIR}/bin
-MINICONDA_DIR=${TOP_DIR}/miniconda2
-CONDA_BIN=${MINICONDA_DIR}/bin
-CONDA_LIB=${MINICONDA_DIR}/lib
+CONDA_DIR=${TOP_DIR}/conda
+CONDA_BIN=${CONDA_DIR}/bin
+CONDA_LIB=${CONDA_DIR}/lib
 CONDA=${CONDA_BIN}/conda
 ENV_NAME="amplicon_analysis_pipeline@${PIPELINE_VERSION}"
-ENV_DIR=${MINICONDA_DIR}/envs/$ENV_NAME
+ENV_DIR=${CONDA_DIR}/envs/$ENV_NAME
+#
+# Functions
+#
+# Report failure and terminate script
+fail()
+{
+    echo ""
+    echo ERROR $@ >&2
+    echo ""
+    echo "$(basename $0): installation failed"
+    exit 1
+}
+#
+# Rewrite the shebangs in the installed conda scripts
+# to remove the full path to conda 'bin' directory
+rewrite_conda_shebangs()
+{
+    pattern="s,^#!${CONDA_BIN}/,#!/usr/bin/env ,g"
+    find ${CONDA_BIN} -type f -exec sed -i "$pattern" {} \;
+}
 #
 # Install conda
-function install_conda_deps() {
+install_conda_deps()
+{
     echo "++++++++++++++++++++++++++"
     echo "Creating conda environment"
     echo "++++++++++++++++++++++++++"
-    if [ -e ${MINICONDA_DIR} ] ; then
-	echo "*** $MINICONDA_DIR already exists ***"
+    if [ -e ${CONDA_DIR} ] ; then
+	echo "*** $CONDA_DIR already exists ***" >&2
 	return
     fi
+    local cwd=$(pwd)
     local wd=$(mktemp -d)
-    pushd $wd
+    cd $wd
     wget -q https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
-    /bin/bash ./Miniconda2-latest-Linux-x86_64.sh -b -p ${MINICONDA_DIR}
-    echo Installed conda in ${MINICONDA_DIR}
+    bash ./Miniconda2-latest-Linux-x86_64.sh -b -p ${CONDA_DIR}
+    echo Installed conda in ${CONDA_DIR}
+    # Update the installation files
+    # This is to avoid problems when the length the installation
+    # directory path exceeds the limit for the shebang statement
+    # in the conda files
+    echo ""
+    echo -n "Rewriting conda shebangs..."
+    rewrite_conda_shebangs
+    echo "ok"
+    echo ""
+    echo -n "Adding conda bin to PATH..."
+    PATH=${CONDA_BIN}:$PATH
+    echo "ok"
+    echo ""
     #
     # Create the conda environment
     cat >environment.yml <<EOF
@@ -80,22 +118,56 @@ dependencies:
 EOF
     ${CONDA} env create --name "${ENV_NAME}" -f environment.yml
     echo Created conda environment in ${ENV_DIR}
-    popd
+    cd $cwd
     rm -rf $wd/*
     rmdir $wd
 }
 #
-# Amplicon analyis pipeline
-function install_amplicon_analysis_pipeline() {
-    echo "+++++++++++++++++++++++++++++++++++++"
-    echo "Installing Amplicon_analysis_pipeline"
-    echo "+++++++++++++++++++++++++++++++++++++"
-    if [ -e ${BIN_DIR}/Amplicon_analysis_pipeline.sh ] ; then
-	echo "*** Amplicon_analysis_pipeline.sh already installed ***"
-	return
-    fi
+# Install all the non-conda dependencies in a single
+# function (invokes separate functions for each package)
+install_non_conda_deps()
+{
+    echo "+++++++++++++++++++++++++++++++++"
+    echo "Installing non-conda dependencies"
+    echo "+++++++++++++++++++++++++++++++++"
+    # Temporary working directory
     local wd=$(mktemp -d)
-    pushd $wd
+    local cwd=$(pwd)
+    local wd=$(mktemp -d)
+    cd $wd
+    # Amplicon analysis pipeline
+    echo -n "Installing Amplicon_analysis_pipeline..."
+    if [ -e ${BIN_DIR}/Amplicon_analysis_pipeline.sh ] ; then
+	echo "already installed"
+    else
+	install_amplicon_analysis_pipeline
+	echo "ok"
+    fi
+    # ChimeraSlayer
+    echo -n "Installing ChimeraSlayer..."
+    if [ -e ${BIN_DIR}/ChimeraSlayer.pl ] ; then
+	echo "already installed"
+    else
+	install_chimeraslayer
+	echo "ok"
+    fi
+    # Uclust
+    echo -n "Installing uclust for QIIME/pyNAST..."
+    if [ -e ${BIN_DIR}/uclust ] ; then
+	echo "already installed"
+    else
+	install_uclust
+	echo "ok"
+    fi
+}
+#
+# Amplicon analyis pipeline
+install_amplicon_analysis_pipeline()
+{
+    local wd=$(mktemp -d)
+    local cwd=$(pwd)
+    local wd=$(mktemp -d)
+    cd $wd
     wget -q https://github.com/MTutino/Amplicon_analysis/archive/v${PIPELINE_VERSION}.tar.gz
     tar zxf v${PIPELINE_VERSION}.tar.gz
     cd Amplicon_analysis-${PIPELINE_VERSION}
@@ -108,7 +180,7 @@ function install_amplicon_analysis_pipeline() {
     /bin/cp -r uc2otutab $INSTALL_DIR
     mkdir -p ${BIN_DIR}
     cat >${BIN_DIR}/Amplicon_analysis_pipeline.sh <<EOF
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Point to Qiime config
 export QIIME_CONFIG_FP=${TOP_DIR}/qiime/qiime_config
@@ -117,6 +189,7 @@ export RDP_JAR_PATH=${TOP_DIR}/share/rdp_classifier/rdp_classifier-${RDP_CLASSIF
 # Put the scripts onto the PATH
 export PATH=${BIN_DIR}:${INSTALL_DIR}:\$PATH
 # Activate the conda environment
+export PATH=${CONDA_BIN}:\$PATH
 source ${CONDA_BIN}/activate ${ENV_NAME}
 # Execute the driver script with the supplied arguments
 $INSTALL_DIR/Amplicon_analysis_pipeline.sh \$@
@@ -124,7 +197,7 @@ exit \$?
 EOF
     chmod 0755 ${BIN_DIR}/Amplicon_analysis_pipeline.sh
     cat >${BIN_DIR}/install_reference_data.sh <<EOF
-#!/bin/bash -e
+#!/usr/bin/env bash -e
 #
 function usage() {
   echo "Usage: \$(basename \$0) DIR"
@@ -156,22 +229,17 @@ echo ""
 echo "\$(basename \$0): finished"
 EOF
     chmod 0755 ${BIN_DIR}/install_reference_data.sh
-    popd
+    cd $cwd
     rm -rf $wd/*
     rmdir $wd
 }
 #
 # ChimeraSlayer
-function install_chimeraslayer() {
-    echo "++++++++++++++++++++++++"
-    echo "Installing ChimeraSlayer"
-    echo "++++++++++++++++++++++++"
-    if [ -e ${BIN_DIR}/ChimeraSlayer.pl ] ; then
-	echo "*** ChimeraSlayer.pl already installed ***"
-	return
-    fi
+install_chimeraslayer()
+{
+    local cwd=$(pwd)
     local wd=$(mktemp -d)
-    pushd $wd
+    cd $wd
     wget -q https://sourceforge.net/projects/microbiomeutil/files/__OLD_VERSIONS/microbiomeutil_2010-04-29.tar.gz
     tar zxf microbiomeutil_2010-04-29.tar.gz
     cd microbiomeutil_2010-04-29
@@ -180,13 +248,13 @@ function install_chimeraslayer() {
     ln -s $INSTALL_DIR ${TOP_DIR}/share/microbiome_chimeraslayer
     /bin/cp -r ChimeraSlayer $INSTALL_DIR
     cat >${BIN_DIR}/ChimeraSlayer.pl <<EOF
-#!/bin/bash
+#!/usr/bin/env bash
 export PATH=$INSTALL_DIR:\$PATH
 $INSTALL_DIR/ChimeraSlayer/ChimeraSlayer.pl $@
 EOF
     chmod 0755 ${INSTALL_DIR}/ChimeraSlayer/ChimeraSlayer.pl
     chmod 0755 ${BIN_DIR}/ChimeraSlayer.pl
-    popd
+    cd $cwd
     rm -rf $wd/*
     rmdir $wd
 }
@@ -194,16 +262,12 @@ EOF
 # uclust required for QIIME/pyNAST
 # License only allows this version to be used with those two packages
 # See: http://drive5.com/uclust/downloads1_2_22q.html
-function install_uclust() {
-    echo "++++++++++++++++++++++++++++++++++"
-    echo "Installing uclust for QIIME/pyNAST"
-    echo "++++++++++++++++++++++++++++++++++"
-    if [ -e ${BIN_DIR}/uclust ] ; then
-	echo "*** uclust already installed ***"
-	return
-    fi
+install_uclust()
+{
     local wd=$(mktemp -d)
-    pushd $wd
+    local cwd=$(pwd)
+    local wd=$(mktemp -d)
+    cd $wd
     wget -q http://drive5.com/uclust/uclustq1.2.22_i86linux64
     INSTALL_DIR=${TOP_DIR}/share/uclust-1.2.22
     mkdir -p $INSTALL_DIR
@@ -211,14 +275,15 @@ function install_uclust() {
     /bin/mv uclustq1.2.22_i86linux64 ${INSTALL_DIR}/uclust
     chmod 0755 ${INSTALL_DIR}/uclust
     ln -s  ${INSTALL_DIR}/uclust ${BIN_DIR}
-    popd
+    cd $cwd
     rm -rf $wd/*
     rmdir $wd
 }
 #
 # R 3.2.1
 # Can't use version from conda due to dependency conflicts
-function install_R_3_2_1() {
+install_R_3_2_1()
+{
     echo "++++++++++++++++++"
     echo "Installing R 3.2.1"
     echo "++++++++++++++++++"
@@ -226,9 +291,10 @@ function install_R_3_2_1() {
 	echo "*** R already installed ***"
 	return
     fi
-    source ${CONDA_BIN}/activate ${ENV_NAME}
+    . ${CONDA_BIN}/activate ${ENV_NAME}
+    local cwd=$(pwd)
     local wd=$(mktemp -d)
-    pushd $wd
+    cd $wd
     echo -n "Fetching R 3.2.1 source code..."
     wget -q http://cran.r-project.org/src/base/R-3/R-3.2.1.tar.gz
     echo "ok"
@@ -247,12 +313,13 @@ function install_R_3_2_1() {
     echo -n "Running make install..."
     make install >>INSTALL.log 2>&1
     echo "ok"
-    popd
+    cd $cwd
     rm -rf $wd/*
     rmdir $wd
-    source ${CONDA_BIN}/deactivate
+    . ${CONDA_BIN}/deactivate
 }
-function setup_pipeline_environment() {
+setup_pipeline_environment()
+{
     echo "+++++++++++++++++++++++++++++++"
     echo "Setting up pipeline environment"
     echo "+++++++++++++++++++++++++++++++"
@@ -262,8 +329,7 @@ function setup_pipeline_environment() {
 	echo "already exists"
     elif [ ! -e ${ENV_DIR}/bin/vsearch ] ; then
 	echo "failed"
-	echo "ERROR vsearch not found" >&2
-	exit 1
+	fail "vsearch not found"
     else
 	ln -s ${ENV_DIR}/bin/vsearch ${BIN_DIR}/vsearch113
 	echo "ok"
@@ -274,8 +340,7 @@ function setup_pipeline_environment() {
 	echo "already exists"
     elif [ ! -e ${ENV_DIR}/share/fasta-splitter/fasta-splitter.pl ] ; then
 	echo "failed"
-	echo "ERROR fasta-splitter.pl not found" >&2
-	exit 1
+	fail "fasta-splitter.pl not found"
     else
 	ln -s ${ENV_DIR}/share/fasta-splitter/fasta-splitter.pl ${BIN_DIR}/fasta-splitter.pl
 	echo "ok"
@@ -287,8 +352,7 @@ function setup_pipeline_environment() {
 	echo "already exists"
     elif [ ! -e ${ENV_DIR}/share/rdp_classifier/rdp_classifier.jar ] ; then
 	echo "failed"
-	echo "ERROR rdp_classifier.jar not found" >&2
-	exit 1
+	fail "rdp_classifier.jar not found"
     else
 	mkdir -p ${TOP_DIR}/share/rdp_classifier
 	ln -s ${ENV_DIR}/share/rdp_classifier/rdp_classifier.jar ${TOP_DIR}/share/rdp_classifier/${rdp_classifier_jar}
@@ -306,7 +370,11 @@ EOF-qiime-config
 	echo "ok"
     fi
 }
-function remove_conda_compilers() {
+#
+# Remove the compilers from the conda environment
+# Not sure if this step is necessary
+remove_conda_compilers()
+{
     echo "+++++++++++++++++++++++++++++++++++++++++"
     echo "Removing compilers from conda environment"
     echo "+++++++++++++++++++++++++++++++++++++++++"
@@ -319,14 +387,11 @@ echo "Amplicon_analysis_pipeline installation"
 echo "======================================="
 echo "Installing into ${TOP_DIR}"
 if [ -e ${TOP_DIR} ] ; then
-    echo "*** Directory already exists ***" >&2
-    exit 1
+    fail "Directory already exists"
 fi
 mkdir -p ${TOP_DIR}
 install_conda_deps
-install_amplicon_analysis_pipeline
-install_chimeraslayer
-install_uclust
+install_non_conda_deps
 install_R_3_2_1
 setup_pipeline_environment
 remove_conda_compilers
