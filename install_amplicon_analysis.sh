@@ -58,11 +58,11 @@ rewrite_conda_shebangs()
 }
 #
 # Install conda
-install_conda_deps()
+install_conda()
 {
-    echo "++++++++++++++++++++++++++"
-    echo "Creating conda environment"
-    echo "++++++++++++++++++++++++++"
+    echo "++++++++++++++++"
+    echo "Installing conda"
+    echo "++++++++++++++++"
     if [ -e ${CONDA_DIR} ] ; then
 	echo "*** $CONDA_DIR already exists ***" >&2
 	return
@@ -81,13 +81,23 @@ install_conda_deps()
     echo -n "Rewriting conda shebangs..."
     rewrite_conda_shebangs
     echo "ok"
-    echo ""
     echo -n "Adding conda bin to PATH..."
     PATH=${CONDA_BIN}:$PATH
     echo "ok"
-    echo ""
-    #
-    # Create the conda environment
+    cd $cwd
+    rm -rf $wd/*
+    rmdir $wd
+}
+#
+# Create conda environment
+install_conda_packages()
+{
+    echo "+++++++++++++++++++++++++"
+    echo "Installing conda packages"
+    echo "+++++++++++++++++++++++++"
+    local cwd=$(pwd)
+    local wd=$(mktemp -d)
+    cd $wd
     cat >environment.yml <<EOF
 name: ${ENV_NAME}
 channels:
@@ -125,11 +135,11 @@ EOF
 #
 # Install all the non-conda dependencies in a single
 # function (invokes separate functions for each package)
-install_non_conda_deps()
+install_non_conda_packages()
 {
-    echo "+++++++++++++++++++++++++++++++++"
-    echo "Installing non-conda dependencies"
-    echo "+++++++++++++++++++++++++++++++++"
+    echo "+++++++++++++++++++++++++++++"
+    echo "Installing non-conda packages"
+    echo "+++++++++++++++++++++++++++++"
     # Temporary working directory
     local wd=$(mktemp -d)
     local cwd=$(pwd)
@@ -158,6 +168,14 @@ install_non_conda_deps()
     else
 	install_uclust
 	echo "ok"
+    fi
+    # R 3.2.1"
+    echo -n "Checking for R 3.2.1..."
+    if [ -e ${BIN_DIR}/R ] ; then
+	echo "R already installed"
+    else
+	echo "not found"
+	install_R_3_2_1
     fi
 }
 #
@@ -284,13 +302,6 @@ install_uclust()
 # Can't use version from conda due to dependency conflicts
 install_R_3_2_1()
 {
-    echo "++++++++++++++++++"
-    echo "Installing R 3.2.1"
-    echo "++++++++++++++++++"
-    if [ -e ${BIN_DIR}/R ] ; then
-	echo "*** R already installed ***"
-	return
-    fi
     . ${CONDA_BIN}/activate ${ENV_NAME}
     local cwd=$(pwd)
     local wd=$(mktemp -d)
@@ -390,9 +401,9 @@ if [ -e ${TOP_DIR} ] ; then
     fail "Directory already exists"
 fi
 mkdir -p ${TOP_DIR}
-install_conda_deps
-install_non_conda_deps
-install_R_3_2_1
+install_conda
+install_conda_packages
+install_non_conda_packages
 setup_pipeline_environment
 remove_conda_compilers
 echo "===================================="
