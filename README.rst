@@ -29,14 +29,17 @@ at run time.
 1. Install the dependencies
 ---------------------------
 
-The ``install_tool_deps.sh`` script can be used to fetch and install the
-dependencies locally, for example::
+The ``install_amplicon_analysis.sh`` script can be used to fetch
+and install the dependencies locally, for example::
 
-    install_tool_deps.sh /path/to/local_tool_dependencies
+    install_amplicon_analysis.sh /path/to/local_tool_dependencies
 
-This can take some time to complete. When finished it should have
-created a set of directories containing the dependencies under the
-specified top level directory.
+This can take some time to complete. When finished it will have
+created a directory called ``Amplicon_analysis-1.2.3`` containing
+the dependencies under the specified top level directory.
+
+**NB** The installed dependencies will occupy around 2.6G of disk
+space.
 
 2. Install the tool files
 -------------------------
@@ -72,7 +75,7 @@ the reference data, for example::
 will install the data in ``/path/to/pipeline/data``.
 
 **NB** The final amount of data downloaded and uncompressed will be
-around 6GB.
+around 9GB.
 
 4. Configure dependencies and reference data in Galaxy
 ------------------------------------------------------
@@ -178,8 +181,9 @@ The tool takes its dependencies from the underlying pipeline script (see
 https://github.com/MTutino/Amplicon_analysis/blob/master/README.md
 for details).
 
-As noted above, currently the ``install_tool_deps.sh`` script can be
-used to manually install the dependencies for a local tool install.
+As noted above, currently the ``install_amplicon_analysis.sh`` script
+can be used to manually install the dependencies for a local tool
+install.
 
 In principle these should also be available if the tool were installed
 from a toolshed. However it would be preferrable in this case to get as
