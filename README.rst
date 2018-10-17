@@ -26,27 +26,8 @@ dependencies and reference data, and how to configure the Galaxy
 instance to detect the dependencies and reference data correctly
 at run time.
 
-1. Install the dependencies
----------------------------
-
-If the tool is installed from the Galaxy toolshed (recommended) then
-the dependencies should be installed automatically and this step can
-be skipped.
-
-Otherwise the ``install_amplicon_analysis_deps.sh`` script can be used
-to fetch and install the dependencies locally, for example::
-
-    install_amplicon_analysis.sh /path/to/local_tool_dependencies
-
-This can take some time to complete. When finished it will have
-created a directory called ``Amplicon_analysis-1.2.3`` containing
-the dependencies under the specified top level directory.
-
-**NB** The installed dependencies will occupy around 2.6G of disk
-space.
-
-2. Install the tool files
--------------------------
+1. Install the tool from the toolshed
+-------------------------------------
 
 The core tool is hosted on the Galaxy toolshed, so it can be installed
 directly from there (this is the recommended route):
@@ -65,7 +46,7 @@ file to tell Galaxy to offer the tool by adding the line e.g.::
 
     <tool file="Amplicon_analysis/amplicon_analysis_pipeline.xml" />
 
-3. Install the reference data
+2. Install the reference data
 -----------------------------
 
 The script ``References.sh`` from the pipeline package at
@@ -81,31 +62,12 @@ will install the data in ``/path/to/pipeline/data``.
 **NB** The final amount of data downloaded and uncompressed will be
 around 9GB.
 
-4. Configure dependencies and reference data in Galaxy
-------------------------------------------------------
+3. Configure reference data location in Galaxy
+----------------------------------------------
 
-The final steps are to make your Galaxy installation aware of the
-tool dependencies and reference data, so it can locate them both when
-the tool is run.
-
-To target the tool dependencies installed previously, add the
-following lines to the ``dependency_resolvers_conf.xml`` file in the
-Galaxy ``config`` directory::
-
-    <dependency_resolvers>
-    ...
-      <galaxy_packages base_path="/path/to/local_tool_dependencies" />
-      <galaxy_packages base_path="/path/to/local_tool_dependencies" versionless="true" />
-      ...
-    </dependency_resolvers>
-
-(NB it is recommended to place these *before* the ``<conda ... />``
-resolvers)
-
-(If you're not familiar with dependency resolvers in Galaxy then
-see the documentation at
-https://docs.galaxyproject.org/en/master/admin/dependency_resolvers.html
-for more details.)
+The final step is to make your Galaxy installation aware of the
+location of the reference data, so it can locate them both when the
+tool is run.
 
 The tool locates the reference data via an environment variable called
 ``AMPLICON_ANALYSIS_REF_DATA_PATH``, which needs to set to the parent
@@ -115,7 +77,8 @@ There are various ways to do this, depending on how your Galaxy
 installation is configured:
 
  * **For local instances:** add a line to set it in the
-   ``config/local_env.sh`` file of your Galaxy installation, e.g.::
+   ``config/local_env.sh`` file of your Galaxy installation (you
+   may need to create a new empty file first), e.g.::
 
        export AMPLICON_ANALYSIS_REF_DATA_PATH=/path/to/pipeline/data
 
@@ -131,9 +94,9 @@ installation is configured:
        <tool id="amplicon_analysis_pipeline" destination="amplicon_analysis"/>
 
    (For more about job destinations see the Galaxy documentation at
-   https://galaxyproject.org/admin/config/jobs/#job-destinations)
+   https://docs.galaxyproject.org/en/master/admin/jobs.html#job-destinations)
 
-5. Enable rendering of HTML outputs from pipeline
+4. Enable rendering of HTML outputs from pipeline
 -------------------------------------------------
 
 To ensure that HTML outputs are displayed correctly in Galaxy
@@ -178,6 +141,33 @@ Known problems
    https://github.com/galaxyproject/galaxy/issues/4490 and
    https://github.com/galaxyproject/galaxy/issues/1676
 
+Appendix: installing the dependencies manually
+==============================================
+
+If the tool is installed from the Galaxy toolshed (recommended) then
+the dependencies should be installed automatically and this step can
+be skipped.
+
+Otherwise the ``install_amplicon_analysis_deps.sh`` script can be used
+to fetch and install the dependencies locally, for example::
+
+    install_amplicon_analysis.sh /path/to/local_tool_dependencies
+
+(This is the same script as is used to install dependencies from the
+toolshed.) This can take some time to complete, and when completed will
+have created a directory called ``Amplicon_analysis-1.2.3`` containing
+the dependencies under the specified top level directory.
+
+**NB** The installed dependencies will occupy around 2.6G of disk
+space.
+
+You will need to make sure that the ``bin`` subdirectory of this
+directory is on Galaxy's ``PATH`` at runtime, for the tool to be able
+to access the dependencies - for example by adding a line to the
+``local_env.sh`` file like::
+
+    export PATH=/path/to/local_tool_dependencies/Amplicon_analysis-1.2.3/bin:$PATH
+
 History
 =======
 
@@ -185,7 +175,7 @@ History
 Version    Changes
 ---------- ----------------------------------------------------------------------
 1.2.3.0    Updated to Amplicon_Analysis_Pipeline version 1.2.3; install
-           dependencies from bioconda and via tool_dependencies.xml.
+           dependencies via tool_dependencies.xml.
 1.2.2.0    Updated to Amplicon_Analysis_Pipeline version 1.2.2 (removes
            jackknifed analysis which is not captured by Galaxy tool)
 1.2.1.0    Updated to Amplicon_Analysis_Pipeline version 1.2.1 (adds
