@@ -1,80 +1,16 @@
 <?xml version="1.0"?>
 <tool_dependency>
   <package name="amplicon_analysis_pipeline" version="1.2.3">
-      <install version="1.0">
-	<actions>
-	  <action type="download_by_url">https://github.com/MTutino/Amplicon_analysis/archive/v1.2.3.tar.gz</action>
-	  <action type="move_file">
-	    <source>Amplicon_analysis_pipeline.sh</source>
-	    <destination>$INSTALL_DIR/Amplicon_analysis_pipeline</destination>
-	  </action>
-	  <action type="move_file">
-	    <source>FIRST_STEP.sh</source>
-	    <destination>$INSTALL_DIR/Amplicon_analysis_pipeline</destination>
-	  </action>
-	  <action type="move_file">
-	    <source>VSEARCH.sh</source>
-	    <destination>$INSTALL_DIR/Amplicon_analysis_pipeline</destination>
-	  </action>
-	  <action type="move_file">
-	    <source>STAT_ANALYSIS.sh</source>
-	    <destination>$INSTALL_DIR/Amplicon_analysis_pipeline</destination>
-	  </action>
-	  <action type="move_file">
-	    <source>THIRD_STEP.sh</source>
-	    <destination>$INSTALL_DIR/Amplicon_analysis_pipeline</destination>
-	  </action>
-	  <action type="move_directory_files">
-	    <source_directory>uc2otutab</source_directory>
-	    <destination_directory>$INSTALL_DIR/Amplicon_analysis_pipeline/uc2otutab</destination_directory>
-	  </action>
-	  <action type="set_environment">
-	    <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/Amplicon_analysis_pipeline</environment_variable>
-	  </action>
-	</actions>
-      </install>
-  </package>
-  <!--
-      microbiomeutil provides ChimeraSlayer
-  -->
-  <package name="microbiomeutil-chimeraslayer" version="2010-04-29">
     <install version="1.0">
       <actions>
-	<action type="download_by_url">https://sourceforge.net/projects/microbiomeutil/files/__OLD_VERSIONS/microbiomeutil_2010-04-29.tar.gz</action>
-	<action type="move_directory_files">
-	  <source_directory>ChimeraSlayer</source_directory>
-	  <destination_directory>$INSTALL_DIR/ChimeraSlayer</destination_directory>
+	<action type="download_file">https://raw.githubusercontent.com/pjbriggs/Amplicon_analysis-galaxy/5fe08ecabf682265778d6307fa63a44c768d251c/install_amplicon_analysis.sh</action>
+	<action type="shell_command">
+	  sh ./install_amplicon_analysis.sh $INSTALL_DIR
 	</action>
 	<action type="set_environment">
-	    <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/ChimeraSlayer</environment_variable>
+	    <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/Amplicon_analysis-1.2.3/bin</environment_variable>
 	</action>
       </actions>
     </install>
-  </package>
-  <!--
-      uclust required for QIIME/pyNAST
-      License only allows this version to be used with those two packages
-      See:
-      http://drive5.com/uclust/downloads1_2_22q.html
-  -->
-  <package name="uclust-qiime" version="1.2.22">
-    <install version="1.0">
-      <actions>
-	<action type="download_by_url">http://drive5.com/uclust/uclustq1.2.22_i86linux64</action>
-	<action type="move_file" rename_to="uclust">
-	  <source>uclustq1.2.22_i86linux64</source>
-	  <destination>$INSTALL_DIR/bin</destination>
-	</action>
-	<action type="chmod">
-	  <file mode="755">$INSTALL_DIR/bin/uclust</file>
-	</action>
-	<action type="set_environment">
-	    <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/bin</environment_variable>
-	</action>
-      </actions>
-    </install>
-  </package>
-  <package name="R" version="3.2.1">
-    <repository name="package_r_3_2_1" owner="iuc" />
   </package>
 </tool_dependency>

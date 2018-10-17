@@ -97,15 +97,6 @@ def list_outputs(filen=None):
     if filen is not None:
         fp.close()
 
-def find_executable(name):
-    # Locate executable on PATH
-    for p in os.environ['PATH'].split(os.pathsep):
-        exe = os.path.normpath(
-            os.path.abspath(os.path.join(p,name)))
-        if os.path.isfile(exe) and os.access(exe,os.X_OK):
-            return exe
-    return None
-
 if __name__ == "__main__":
     # Command line
     print "Amplicon analysis: starting"
@@ -170,77 +161,6 @@ if __name__ == "__main__":
         ref_database = "homd"
     else:
         ref_database = "gg"
-
-    # Executables
-    os.mkdir("bin")
-    os.environ["PATH"] = os.path.abspath("bin") + \
-                         os.pathsep + \
-                         os.environ["PATH"]
-    print "-- updated PATH: %s" % os.environ["PATH"]
-    # Pipeline wants 'vsearch113' but bioconda version is just
-    # 'vsearch'
-    vsearch = find_executable("vsearch113")
-    if vsearch is None:
-        vsearch = find_executable("vsearch")
-    if vsearch:
-        os.symlink(vsearch,os.path.join("bin","vsearch113"))
-        print "-- made symlink to %s" % vsearch
-    else:
-        sys.stderr.write("Missing 'vsearch[113]'\n")
-    # Pipeline wants 'fasta-splitter.pl' but bioconda provides
-    # 'fasta-splitter'
-    fasta_splitter = find_executable("fasta-splitter.pl")
-    if fasta_splitter is None:
-        fasta_splitter = find_executable("fasta-splitter")
-        if os.path.islink(fasta_splitter):
-            fasta_splitter = os.path.join(
-                os.path.dirname(fasta_splitter),
-                os.readlink(fasta_splitter))
-    if fasta_splitter:
-        os.symlink(fasta_splitter,os.path.join("bin","fasta-splitter.pl"))
-        print "-- made symlink to %s" % fasta_splitter
-    else:
-        sys.stderr.write("Missing 'fasta-splitter[.pl]'\n")
-    # Qiime 1.8.0 wants 'RDP_JAR_PATH' env var to point to
-    # the rdp_classifier.jar file
-    # biconda provides this in the 'share/rdp_classifier/' dir
-    # which is a link to the 'share/rdp_classifier-<VERSION>/' dir
-    rdp_classifier = find_executable("rdp_classifier")
-    if rdp_classifier:
-        # Generate expected path to JAR file
-        rdp_classifier = os.path.normpath(
-            os.path.join(os.path.dirname(rdp_classifier),
-                         "..",
-                         "share",
-                         "rdp_classifier",
-                         "rdp_classifier.jar"))
-    if rdp_classifier and os.path.exists(rdp_classifier):
-        # Get real directory (which contains version)
-        rdp_classifier_dir = os.readlink(
-            os.path.dirname(rdp_classifier))
-        # Extract the version
-        rdp_version = '-'.join(os.path.basename(
-            rdp_classifier_dir).split('-')[1:])
-        # Make a symlink to JAR file with version in the name
-        rdp_jar_path = os.path.join(os.path.abspath("bin"),
-                                    "rdp_classifier-%s.jar" %
-                                    rdp_version)
-        os.symlink(rdp_classifier,rdp_jar_path)
-        print "-- made symlink to %s" % rdp_classifier
-        # Set the RDP_JAR_PATH env var
-        os.environ["RDP_JAR_PATH"] = rdp_jar_path
-        print "-- set RDP_JAR_PATH: %s" % os.environ["RDP_JAR_PATH"]
-    else:
-        sys.stderr.write("Missing 'rdp_classifier.jar'\n")
-    # Set up qiime_config file
-    qiime_config_file = os.path.abspath("qiime_config")
-    with open(qiime_config_file,'w') as qiime_config:
-        # Set qiime_scripts_dir
-        qiime_config.write("qiime_scripts_dir\t%s" %
-                           os.path.dirname(
-                               find_executable("single_rarefaction.py")))
-    os.environ["QIIME_CONFIG_FP"] = qiime_config_file
-    print "-- set QIIME_CONFIG_FP: %s" % os.environ["QIIME_CONFIG_FP"]
 
     # Construct the pipeline command
     print "Amplicon analysis: constructing pipeline command"
