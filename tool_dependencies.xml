@@ -3,7 +3,7 @@
   <package name="amplicon_analysis_pipeline" version="1.2.3">
     <install version="1.0">
       <actions>
-	<action type="download_file">https://raw.githubusercontent.com/pjbriggs/Amplicon_analysis-galaxy/5fe08ecabf682265778d6307fa63a44c768d251c/install_amplicon_analysis.sh</action>
+	<action type="download_file">https://raw.githubusercontent.com/pjbriggs/Amplicon_analysis-galaxy/master/install_amplicon_analysis.sh</action>
 	<action type="shell_command">
 	  sh ./install_amplicon_analysis.sh $INSTALL_DIR
 	</action>
