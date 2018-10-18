@@ -60,9 +60,10 @@ def print_error(message):
     sys.stderr.write("%s\n\n" % ('*'*width))
 
 def clean_up_name(sample):
-    # Remove trailing "_L[0-9]+_001" from Fastq
-    # pair names
-    split_name = sample.split('_')
+    # Remove extensions and trailing "_L[0-9]+_001" from
+    # Fastq pair names
+    sample_name = '.'.join(sample.split('.')[:1])
+    split_name = sample_name.split('_')
     if split_name[-1] == "001":
         split_name = split_name[:-1]
     if split_name[-1].startswith('L'):
@@ -139,10 +140,12 @@ if __name__ == "__main__":
 
     # Link to FASTQs and construct Final_name.txt file
     sample_names = []
+    print "-- making Final_name.txt"
     with open("Final_name.txt",'w') as final_name:
         fastqs = iter(args.fastq_pairs)
         for sample_name,fqr1,fqr2 in zip(fastqs,fastqs,fastqs):
             sample_name = clean_up_name(sample_name)
+            print "   %s" % sample_name
             r1 = "%s_R1_.fastq" % sample_name
             r2 = "%s_R2_.fastq" % sample_name
             os.symlink(fqr1,r1)
