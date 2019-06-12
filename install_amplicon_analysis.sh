@@ -110,21 +110,18 @@ dependencies:
   - sickle-trim=1.33
   - bioawk=1.0
   - pandaseq=2.8.1
-  - spades=3.5.0
+  - spades=3.10.1
   - fastqc=0.11.3
-  - qiime=1.8.0
+  - qiime=1.9.1
   - blast-legacy=2.2.26
   - fasta-splitter=0.2.4
   - rdp_classifier=$RDP_CLASSIFIER_VERSION
   - vsearch=1.1.3
-  # Need to explicitly specify libgfortran
-  # version (otherwise get version incompatible
-  # with numpy=1.7.1)
-  - libgfortran=1.0
-  # Compilers needed to build R
-  - gcc_linux-64
-  - gxx_linux-64
-  - gfortran_linux-64
+  - r=3.5.1
+  - r-tidyverse
+  - bioconductor-dada2
+  - bioconductor-biomformat
+  - bioconductor-shortread
 EOF
     ${CONDA} env create --name "${ENV_NAME}" -f environment.yml
     echo Created conda environment in ${ENV_DIR}
@@ -168,14 +165,6 @@ install_non_conda_packages()
     else
 	install_uclust
 	echo "ok"
-    fi
-    # R 3.2.1"
-    echo -n "Checking for R 3.2.1..."
-    if [ -e ${BIN_DIR}/R ] ; then
-	echo "R already installed"
-    else
-	echo "not found"
-	install_R_3_2_1
     fi
 }
 #
@@ -405,7 +394,6 @@ install_conda
 install_conda_packages
 install_non_conda_packages
 setup_pipeline_environment
-remove_conda_compilers
 echo "===================================="
 echo "Amplicon_analysis_pipeline installed"
 echo "===================================="
