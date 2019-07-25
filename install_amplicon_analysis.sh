@@ -291,17 +291,6 @@ setup_pipeline_environment()
     echo "+++++++++++++++++++++++++++++++"
     echo "Setting up pipeline environment"
     echo "+++++++++++++++++++++++++++++++"
-    # vsearch113
-    echo -n "Setting up vsearch113..."
-    if [ -e ${BIN_DIR}/vsearch113 ] ; then
-	echo "already exists"
-    elif [ ! -e ${ENV_DIR}/bin/vsearch ] ; then
-	echo "failed"
-	fail "vsearch not found"
-    else
-	ln -s ${ENV_DIR}/bin/vsearch ${BIN_DIR}/vsearch113
-	echo "ok"
-    fi
     # fasta_splitter.pl
     echo -n "Setting up fasta_splitter.pl..."
     if [ -e ${BIN_DIR}/fasta-splitter.pl ] ; then
@@ -337,16 +326,6 @@ qiime_scripts_dir	${ENV_DIR}/bin
 EOF-qiime-config
 	echo "ok"
     fi
-}
-#
-# Remove the compilers from the conda environment
-# Not sure if this step is necessary
-remove_conda_compilers()
-{
-    echo "+++++++++++++++++++++++++++++++++++++++++"
-    echo "Removing compilers from conda environment"
-    echo "+++++++++++++++++++++++++++++++++++++++++"
-    ${CONDA} remove -y -n ${ENV_NAME} gcc_linux-64 gxx_linux-64 gfortran_linux-64
 }
 #
 # Top level script does the installation
