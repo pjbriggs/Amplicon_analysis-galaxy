@@ -116,12 +116,12 @@ dependencies:
   - blast-legacy=2.2.26
   - fasta-splitter=0.2.4
   - rdp_classifier=$RDP_CLASSIFIER_VERSION
-  - vsearch=1.1.3
+  - vsearch=2.10.4
   - r=3.5.1
-  - r-tidyverse
-  - bioconductor-dada2
-  - bioconductor-biomformat
-  - bioconductor-shortread
+  - r-tidyverse=1.2.1
+  - bioconductor-dada2=1.10
+  - bioconductor-biomformat=1.10.1
+  - bioconductor-shortread=1.40.0
 EOF
     ${CONDA} env create --name "${ENV_NAME}" -f environment.yml
     echo Created conda environment in ${ENV_DIR}
