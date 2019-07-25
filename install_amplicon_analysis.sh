@@ -25,7 +25,7 @@ if [ ! -z "$1" ] ; then
     cd $1
 fi
 # Versions
-PIPELINE_VERSION=1.2.3
+PIPELINE_VERSION=1.3.1
 RDP_CLASSIFIER_VERSION=2.2
 # Directories
 TOP_DIR=$(pwd)/Amplicon_analysis-${PIPELINE_VERSION}
@@ -175,8 +175,8 @@ install_amplicon_analysis_pipeline()
     local cwd=$(pwd)
     local wd=$(mktemp -d)
     cd $wd
-    wget -q https://github.com/MTutino/Amplicon_analysis/archive/v${PIPELINE_VERSION}.tar.gz
-    tar zxf v${PIPELINE_VERSION}.tar.gz
+    wget -q https://github.com/MTutino/Amplicon_analysis/archive/${PIPELINE_VERSION}.tar.gz
+    tar zxf ${PIPELINE_VERSION}.tar.gz
     cd Amplicon_analysis-${PIPELINE_VERSION}
     INSTALL_DIR=${TOP_DIR}/share/amplicon_analysis_pipeline-${PIPELINE_VERSION}
     mkdir -p $INSTALL_DIR
