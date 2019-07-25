@@ -286,38 +286,6 @@ install_uclust()
     rm -rf $wd/*
     rmdir $wd
 }
-#
-# R 3.2.1
-# Can't use version from conda due to dependency conflicts
-install_R_3_2_1()
-{
-    . ${CONDA_BIN}/activate ${ENV_NAME}
-    local cwd=$(pwd)
-    local wd=$(mktemp -d)
-    cd $wd
-    echo -n "Fetching R 3.2.1 source code..."
-    wget -q http://cran.r-project.org/src/base/R-3/R-3.2.1.tar.gz
-    echo "ok"
-    INSTALL_DIR=${TOP_DIR}
-    mkdir -p $INSTALL_DIR
-    echo -n "Unpacking source code..."
-    tar xzf R-3.2.1.tar.gz >INSTALL.log 2>&1
-    echo "ok"
-    cd R-3.2.1
-    echo -n "Running configure..."
-    ./configure --prefix=$INSTALL_DIR --with-x=no --with-readline=no >>INSTALL.log 2>&1
-    echo "ok"
-    echo -n "Running make..."
-    make >>INSTALL.log 2>&1
-    echo "ok"
-    echo -n "Running make install..."
-    make install >>INSTALL.log 2>&1
-    echo "ok"
-    cd $cwd
-    rm -rf $wd/*
-    rmdir $wd
-    . ${CONDA_BIN}/deactivate
-}
 setup_pipeline_environment()
 {
     echo "+++++++++++++++++++++++++++++++"
