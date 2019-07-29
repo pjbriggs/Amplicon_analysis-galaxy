@@ -25,7 +25,7 @@ if [ ! -z "$1" ] ; then
     cd $1
 fi
 # Versions
-PIPELINE_VERSION=1.3.1
+PIPELINE_VERSION=1.3.2
 RDP_CLASSIFIER_VERSION=2.2
 # Directories
 TOP_DIR=$(pwd)/Amplicon_analysis-${PIPELINE_VERSION}
@@ -106,7 +106,7 @@ channels:
   - bioconda
 dependencies:
   - python=2.7
-  - cutadapt=1.11
+  - cutadapt=1.18
   - sickle-trim=1.33
   - bioawk=1.0
   - pandaseq=2.8.1
@@ -114,7 +114,7 @@ dependencies:
   - fastqc=0.11.3
   - qiime=1.9.1
   - blast-legacy=2.2.26
-  - fasta-splitter=0.2.4
+  - fasta-splitter=0.2.6
   - rdp_classifier=$RDP_CLASSIFIER_VERSION
   - vsearch=2.10.4
   - r=3.5.1
