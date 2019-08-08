@@ -1,19 +1,28 @@
-<tool id="amplicon_analysis_pipeline" name="Amplicon Analysis Pipeline" version="1.2.3.0">
+<tool id="amplicon_analysis_pipeline" name="Amplicon Analysis Pipeline" version="1.3.2.0">
   <description>analyse 16S rRNA data from Illumina Miseq paired-end reads</description>
   <requirements>
-    <requirement type="package" version="1.2.3">amplicon_analysis_pipeline</requirement>
+    <requirement type="package" version="1.3.2">amplicon_analysis_pipeline</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" />
   </stdio>
   <command><![CDATA[
+
+  ## Convenience variable for pipeline name
+  #set $pipeline_name = $pipeline.pipeline_name
+
   ## Set the reference database name
-  #if $reference_database == "-S"
-    #set reference_database_name = "silva"
-  #else if $reference_database == "-H"
-    #set reference_database_name = "homd"
+  #if str( $pipeline_name ) == "DADA2"
+     #set reference_database_name = "OTU_tables"
   #else
-    #set reference_database_name = "gg"
+     #set reference_database = $pipeline.reference_database
+     #if $reference_database == "-S"
+        #set reference_database_name = "silva"
+     #else if $reference_database == "-H"
+        #set reference_database_name = "homd"
+     #else
+        #set reference_database_name = "gg"
+     #end if
   #end if
 
   ## Run the amplicon analysis pipeline wrapper
@@ -37,9 +46,9 @@
   #if str( $minimum_length ) != ""
   -L $minimum_length
   #end if
-  -P $pipeline
-  -r \$AMPLICON_ANALYSIS_REF_DATA_PATH
-  #if str( $reference_database ) != ""
+  -P $pipeline_name
+  -r \${AMPLICON_ANALYSIS_REF_DATA_PATH-ReferenceData}
+  #if str( $pipeline_name ) != "DADA2"
     ${reference_database}
   #end if
   #if str($categories_file_in) != 'None'
@@ -60,11 +69,11 @@
 
   ## Collect outputs
   cp Metatable_log/Metatable_mod.txt "${metatable_mod}" &&
-  cp ${pipeline}_OTU_tables/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_tax_OTU_table.biom "${tax_otu_table_biom_file}" &&
-  cp ${pipeline}_OTU_tables/otus.tre "${otus_tre_file}" &&
-  cp RESULTS/${pipeline}_${reference_database_name}/OTUs_count.txt "${otus_count_file}" &&
-  cp RESULTS/${pipeline}_${reference_database_name}/table_summary.txt "${table_summary_file}" &&
-  cp Multiplexed_files/${pipeline}_pipeline/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_OTUs.fasta "${dereplicated_nonchimera_otus_fasta}" &&
+  cp ${pipeline_name}_OTU_tables/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_tax_OTU_table.biom "${tax_otu_table_biom_file}" &&
+  cp ${pipeline_name}_OTU_tables/otus.tre "${otus_tre_file}" &&
+  cp RESULTS/${pipeline_name}_${reference_database_name}/OTUs_count.txt "${otus_count_file}" &&
+  cp RESULTS/${pipeline_name}_${reference_database_name}/table_summary.txt "${table_summary_file}" &&
+  cp Multiplexed_files/${pipeline_name}_pipeline/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_OTUs.fasta "${dereplicated_nonchimera_otus_fasta}" &&
   cp QUALITY_CONTROL/Reads_count.txt "$read_counts_out" &&
   cp fastqc_quality_boxplots.html "${fastqc_quality_boxplots_html}" &&
 
@@ -72,36 +81,43 @@
 
   ## OTU table
   mkdir $heatmap_otu_table_html.files_path &&
-  cp -r RESULTS/${pipeline}_${reference_database_name}/Heatmap/js $heatmap_otu_table_html.files_path &&
-  cp RESULTS/${pipeline}_${reference_database_name}/Heatmap/otu_table.html "${heatmap_otu_table_html}" &&
+  cp -r RESULTS/${pipeline_name}_${reference_database_name}/Heatmap/js $heatmap_otu_table_html.files_path &&
+  cp RESULTS/${pipeline_name}_${reference_database_name}/Heatmap/otu_table.html "${heatmap_otu_table_html}" &&
 
   ## Phylum genus barcharts
   mkdir $phylum_genus_dist_barcharts_html.files_path &&
-  cp -r RESULTS/${pipeline}_${reference_database_name}/phylum_genus_charts/charts $phylum_genus_dist_barcharts_html.files_path &&
-  cp -r RESULTS/${pipeline}_${reference_database_name}/phylum_genus_charts/raw_data $phylum_genus_dist_barcharts_html.files_path &&
-  cp RESULTS/${pipeline}_${reference_database_name}/phylum_genus_charts/bar_charts.html "${phylum_genus_dist_barcharts_html}" &&
+  cp -r RESULTS/${pipeline_name}_${reference_database_name}/phylum_genus_charts/charts $phylum_genus_dist_barcharts_html.files_path &&
+  cp -r RESULTS/${pipeline_name}_${reference_database_name}/phylum_genus_charts/raw_data $phylum_genus_dist_barcharts_html.files_path &&
+  cp RESULTS/${pipeline_name}_${reference_database_name}/phylum_genus_charts/bar_charts.html "${phylum_genus_dist_barcharts_html}" &&
 
   ## Beta diversity weighted 2d plots
   mkdir $beta_div_even_weighted_2d_plots.files_path &&
-  cp -r RESULTS/${pipeline}_${reference_database_name}/beta_div_even/weighted_2d_plot/* $beta_div_even_weighted_2d_plots.files_path &&
-  cp RESULTS/${pipeline}_${reference_database_name}/beta_div_even/weighted_2d_plot/weighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_weighted_2d_plots}" &&
+  cp -r RESULTS/${pipeline_name}_${reference_database_name}/beta_div_even/weighted_2d_plot/* $beta_div_even_weighted_2d_plots.files_path &&
+  cp RESULTS/${pipeline_name}_${reference_database_name}/beta_div_even/weighted_2d_plot/weighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_weighted_2d_plots}" &&
 
   ## Beta diversity unweighted 2d plots
   mkdir $beta_div_even_unweighted_2d_plots.files_path &&
-  cp -r RESULTS/${pipeline}_${reference_database_name}/beta_div_even/unweighted_2d_plot/* $beta_div_even_unweighted_2d_plots.files_path &&
-  cp RESULTS/${pipeline}_${reference_database_name}/beta_div_even/unweighted_2d_plot/unweighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_unweighted_2d_plots}" &&
+  cp -r RESULTS/${pipeline_name}_${reference_database_name}/beta_div_even/unweighted_2d_plot/* $beta_div_even_unweighted_2d_plots.files_path &&
+  cp RESULTS/${pipeline_name}_${reference_database_name}/beta_div_even/unweighted_2d_plot/unweighted_unifrac_pc_2D_PCoA_plots.html "${beta_div_even_unweighted_2d_plots}" &&
 
   ## Alpha diversity rarefaction plots
   mkdir $alpha_div_rarefaction_plots.files_path &&
-  cp RESULTS/${pipeline}_${reference_database_name}/Alpha_diversity/rarefaction_curves/rarefaction_plots.html $alpha_div_rarefaction_plots &&
-  cp -r RESULTS/${pipeline}_${reference_database_name}/Alpha_diversity/rarefaction_curves/average_plots $alpha_div_rarefaction_plots.files_path &&
+  cp RESULTS/${pipeline_name}_${reference_database_name}/Alpha_diversity/rarefaction_curves/rarefaction_plots.html $alpha_div_rarefaction_plots &&
+  cp -r RESULTS/${pipeline_name}_${reference_database_name}/Alpha_diversity/rarefaction_curves/average_plots $alpha_div_rarefaction_plots.files_path &&
+
+  ## DADA2 error rate plots
+  #if str($pipeline_name) == "DADA2"
+    mkdir $dada2_error_rate_plots.files_path &&
+    cp DADA2_OTU_tables/Error_rate_plots/error_rate_plots.html $dada2_error_rate_plots &&
+    cp -r DADA2_OTU_tables/Error_rate_plots/*.pdf $dada2_error_rate_plots.files_path &&
+  #end if
 
   ## Categories data
   #if str($categories_file_in) != 'None'
     ## Alpha diversity boxplots
     mkdir $alpha_div_boxplots.files_path &&
     cp alpha_diversity_boxplots.html "$alpha_div_boxplots" &&
-    cp RESULTS/${pipeline}_${reference_database_name}/Alpha_diversity/Alpha_diversity_boxplot/Categories_shannon/*.pdf $alpha_div_boxplots.files_path &&
+    cp RESULTS/${pipeline_name}_${reference_database_name}/Alpha_diversity/Alpha_diversity_boxplot/Categories_shannon/*.pdf $alpha_div_boxplots.files_path &&
   #end if
 
   ## Pipeline outputs (log files etc)
@@ -161,55 +177,61 @@
     <param type="integer" name="sliding_window_length" value="10"
 	   label="Minimum length in bp to retain a read after trimming"
 	   help="Supplied to Sickle; default is 10 (-l)" />
-    <param type="select" name="pipeline"
-	    label="Pipeline to use for analysis">
-      <option value="Vsearch" selected="true" >Vsearch</option>
-      <!--
-      Remove the QIIME and Uparse options for now
-      <option value="QIIME">QIIME</option>
-      <option value="Uparse">Uparse</option>
-      -->
-    </param>
-    <param type="select" name="reference_database"
-	   label="Reference database">
-      <option value="" selected="true">GreenGenes</option>
-      <option value="-S">Silva</option>
-      <option value="-H">Human Oral Microbiome Database (HOMD)</option>
-    </param>
+    <conditional name="pipeline">
+      <param type="select" name="pipeline_name"
+	     label="Pipeline to use for analysis">
+	<option value="Vsearch" selected="true" >Vsearch</option>
+	<option value="DADA2">DADA2</option>
+      </param>
+      <when value="Vsearch">
+	<param type="select" name="reference_database"
+	       label="Reference database">
+	  <option value="" selected="true">GreenGenes</option>
+	  <option value="-S">Silva</option>
+	  <option value="-H">Human Oral Microbiome Database (HOMD)</option>
+	</param>
+      </when>
+      <when value="DADA2">
+      </when>
+    </conditional>
   </inputs>
   <outputs>
     <data format="tabular" name="metatable_mod"
 	  label="${tool.name}:${title} Metatable_mod.txt" />
     <data format="tabular" name="read_counts_out"
-	  label="${tool.name} (${pipeline}):${title} read counts" />
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} read counts" />
     <data format="biom" name="tax_otu_table_biom_file"
-	  label="${tool.name} (${pipeline}):${title} tax OTU table (biom format)" />
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} tax OTU table (biom format)" />
     <data format="tabular" name="otus_tre_file"
-	  label="${tool.name} (${pipeline}):${title} otus.tre" />
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} otus.tre" />
     <data format="html" name="phylum_genus_dist_barcharts_html"
-	  label="${tool.name} (${pipeline}):${title} phylum genus dist barcharts HTML" />
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} phylum genus dist barcharts HTML" />
     <data format="tabular" name="otus_count_file"
-	  label="${tool.name} (${pipeline}):${title} OTUs count file" />
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} OTUs count file" />
     <data format="tabular" name="table_summary_file"
-	  label="${tool.name} (${pipeline}):${title} table summary file" />
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} table summary file" />
     <data format="fasta" name="dereplicated_nonchimera_otus_fasta"
-	  label="${tool.name} (${pipeline}):${title} multiplexed linearized dereplicated mc2 repset nonchimeras OTUs FASTA" />
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} multiplexed linearized dereplicated mc2 repset nonchimeras OTUs FASTA" />
     <data format="html" name="fastqc_quality_boxplots_html"
-	  label="${tool.name} (${pipeline}):${title} FastQC per-base quality boxplots HTML" />
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} FastQC per-base quality boxplots HTML" />
     <data format="html" name="heatmap_otu_table_html"
-	  label="${tool.name} (${pipeline}):${title} heatmap OTU table HTML" />
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} heatmap OTU table HTML" />
     <data format="html" name="beta_div_even_weighted_2d_plots"
-	  label="${tool.name} (${pipeline}):${title} beta diversity weighted 2D plots HTML" />
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} beta diversity weighted 2D plots HTML" />
     <data format="html" name="beta_div_even_unweighted_2d_plots"
-	  label="${tool.name} (${pipeline}):${title} beta diversity unweighted 2D plots HTML" />
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} beta diversity unweighted 2D plots HTML" />
     <data format="html" name="alpha_div_rarefaction_plots"
-	  label="${tool.name} (${pipeline}):${title} alpha diversity rarefaction plots HTML" />
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} alpha diversity rarefaction plots HTML" />
+    <data format="html" name="dada2_error_rate_plots"
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} DADA2 error rate plots">
+      <filter>pipeline_name == 'DADA2'</filter>
+    </data>
     <data format="html" name="alpha_div_boxplots"
-	  label="${tool.name} (${pipeline}):${title} alpha diversity boxplots">
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} alpha diversity boxplots">
       <filter>categories_file_in is not None</filter>
     </data>
     <data format="html" name="log_files"
-	  label="${tool.name} (${pipeline}):${title} log files" />
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} log files" />
   </outputs>
   <tests>
   </tests>
@@ -395,12 +417,11 @@ Under **Amplicon_Analysis_Pipeline**
    380 (used for V3-V4 16S sequencing; expected length ~440bp)
 
  * **Pipeline to use for analysis** Choose the pipeline to use for OTU
-   clustering and chimera removal. The Galaxy tool currently supports
-   ``Vsearch`` only. ``Uparse`` and ``QIIME`` are planned to be added
-   shortly (the tools are already available for the stand-alone pipeline).
+   clustering and chimera removal. The Galaxy tool supports the ``Vsearch``
+   and ``DADA2`` pipelines.
 
- * **Reference database** Choose between ``GreenGenes`` and ``Silva``
-   databases for taxa assignment.
+ * **Reference database** Choose between ``GreenGenes``, ``Silva`` or
+   ``HOMD`` (Human Oral Microbiome Database) for taxa assignment.
 
 Click on **Execute** to start the analysis.
 

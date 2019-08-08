@@ -117,9 +117,9 @@ if __name__ == "__main__":
     p.add_argument("-L",dest="minimum_length")
     p.add_argument("-l",dest="sliding_window_length")
     p.add_argument("-P",dest="pipeline",
-                   choices=["vsearch","uparse","qiime"],
-                   type=str.lower,
-                   default="vsearch")
+                   choices=["Vsearch","DADA2"],
+                   type=str,
+                   default="Vsearch")
     p.add_argument("-S",dest="use_silva",action="store_true")
     p.add_argument("-H",dest="use_homd",action="store_true")
     p.add_argument("-r",dest="reference_data_path")
@@ -312,7 +312,7 @@ if __name__ == "__main__":
         print "Amplicon analysis: indexing alpha diversity boxplots"
         boxplots_dir = os.path.abspath(
             os.path.join("RESULTS",
-                         "%s_%s" % (args.pipeline.title(),
+                         "%s_%s" % (args.pipeline,
                                     ref_database),
                          "Alpha_diversity",
                          "Alpha_diversity_boxplot",
