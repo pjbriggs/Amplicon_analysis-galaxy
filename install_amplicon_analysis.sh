@@ -26,6 +26,7 @@ if [ ! -z "$1" ] ; then
 fi
 # Versions
 PIPELINE_VERSION=1.3.2
+CONDA_REQUIRED_VERSION=4.6.14
 RDP_CLASSIFIER_VERSION=2.2
 # Directories
 TOP_DIR=$(pwd)/Amplicon_analysis-${PIPELINE_VERSION}
@@ -57,6 +58,20 @@ rewrite_conda_shebangs()
     find ${CONDA_BIN} -type f -exec sed -i "$pattern" {} \;
 }
 #
+# Reset conda version if required
+reset_conda_version()
+{
+    CONDA_VERSION="$(${CONDA_BIN}/conda -V 2>&1 | head -n 1 | cut -d' ' -f2)"
+    echo conda version: ${CONDA_VERSION}
+    if [ "${CONDA_VERSION}" != "${CONDA_REQUIRED_VERSION}" ] ; then
+	echo "Resetting conda version to $CONDA_REQUIRED_VERSION"
+	${CONDA_BIN}/conda config --set allow_conda_downgrades true
+	${CONDA_BIN}/conda install -y conda=${CONDA_REQUIRED_VERSION}
+    else
+	echo "conda version ok"
+    fi
+}
+#
 # Install conda
 install_conda()
 {
@@ -73,6 +88,10 @@ install_conda()
     wget -q https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
     bash ./Miniconda2-latest-Linux-x86_64.sh -b -p ${CONDA_DIR}
     echo Installed conda in ${CONDA_DIR}
+    # Reset the conda version to a known working version
+    # (to avoid problems observed with e.g. conda 4.7.10)
+    echo ""
+    reset_conda_version
     # Update the installation files
     # This is to avoid problems when the length the installation
     # directory path exceeds the limit for the shebang statement
