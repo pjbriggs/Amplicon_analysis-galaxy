@@ -181,7 +181,7 @@ install_amplicon_analysis_pipeline()
     INSTALL_DIR=${TOP_DIR}/share/amplicon_analysis_pipeline-${PIPELINE_VERSION}
     mkdir -p $INSTALL_DIR
     ln -s $INSTALL_DIR ${TOP_DIR}/share/amplicon_analysis_pipeline
-    for f in *.sh ; do
+    for f in *.sh *.R ; do
 	/bin/cp $f $INSTALL_DIR
     done
     /bin/cp -r uc2otutab $INSTALL_DIR
