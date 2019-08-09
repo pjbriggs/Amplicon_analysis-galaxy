@@ -64,7 +64,7 @@ reset_conda_version()
     CONDA_VERSION="$(${CONDA_BIN}/conda -V 2>&1 | head -n 1 | cut -d' ' -f2)"
     echo conda version: ${CONDA_VERSION}
     if [ "${CONDA_VERSION}" != "${CONDA_REQUIRED_VERSION}" ] ; then
-	echo "Resetting conda version to $CONDA_REQUIRED_VERSION"
+	echo "Resetting conda to last known working version $CONDA_REQUIRED_VERSION"
 	${CONDA_BIN}/conda config --set allow_conda_downgrades true
 	${CONDA_BIN}/conda install -y conda=${CONDA_REQUIRED_VERSION}
     else
