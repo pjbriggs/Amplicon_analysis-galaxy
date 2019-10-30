@@ -13,7 +13,7 @@
 
   ## Set the reference database name
   #if str( $pipeline_name ) == "DADA2"
-     #set reference_database_name = "OTU_tables"
+     #set reference_database_name = "silva"
   #else
      #set reference_database = $pipeline.reference_database
      #if $reference_database == "-S"
