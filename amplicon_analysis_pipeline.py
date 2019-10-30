@@ -300,9 +300,36 @@ if __name__ == "__main__":
                     if boxplot is None:
                         boxplot = "Missing plot"
                     quality_boxplots.write("<h4>%s</h4><p>%s</p>" %
+
                                            (os.path.basename(f),
                                             boxplot))
             quality_boxplots.write("""</body>
+</html>
+""")
+
+    # Handle DADA2 error rate plot PDFs
+    if args.pipeline == "DADA2":
+        print("Amplicon analysis: collecting error rate plots")
+        error_rate_plots_dir = os.path.abspath(
+            os.path.join("DADA2_OTU_tables",
+                         "Error_rate_plots"))
+        error_rate_plot_pdfs = [os.path.basename(pdf)
+                                for pdf in
+                                sorted(glob.glob(
+                                    os.path.join(error_rate_plots_dir,"*.pdf")))]
+        with open("error_rate_plots.html","w") as error_rate_plots_out:
+            error_rate_plots_out.write("""<html>
+<head>
+<title>Amplicon analysis pipeline: DADA2 Error Rate Plots</title>
+<head>
+<body>
+<h1>Amplicon analysis pipeline: DADA2 Error Rate Plots</h1>
+""")
+            error_rate_plots_out.write("<ul>\n")
+            for pdf in error_rate_plot_pdfs:
+                error_rate_plots_out.write("<li>%s</li>\n" % ahref(pdf))
+            error_rate_plots_out.write("<ul>\n")
+            error_rate_plots_out.write("""</body>
 </html>
 """)
 

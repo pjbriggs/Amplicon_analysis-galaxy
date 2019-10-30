@@ -224,7 +224,7 @@
 	  label="${tool.name} (${pipeline.pipeline_name}):${title} alpha diversity rarefaction plots HTML" />
     <data format="html" name="dada2_error_rate_plots"
 	  label="${tool.name} (${pipeline.pipeline_name}):${title} DADA2 error rate plots">
-      <filter>pipeline_name == 'DADA2'</filter>
+      <filter>pipeline['pipeline_name'] == 'DADA2'</filter>
     </data>
     <data format="html" name="alpha_div_boxplots"
 	  label="${tool.name} (${pipeline.pipeline_name}):${title} alpha diversity boxplots">
