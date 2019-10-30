@@ -125,7 +125,7 @@ channels:
   - bioconda
 dependencies:
   - python=2.7
-  - cutadapt=1.18
+  - cutadapt=1.8
   - sickle-trim=1.33
   - bioawk=1.0
   - pandaseq=2.8.1
