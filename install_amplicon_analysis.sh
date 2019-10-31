@@ -147,6 +147,25 @@ EOF
     cd $cwd
     rm -rf $wd/*
     rmdir $wd
+    #
+    # Patch qiime 1.9.1 tools to switch deprecated 'axisbg'
+    # matplotlib property to 'facecolor':
+    # https://matplotlib.org/api/prev_api_changes/api_changes_2.0.0.html
+    echo ""
+    for exe in make_2d_plots.py plot_taxa_summary.py ; do
+	echo -n "Patching ${exe}..."
+	find ${CONDA_DIR} -type f -name "$exe" -exec sed -i 's/axisbg=/facecolor=/g' {} \;
+	echo "done"
+    done
+    #
+    # Patch qiime 1.9.1 tools to switch deprecated 'set_axis_bgcolor'
+    # method call to 'set_facecolor':
+    # https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.set_axis_bgcolor.html
+    for exe in make_rarefaction_plots.py ; do
+	echo -n "Patching ${exe}..."
+	find ${CONDA_DIR} -type f -name "$exe" -exec sed -i 's/set_axis_bgcolor/set_facecolor/g' {} \;
+	echo "done"
+    done
 }
 #
 # Install all the non-conda dependencies in a single
