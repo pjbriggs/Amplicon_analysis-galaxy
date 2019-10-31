@@ -231,6 +231,8 @@ install_amplicon_analysis_pipeline()
 export QIIME_CONFIG_FP=${TOP_DIR}/qiime/qiime_config
 # Set up the RDP jar file
 export RDP_JAR_PATH=${TOP_DIR}/share/rdp_classifier/rdp_classifier-${RDP_CLASSIFIER_VERSION}.jar
+# Set the Matplotlib backend
+export MPLBACKEND="agg"
 # Put the scripts onto the PATH
 export PATH=${BIN_DIR}:${INSTALL_DIR}:\$PATH
 # Activate the conda environment
