@@ -25,7 +25,7 @@ if [ ! -z "$1" ] ; then
     cd $1
 fi
 # Versions
-PIPELINE_VERSION=1.3.2
+PIPELINE_VERSION=1.3.3
 CONDA_REQUIRED_VERSION=4.6.14
 RDP_CLASSIFIER_VERSION=2.2
 # Directories
