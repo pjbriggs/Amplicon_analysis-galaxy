@@ -138,9 +138,8 @@ dependencies:
   - vsearch=2.10.4
   - r=3.5.1
   - r-tidyverse=1.2.1
-  - bioconductor-dada2=1.10
-  - bioconductor-biomformat=1.10.1
-  - bioconductor-shortread=1.40.0
+  - bioconductor-dada2=1.8
+  - bioconductor-biomformat=1.8.0
 EOF
     ${CONDA} env create --name "${ENV_NAME}" -f environment.yml
     echo Created conda environment in ${ENV_DIR}
