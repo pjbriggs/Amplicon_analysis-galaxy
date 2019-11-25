@@ -311,7 +311,6 @@ EOF
 # See: http://drive5.com/uclust/downloads1_2_22q.html
 install_uclust()
 {
-    local wd=$(mktemp -d)
     local cwd=$(pwd)
     local wd=$(mktemp -d)
     cd $wd
