@@ -197,13 +197,9 @@ install_non_conda_packages()
 	echo "ok"
     fi
     # Uclust
-    echo -n "Installing uclust for QIIME/pyNAST..."
-    if [ -e ${BIN_DIR}/uclust ] ; then
-	echo "already installed"
-    else
-	install_uclust
-	echo "ok"
-    fi
+    # This no longer seems to be available for download from
+    # drive5.com so don't download
+    echo "WARNING uclust not available: skipping installation"
 }
 #
 # Amplicon analyis pipeline
