@@ -79,10 +79,8 @@
 
   ## HTML outputs
 
-  ## OTU table
-  mkdir $heatmap_otu_table_html.files_path &&
-  cp -r RESULTS/${pipeline_name}_${reference_database_name}/Heatmap/js $heatmap_otu_table_html.files_path &&
-  cp RESULTS/${pipeline_name}_${reference_database_name}/Heatmap/otu_table.html "${heatmap_otu_table_html}" &&
+  ## OTU table heatmap
+  cp RESULTS/${pipeline_name}_${reference_database_name}/Heatmap.pdf "${heatmap_otu_table_pdf}"" &&
 
   ## Phylum genus barcharts
   mkdir $phylum_genus_dist_barcharts_html.files_path &&
@@ -214,8 +212,8 @@
 	  label="${tool.name} (${pipeline.pipeline_name}):${title} multiplexed linearized dereplicated mc2 repset nonchimeras OTUs FASTA" />
     <data format="html" name="fastqc_quality_boxplots_html"
 	  label="${tool.name} (${pipeline.pipeline_name}):${title} FastQC per-base quality boxplots HTML" />
-    <data format="html" name="heatmap_otu_table_html"
-	  label="${tool.name} (${pipeline.pipeline_name}):${title} heatmap OTU table HTML" />
+    <data format="pdf" name="heatmap_otu_table_pdf"
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} heatmap OTU table PDF" />
     <data format="html" name="beta_div_even_weighted_2d_plots"
 	  label="${tool.name} (${pipeline.pipeline_name}):${title} beta diversity weighted 2D plots HTML" />
     <data format="html" name="beta_div_even_unweighted_2d_plots"
@@ -452,7 +450,7 @@ appear in the History panel when the analysis is completed
  * **Vsearch_multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_OTUs.fasta**
    Fasta file with OTU sequences
 
- * **Vsearch_heatmap_OTU_table_HTML** Interactive OTU heatmap
+ * **Vsearch_heatmap_OTU_table_PDF** OTU heatmap in PDF format
    (http://qiime.org/1.8.0/scripts/make_otu_heatmap_html.html )
 
  * **Vsearch_beta_diversity_weighted_2D_plots_HTML** PCoA plots in HTML
