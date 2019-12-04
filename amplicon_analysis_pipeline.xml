@@ -69,12 +69,19 @@
 
   ## Collect outputs
   cp Metatable_log/Metatable_mod.txt "${metatable_mod}" &&
-  cp ${pipeline_name}_OTU_tables/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_tax_OTU_table.biom "${tax_otu_table_biom_file}" &&
+  #if str( $pipeline_name ) == "Vsearch"
+    # Vsearch-specific
+    cp ${pipeline_name}_OTU_tables/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_tax_OTU_table.biom "${tax_otu_table_biom_file}" &&
+    cp Multiplexed_files/${pipeline_name}_pipeline/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_OTUs.fasta "${dereplicated_nonchimera_otus_fasta}" &&
+    cp QUALITY_CONTROL/Reads_count.txt "$read_counts_out" &&
+  #else
+    # DADA2-specific
+    cp ${pipeline_name}_OTU_tables/DADA2_tax_OTU_table.biom "${tax_otu_table_biom_file}" &&
+    cp ${pipeline_name}_OTU_tables/seqs.fa "${dereplicated_nonchimera_otus_fasta}" &&
+  #end if
   cp ${pipeline_name}_OTU_tables/otus.tre "${otus_tre_file}" &&
   cp RESULTS/${pipeline_name}_${reference_database_name}/OTUs_count.txt "${otus_count_file}" &&
   cp RESULTS/${pipeline_name}_${reference_database_name}/table_summary.txt "${table_summary_file}" &&
-  cp Multiplexed_files/${pipeline_name}_pipeline/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_OTUs.fasta "${dereplicated_nonchimera_otus_fasta}" &&
-  cp QUALITY_CONTROL/Reads_count.txt "$read_counts_out" &&
   cp fastqc_quality_boxplots.html "${fastqc_quality_boxplots_html}" &&
 
   ## HTML outputs
@@ -197,7 +204,9 @@
     <data format="tabular" name="metatable_mod"
 	  label="${tool.name}:${title} Metatable_mod.txt" />
     <data format="tabular" name="read_counts_out"
-	  label="${tool.name} (${pipeline.pipeline_name}):${title} read counts" />
+	  label="${tool.name} (${pipeline.pipeline_name}):${title} read counts">
+      <filter>pipeline['pipeline_name'] == 'Vsearch'</filter>
+    </data>
     <data format="biom" name="tax_otu_table_biom_file"
 	  label="${tool.name} (${pipeline.pipeline_name}):${title} tax OTU table (biom format)" />
     <data format="tabular" name="otus_tre_file"
