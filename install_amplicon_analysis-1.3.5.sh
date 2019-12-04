@@ -25,7 +25,8 @@ if [ ! -z "$1" ] ; then
     cd $1
 fi
 # Versions
-PIPELINE_VERSION=1.2.3
+PIPELINE_VERSION=1.3.5
+CONDA_REQUIRED_VERSION=4.6.14
 RDP_CLASSIFIER_VERSION=2.2
 # Directories
 TOP_DIR=$(pwd)/Amplicon_analysis-${PIPELINE_VERSION}
@@ -57,6 +58,20 @@ rewrite_conda_shebangs()
     find ${CONDA_BIN} -type f -exec sed -i "$pattern" {} \;
 }
 #
+# Reset conda version if required
+reset_conda_version()
+{
+    CONDA_VERSION="$(${CONDA_BIN}/conda -V 2>&1 | head -n 1 | cut -d' ' -f2)"
+    echo conda version: ${CONDA_VERSION}
+    if [ "${CONDA_VERSION}" != "${CONDA_REQUIRED_VERSION}" ] ; then
+	echo "Resetting conda to last known working version $CONDA_REQUIRED_VERSION"
+	${CONDA_BIN}/conda config --set allow_conda_downgrades true
+	${CONDA_BIN}/conda install -y conda=${CONDA_REQUIRED_VERSION}
+    else
+	echo "conda version ok"
+    fi
+}
+#
 # Install conda
 install_conda()
 {
@@ -73,6 +88,10 @@ install_conda()
     wget -q https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
     bash ./Miniconda2-latest-Linux-x86_64.sh -b -p ${CONDA_DIR}
     echo Installed conda in ${CONDA_DIR}
+    # Reset the conda version to a known working version
+    # (to avoid problems observed with e.g. conda 4.7.10)
+    echo ""
+    reset_conda_version
     # Update the installation files
     # This is to avoid problems when the length the installation
     # directory path exceeds the limit for the shebang statement
@@ -106,31 +125,46 @@ channels:
   - bioconda
 dependencies:
   - python=2.7
-  - cutadapt=1.11
+  - cutadapt=1.8
   - sickle-trim=1.33
   - bioawk=1.0
   - pandaseq=2.8.1
-  - spades=3.5.0
+  - spades=3.10.1
   - fastqc=0.11.3
-  - qiime=1.8.0
+  - qiime=1.9.1
   - blast-legacy=2.2.26
-  - fasta-splitter=0.2.4
+  - fasta-splitter=0.2.6
   - rdp_classifier=$RDP_CLASSIFIER_VERSION
-  - vsearch=1.1.3
-  # Need to explicitly specify libgfortran
-  # version (otherwise get version incompatible
-  # with numpy=1.7.1)
-  - libgfortran=1.0
-  # Compilers needed to build R
-  - gcc_linux-64
-  - gxx_linux-64
-  - gfortran_linux-64
+  - vsearch=2.10.4
+  - r=3.5.1
+  - r-tidyverse=1.2.1
+  - bioconductor-dada2=1.8
+  - bioconductor-biomformat=1.8.0
 EOF
     ${CONDA} env create --name "${ENV_NAME}" -f environment.yml
     echo Created conda environment in ${ENV_DIR}
     cd $cwd
     rm -rf $wd/*
     rmdir $wd
+    #
+    # Patch qiime 1.9.1 tools to switch deprecated 'axisbg'
+    # matplotlib property to 'facecolor':
+    # https://matplotlib.org/api/prev_api_changes/api_changes_2.0.0.html
+    echo ""
+    for exe in make_2d_plots.py plot_taxa_summary.py ; do
+	echo -n "Patching ${exe}..."
+	find ${CONDA_DIR} -type f -name "$exe" -exec sed -i 's/axisbg=/facecolor=/g' {} \;
+	echo "done"
+    done
+    #
+    # Patch qiime 1.9.1 tools to switch deprecated 'set_axis_bgcolor'
+    # method call to 'set_facecolor':
+    # https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.set_axis_bgcolor.html
+    for exe in make_rarefaction_plots.py ; do
+	echo -n "Patching ${exe}..."
+	find ${CONDA_DIR} -type f -name "$exe" -exec sed -i 's/set_axis_bgcolor/set_facecolor/g' {} \;
+	echo "done"
+    done
 }
 #
 # Install all the non-conda dependencies in a single
@@ -162,21 +196,9 @@ install_non_conda_packages()
 	echo "ok"
     fi
     # Uclust
-    echo -n "Installing uclust for QIIME/pyNAST..."
-    if [ -e ${BIN_DIR}/uclust ] ; then
-	echo "already installed"
-    else
-	install_uclust
-	echo "ok"
-    fi
-    # R 3.2.1"
-    echo -n "Checking for R 3.2.1..."
-    if [ -e ${BIN_DIR}/R ] ; then
-	echo "R already installed"
-    else
-	echo "not found"
-	install_R_3_2_1
-    fi
+    # This no longer seems to be available for download from
+    # drive5.com so don't download
+    echo "WARNING uclust not available: skipping installation"
 }
 #
 # Amplicon analyis pipeline
@@ -186,13 +208,13 @@ install_amplicon_analysis_pipeline()
     local cwd=$(pwd)
     local wd=$(mktemp -d)
     cd $wd
-    wget -q https://github.com/MTutino/Amplicon_analysis/archive/v${PIPELINE_VERSION}.tar.gz
-    tar zxf v${PIPELINE_VERSION}.tar.gz
+    wget -q https://github.com/MTutino/Amplicon_analysis/archive/${PIPELINE_VERSION}.tar.gz
+    tar zxf ${PIPELINE_VERSION}.tar.gz
     cd Amplicon_analysis-${PIPELINE_VERSION}
     INSTALL_DIR=${TOP_DIR}/share/amplicon_analysis_pipeline-${PIPELINE_VERSION}
     mkdir -p $INSTALL_DIR
     ln -s $INSTALL_DIR ${TOP_DIR}/share/amplicon_analysis_pipeline
-    for f in *.sh ; do
+    for f in *.sh *.R ; do
 	/bin/cp $f $INSTALL_DIR
     done
     /bin/cp -r uc2otutab $INSTALL_DIR
@@ -204,6 +226,8 @@ install_amplicon_analysis_pipeline()
 export QIIME_CONFIG_FP=${TOP_DIR}/qiime/qiime_config
 # Set up the RDP jar file
 export RDP_JAR_PATH=${TOP_DIR}/share/rdp_classifier/rdp_classifier-${RDP_CLASSIFIER_VERSION}.jar
+# Set the Matplotlib backend
+export MPLBACKEND="agg"
 # Put the scripts onto the PATH
 export PATH=${BIN_DIR}:${INSTALL_DIR}:\$PATH
 # Activate the conda environment
@@ -282,7 +306,6 @@ EOF
 # See: http://drive5.com/uclust/downloads1_2_22q.html
 install_uclust()
 {
-    local wd=$(mktemp -d)
     local cwd=$(pwd)
     local wd=$(mktemp -d)
     cd $wd
@@ -297,54 +320,11 @@ install_uclust()
     rm -rf $wd/*
     rmdir $wd
 }
-#
-# R 3.2.1
-# Can't use version from conda due to dependency conflicts
-install_R_3_2_1()
-{
-    . ${CONDA_BIN}/activate ${ENV_NAME}
-    local cwd=$(pwd)
-    local wd=$(mktemp -d)
-    cd $wd
-    echo -n "Fetching R 3.2.1 source code..."
-    wget -q http://cran.r-project.org/src/base/R-3/R-3.2.1.tar.gz
-    echo "ok"
-    INSTALL_DIR=${TOP_DIR}
-    mkdir -p $INSTALL_DIR
-    echo -n "Unpacking source code..."
-    tar xzf R-3.2.1.tar.gz >INSTALL.log 2>&1
-    echo "ok"
-    cd R-3.2.1
-    echo -n "Running configure..."
-    ./configure --prefix=$INSTALL_DIR --with-x=no --with-readline=no >>INSTALL.log 2>&1
-    echo "ok"
-    echo -n "Running make..."
-    make >>INSTALL.log 2>&1
-    echo "ok"
-    echo -n "Running make install..."
-    make install >>INSTALL.log 2>&1
-    echo "ok"
-    cd $cwd
-    rm -rf $wd/*
-    rmdir $wd
-    . ${CONDA_BIN}/deactivate
-}
 setup_pipeline_environment()
 {
     echo "+++++++++++++++++++++++++++++++"
     echo "Setting up pipeline environment"
     echo "+++++++++++++++++++++++++++++++"
-    # vsearch113
-    echo -n "Setting up vsearch113..."
-    if [ -e ${BIN_DIR}/vsearch113 ] ; then
-	echo "already exists"
-    elif [ ! -e ${ENV_DIR}/bin/vsearch ] ; then
-	echo "failed"
-	fail "vsearch not found"
-    else
-	ln -s ${ENV_DIR}/bin/vsearch ${BIN_DIR}/vsearch113
-	echo "ok"
-    fi
     # fasta_splitter.pl
     echo -n "Setting up fasta_splitter.pl..."
     if [ -e ${BIN_DIR}/fasta-splitter.pl ] ; then
@@ -382,16 +362,6 @@ EOF-qiime-config
     fi
 }
 #
-# Remove the compilers from the conda environment
-# Not sure if this step is necessary
-remove_conda_compilers()
-{
-    echo "+++++++++++++++++++++++++++++++++++++++++"
-    echo "Removing compilers from conda environment"
-    echo "+++++++++++++++++++++++++++++++++++++++++"
-    ${CONDA} remove -y -n ${ENV_NAME} gcc_linux-64 gxx_linux-64 gfortran_linux-64
-}
-#
 # Top level script does the installation
 echo "======================================="
 echo "Amplicon_analysis_pipeline installation"
@@ -405,7 +375,6 @@ install_conda
 install_conda_packages
 install_non_conda_packages
 setup_pipeline_environment
-remove_conda_compilers
 echo "===================================="
 echo "Amplicon_analysis_pipeline installed"
 echo "===================================="
