@@ -1,7 +1,7 @@
 <tool id="amplicon_analysis_pipeline" name="Amplicon Analysis Pipeline" version="1.3.2.0">
   <description>analyse 16S rRNA data from Illumina Miseq paired-end reads</description>
   <requirements>
-    <requirement type="package" version="1.3.2">amplicon_analysis_pipeline</requirement>
+    <requirement type="package" version="1.3.5">amplicon_analysis_pipeline</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" />
