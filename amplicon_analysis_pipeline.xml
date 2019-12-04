@@ -84,10 +84,10 @@
   cp RESULTS/${pipeline_name}_${reference_database_name}/table_summary.txt "${table_summary_file}" &&
   cp fastqc_quality_boxplots.html "${fastqc_quality_boxplots_html}" &&
 
-  ## HTML outputs
-
   ## OTU table heatmap
   cp RESULTS/${pipeline_name}_${reference_database_name}/Heatmap.pdf "${heatmap_otu_table_pdf}"" &&
+
+  ## HTML outputs
 
   ## Phylum genus barcharts
   mkdir $phylum_genus_dist_barcharts_html.files_path &&
