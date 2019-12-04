@@ -436,30 +436,31 @@ Click on **Execute** to start the analysis.
 **********
 
 Results are entirely generated using QIIME scripts. The results will 
-appear in the History panel when the analysis is completed
+appear in the History panel when the analysis is completed.
 
- * **Vsearch_tax_OTU_table (biom format)** The OTU table in BIOM format
-   (http://biom-format.org/)
+The following outputs are captured:
 
- * **Vsearch_OTUs.tree** Phylogenetic tree constructed using
-   ``make_phylogeny.py`` (fasttree) QIIME script
-   (http://qiime.org/scripts/make_phylogeny.html)
+ * **Vsearch_tax_OTU_table.biom|DADA2_tax_OTU_table.biom (biom format)**
+   The OTU table in BIOM format (http://biom-format.org/)
 
- * **Vsearch_phylum_genus_dist_barcharts_HTML** HTML file with bar
-   charts at Phylum, Genus and Species level
+ * **otus.tre** Phylogenetic tree constructed using ``make_phylogeny.py``
+   (fasttree) QIIME script (http://qiime.org/scripts/make_phylogeny.html)
+
+ * **Phylum_genus_dist_barcharts_HTML** HTML file with bar charts at
+   Phylum, Genus and Species level
    (http://qiime.org/scripts/summarize_taxa.html and
    http://qiime.org/scripts/plot_taxa_summary.html)
 
- * **Vsearch_OTUs_count_file** Summary of OTU counts per sample
+ * **OTUs_count_file** Summary of OTU counts per sample
    (http://biom-format.org/documentation/summarizing_biom_tables.html)
 
- * **Vsearch_table_summary_file** Summary of sequences counts per sample
+ * **Table_summary_file** Summary of sequences counts per sample
    (http://biom-format.org/documentation/summarizing_biom_tables.html)
 
- * **Vsearch_multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_OTUs.fasta**
-   Fasta file with OTU sequences
+ * **multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_OTUs.fasta|seqs.fa**
+   Fasta file with OTU sequences (Vsearch|DADA2)
 
- * **Vsearch_heatmap_OTU_table_PDF** OTU heatmap in PDF format
+ * **Heatmap_PDF** OTU heatmap in PDF format
    (http://qiime.org/1.8.0/scripts/make_otu_heatmap_html.html )
 
  * **Vsearch_beta_diversity_weighted_2D_plots_HTML** PCoA plots in HTML
