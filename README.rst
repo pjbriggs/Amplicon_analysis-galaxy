@@ -174,6 +174,7 @@ History
 ========== ======================================================================
 Version    Changes
 ---------- ----------------------------------------------------------------------
+1.3.5.0    Updated to Amplicon_Analysis_Pipeline version 1.3.5.
 1.2.3.0    Updated to Amplicon_Analysis_Pipeline version 1.2.3; install
            dependencies via tool_dependencies.xml.
 1.2.2.0    Updated to Amplicon_Analysis_Pipeline version 1.2.2 (removes
