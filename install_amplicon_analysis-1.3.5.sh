@@ -101,7 +101,7 @@ install_conda()
     rewrite_conda_shebangs
     echo "ok"
     echo -n "Adding conda bin to PATH..."
-    PATH=${CONDA_BIN}:$PATH
+    export PATH=${CONDA_BIN}:$PATH
     echo "ok"
     cd $cwd
     rm -rf $wd/*
@@ -142,6 +142,11 @@ dependencies:
   - bioconductor-biomformat=1.8.0
 EOF
     ${CONDA} env create --name "${ENV_NAME}" -f environment.yml
+    if [ $? -ne 0 ] ; then
+	fail "Non-zero exit status from 'conda env create'"
+    elif [ ! -e "${ENV_DIR}" ] ; then
+	fail "Failed to create conda environment: ${ENV_DIR} not found"
+    fi
     echo Created conda environment in ${ENV_DIR}
     cd $cwd
     rm -rf $wd/*
