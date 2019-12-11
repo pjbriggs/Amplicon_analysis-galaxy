@@ -88,6 +88,9 @@ install_conda()
     wget -q https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
     bash ./Miniconda2-latest-Linux-x86_64.sh -b -p ${CONDA_DIR}
     echo Installed conda in ${CONDA_DIR}
+    echo -n "Adding conda bin to PATH..."
+    export PATH=${CONDA_BIN}:$PATH
+    echo "ok"
     # Reset the conda version to a known working version
     # (to avoid problems observed with e.g. conda 4.7.10)
     echo ""
@@ -99,9 +102,6 @@ install_conda()
     echo ""
     echo -n "Rewriting conda shebangs..."
     rewrite_conda_shebangs
-    echo "ok"
-    echo -n "Adding conda bin to PATH..."
-    export PATH=${CONDA_BIN}:$PATH
     echo "ok"
     cd $cwd
     rm -rf $wd/*
