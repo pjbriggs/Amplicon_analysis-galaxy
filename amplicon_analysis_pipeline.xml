@@ -85,7 +85,7 @@
   cp fastqc_quality_boxplots.html "${fastqc_quality_boxplots_html}" &&
 
   ## OTU table heatmap
-  cp RESULTS/${pipeline_name}_${reference_database_name}/Heatmap.pdf "${heatmap_otu_table_pdf}"" &&
+  cp RESULTS/${pipeline_name}_${reference_database_name}/Heatmap.pdf "${heatmap_otu_table_pdf}" &&
 
   ## HTML outputs
 
