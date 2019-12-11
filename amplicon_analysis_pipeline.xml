@@ -70,12 +70,12 @@
   ## Collect outputs
   cp Metatable_log/Metatable_mod.txt "${metatable_mod}" &&
   #if str( $pipeline_name ) == "Vsearch"
-    # Vsearch-specific
+    ## Vsearch-specific
     cp ${pipeline_name}_OTU_tables/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_tax_OTU_table.biom "${tax_otu_table_biom_file}" &&
     cp Multiplexed_files/${pipeline_name}_pipeline/multiplexed_linearized_dereplicated_mc2_repset_nonchimeras_OTUs.fasta "${dereplicated_nonchimera_otus_fasta}" &&
     cp QUALITY_CONTROL/Reads_count.txt "$read_counts_out" &&
   #else
-    # DADA2-specific
+    ## DADA2-specific
     cp ${pipeline_name}_OTU_tables/DADA2_tax_OTU_table.biom "${tax_otu_table_biom_file}" &&
     cp ${pipeline_name}_OTU_tables/seqs.fa "${dereplicated_nonchimera_otus_fasta}" &&
   #end if
