@@ -277,6 +277,9 @@ if __name__ == "__main__":
 """)
         # Look for raw and trimmed FastQC output for each sample
         for sample_name in sample_names:
+            # Replace underscores with hyphens in sample names
+            sample_name = sample_name.replace('_','-')
+            # Write HTML file with links to the FastQC boxplots
             fastqc_dir = os.path.join(sample_name,"FastQC")
             quality_boxplots.write("<h2>%s</h2>" % sample_name)
             for d in ("Raw","cutdapt_sickle/Q%s" % phred_score):
