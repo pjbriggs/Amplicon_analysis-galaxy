@@ -303,7 +303,6 @@ if __name__ == "__main__":
                     if boxplot is None:
                         boxplot = "Missing plot"
                     quality_boxplots.write("<h4>%s</h4><p>%s</p>" %
-
                                            (os.path.basename(f),
                                             boxplot))
             quality_boxplots.write("""</body>
