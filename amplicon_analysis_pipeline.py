@@ -320,7 +320,9 @@ if __name__ == "__main__":
                                 for pdf in
                                 sorted(glob.glob(
                                     os.path.join(error_rate_plots_dir,"*.pdf")))]
-        with open("error_rate_plots.html","w") as error_rate_plots_out:
+        error_rate_plots_html = os.path.join(error_rate_plots_dir,
+                                             "error_rate_plots.html")
+        with open(error_rate_plots_html,"w") as error_rate_plots_out:
             error_rate_plots_out.write("""<html>
 <head>
 <title>Amplicon analysis pipeline: DADA2 Error Rate Plots</title>
