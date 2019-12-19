@@ -155,12 +155,15 @@ if __name__ == "__main__":
             sample_names.append(sample_name)
 
     # Reference database
-    if args.use_silva:
+    if args.pipeline == "Vsearch":
+        if args.use_silva:
+            ref_database = "silva"
+        elif args.use_homd:
+            ref_database = "homd"
+        else:
+            ref_database = "gg"
+    elif args.pipeline == "DADA2":
         ref_database = "silva"
-    elif args.use_homd:
-        ref_database = "homd"
-    else:
-        ref_database = "gg"
 
     # Construct the pipeline command
     print "Amplicon analysis: constructing pipeline command"
@@ -180,10 +183,11 @@ if __name__ == "__main__":
     if args.reference_data_path:
         pipeline.add_args("-r",args.reference_data_path)
     pipeline.add_args("-P",args.pipeline)
-    if ref_database == "silva":
-        pipeline.add_args("-S")
-    elif ref_database == "homd":
-        pipeline.add_args("-H")
+    if args.pipeline == "Vsearch":
+        if ref_database == "silva":
+            pipeline.add_args("-S")
+        elif ref_database == "homd":
+            pipeline.add_args("-H")
 
     # Echo the pipeline command to stdout
     print "Running %s" % pipeline
