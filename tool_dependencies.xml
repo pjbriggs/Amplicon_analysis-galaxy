@@ -8,7 +8,7 @@
 	  sh ./install_amplicon_analysis-1.3.6.sh $INSTALL_DIR
 	</action>
 	<action type="set_environment">
-	    <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/Amplicon_analysis-1.3.5/bin</environment_variable>
+	    <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/Amplicon_analysis-1.3.6/bin</environment_variable>
 	</action>
       </actions>
     </install>
