@@ -117,9 +117,9 @@ if __name__ == "__main__":
     p.add_argument("-L",dest="minimum_length")
     p.add_argument("-l",dest="sliding_window_length")
     p.add_argument("-P",dest="pipeline",
-                   choices=["vsearch","uparse","qiime"],
-                   type=str.lower,
-                   default="vsearch")
+                   choices=["Vsearch","DADA2"],
+                   type=str,
+                   default="Vsearch")
     p.add_argument("-S",dest="use_silva",action="store_true")
     p.add_argument("-H",dest="use_homd",action="store_true")
     p.add_argument("-r",dest="reference_data_path")
@@ -155,12 +155,15 @@ if __name__ == "__main__":
             sample_names.append(sample_name)
 
     # Reference database
-    if args.use_silva:
+    if args.pipeline == "Vsearch":
+        if args.use_silva:
+            ref_database = "silva"
+        elif args.use_homd:
+            ref_database = "homd"
+        else:
+            ref_database = "gg"
+    elif args.pipeline == "DADA2":
         ref_database = "silva"
-    elif args.use_homd:
-        ref_database = "homd"
-    else:
-        ref_database = "gg"
 
     # Construct the pipeline command
     print "Amplicon analysis: constructing pipeline command"
@@ -180,10 +183,11 @@ if __name__ == "__main__":
     if args.reference_data_path:
         pipeline.add_args("-r",args.reference_data_path)
     pipeline.add_args("-P",args.pipeline)
-    if ref_database == "silva":
-        pipeline.add_args("-S")
-    elif ref_database == "homd":
-        pipeline.add_args("-H")
+    if args.pipeline == "Vsearch":
+        if ref_database == "silva":
+            pipeline.add_args("-S")
+        elif ref_database == "homd":
+            pipeline.add_args("-H")
 
     # Echo the pipeline command to stdout
     print "Running %s" % pipeline
@@ -277,6 +281,9 @@ if __name__ == "__main__":
 """)
         # Look for raw and trimmed FastQC output for each sample
         for sample_name in sample_names:
+            # Replace underscores with hyphens in sample names
+            sample_name = sample_name.replace('_','-')
+            # Write HTML file with links to the FastQC boxplots
             fastqc_dir = os.path.join(sample_name,"FastQC")
             quality_boxplots.write("<h2>%s</h2>" % sample_name)
             for d in ("Raw","cutdapt_sickle/Q%s" % phred_score):
@@ -306,13 +313,41 @@ if __name__ == "__main__":
 </html>
 """)
 
+    # Handle DADA2 error rate plot PDFs
+    if args.pipeline == "DADA2":
+        print("Amplicon analysis: collecting error rate plots")
+        error_rate_plots_dir = os.path.abspath(
+            os.path.join("DADA2_OTU_tables",
+                         "Error_rate_plots"))
+        error_rate_plot_pdfs = [os.path.basename(pdf)
+                                for pdf in
+                                sorted(glob.glob(
+                                    os.path.join(error_rate_plots_dir,"*.pdf")))]
+        error_rate_plots_html = os.path.join(error_rate_plots_dir,
+                                             "error_rate_plots.html")
+        with open(error_rate_plots_html,"w") as error_rate_plots_out:
+            error_rate_plots_out.write("""<html>
+<head>
+<title>Amplicon analysis pipeline: DADA2 Error Rate Plots</title>
+<head>
+<body>
+<h1>Amplicon analysis pipeline: DADA2 Error Rate Plots</h1>
+""")
+            error_rate_plots_out.write("<ul>\n")
+            for pdf in error_rate_plot_pdfs:
+                error_rate_plots_out.write("<li>%s</li>\n" % ahref(pdf))
+            error_rate_plots_out.write("<ul>\n")
+            error_rate_plots_out.write("""</body>
+</html>
+""")
+
     # Handle additional output when categories file was supplied
     if args.categories_file is not None:
         # Alpha diversity boxplots
         print "Amplicon analysis: indexing alpha diversity boxplots"
         boxplots_dir = os.path.abspath(
             os.path.join("RESULTS",
-                         "%s_%s" % (args.pipeline.title(),
+                         "%s_%s" % (args.pipeline,
                                     ref_database),
                          "Alpha_diversity",
                          "Alpha_diversity_boxplot",
