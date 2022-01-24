@@ -26,7 +26,7 @@
   #end if
 
   ## Run the amplicon analysis pipeline wrapper
-  python $__tool_directory__/amplicon_analysis_pipeline.py
+  python3 $__tool_directory__/amplicon_analysis_pipeline.py
   ## Set options
   #if str( $forward_pcr_primer ) != ""
   -g "$forward_pcr_primer"
